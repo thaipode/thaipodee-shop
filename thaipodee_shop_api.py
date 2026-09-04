@@ -18,7 +18,13 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-# ==============================================
+app = FastAPI()
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
+
+@app.get("/")
+def read_root():
+    return {"message": "ยินดีต้อนรับสู่ THAIPODEE SHOP API 🇹🇭🛒"}
+
 # 📊 MODELS — ตารางข้อมูลทั้งหมด
 # ==============================================
 class User(Base):
