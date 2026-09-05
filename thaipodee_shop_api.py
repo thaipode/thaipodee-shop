@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.responses import FileResponse
+from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import json
@@ -35,10 +36,10 @@ def save_videos(videos):
     with open(VIDEOS_FILE, "w", encoding="utf-8") as f:
         json.dump(videos, f, ensure_ascii=False, indent=2)
 
-# หน้าแรก
+# ✅ หน้าแรก — แสดงหน้าเว็บแทน JSON
 @app.get("/")
 def read_root():
-    return {"message": "ไทยโพธิ์ดีช็อป API ทำงานปกติ"}
+    return FileResponse("index.html")
 
 # ดึงรายการวิดีโอทั้งหมด
 @app.get("/videos/")
@@ -49,22 +50,18 @@ def get_videos():
 @app.post("/videos/")
 def upload_video(file: UploadFile = File(...), title: str = Form(...)):
     try:
-        # ตรวจสอบนามสกุลไฟล์
         allowed_exts = {".mp4", ".mov", ".avi", ".webm", ".mkv"}
         ext = os.path.splitext(file.filename)[1].lower()
         if ext not in allowed_exts:
             raise HTTPException(status_code=400, detail="รองรับเฉพาะไฟล์วิดีโอเท่านั้น")
         
-        # ตั้งชื่อไฟล์ใหม่เพื่อป้องกันชื่อซ้ำ
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         filename = f"{timestamp}{ext}"
         file_path = os.path.join(UPLOAD_DIR, filename)
         
-        # บันทึกไฟล์
         with open(file_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         
-        # บันทึกข้อมูล
         videos = load_videos()
         new_video = {
             "id": len(videos) + 1,
@@ -81,10 +78,5 @@ def upload_video(file: UploadFile = File(...), title: str = Form(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"เกิดข้อผิดพลาด: {str(e)}")
 
-# ให้ดาวน์โหลด/เล่นวิดีโอ
-@app.get("/uploads/{filename}")
-def get_video(filename: str):
-    file_path = os.path.join(UPLOAD_DIR, filename)
-    if not os.path.exists(file_path):
-        raise HTTPException(status_code=404, detail="ไม่พบไฟล์")
-    return FileResponse(file_path)
+# ให้บริการไฟล์วิดีโอ
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
