@@ -26,41 +26,65 @@
       font-size: 12px; font-weight: 800; width: 22px; height: 22px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
     }
+    /* 🔊 ปุ่มเปิดปิดเสียง */
+    .sound-btn {
+      position: absolute; top: 60px; right: 20px; z-index: 30;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: rgba(0,0,0,0.5); border: none;
+      font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    }
 
     /* ========== PAGES ========== */
     .page { display: none; padding-top: 60px; }
     .page.active { display: block; }
 
-    /* ========== VIDEO CARD — FULL SCREEN ========== */
+    /* ========== VIDEO CARD — FULL SCREEN + เสียง ========== */
     .video-feed { width: 100%; }
     .video-card {
       position: relative; width: 100%; min-height: calc(100vh - 60px);
       background: #000; display: flex; align-items: center; justify-content: center;
-      overflow: hidden;
+      overflow: hidden; cursor: pointer;
     }
-    .video-media { width: 100%; height: 100%; object-fit: cover; }
+    .video-media { 
+      width: 100%; height: 100%; object-fit: cover;
+      /* 🔊 สำคัญ — ให้เสียงทำงาน */
+      autoplay: true; loop: true; muted: true; playsinline: true;
+    }
     .no-video {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       height: calc(100vh - 60px); color: #888; font-size: 18px; text-align: center; padding: 20px;
     }
     .no-video div:first-child { font-size: 64px; margin-bottom: 20px; }
 
-    /* ========== SIDE ACTIONS — ใหญ่ขึ้น! ชัดเจน! ========== */
+    /* 📢 คำแนะนำเปิดเสียง */
+    .sound-hint {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: rgba(0,0,0,0.7); padding: 15px 25px; border-radius: 30px;
+      font-size: 16px; z-index: 25; pointer-events: none;
+      animation: fadeOut 3s forwards;
+    }
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      70% { opacity: 1; }
+      100% { opacity: 0; pointer-events: none; }
+    }
+
+    /* ========== SIDE ACTIONS — ตำแหน่งถูก ไม่ซ้อนกัน! ========== */
     .side-actions {
-      position: absolute; right: 16px; bottom: 140px;
-      display: flex; flex-direction: column; gap: 32px; align-items: center;
+      position: absolute; right: 16px; bottom: 180px;
+      display: flex; flex-direction: column; gap: 28px; align-items: center;
       z-index: 20;
     }
     .side-btn {
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
       cursor: pointer; transition: transform 0.15s ease;
     }
     .side-btn:active { transform: scale(0.9); }
-    .side-btn span { font-size: 13px; font-weight: 600; }
-    .side-icon { font-size: 36px; line-height: 1; }
+    .side-btn span { font-size: 12px; font-weight: 600; }
+    .side-icon { font-size: 34px; line-height: 1; }
     .like-btn.liked .side-icon { color: #ff2442; }
     
-    /* 🎵 แผ่นเพลง — ใหญ่ขึ้น หมุนชัดเจน */
+    /* 🎵 แผ่นเพลง — ชัดเจน หมุนได้ */
     .music-disc {
       width: 56px; height: 56px; border-radius: 50%;
       background: linear-gradient(135deg, #333, #555);
@@ -81,7 +105,7 @@
     .video-desc { font-size: 15px; line-height: 1.5; margin-bottom: 12px; }
     .music-info { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #fff; }
 
-    /* ========== BOTTOM NAV — ใหญ่ขึ้น กดง่าย! ========== */
+    /* ========== BOTTOM NAV — ใหญ่ กดง่าย! ========== */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
       background: #000; border-top: 1px solid #222;
@@ -219,7 +243,7 @@
     </div>
   </div>
 
-  <!-- ========== หน้าแรก ========== -->
+  <!-- ========== หน้าแรก - วิดีโอ + เสียง ========== -->
   <div class="page active" id="page-home">
     <div class="video-feed" id="videoFeed">
       <div class="no-video">
@@ -304,12 +328,12 @@
     <div class="modal-content">
       <div class="modal-title">อัปโหลด</div>
       <div class="copyright-warning">
-        <strong>⚠️ เรื่องลิขสิทธิ์เพลง</strong><br>
+        <strong>⚠️ เรื่องลิขสิทธิ์เพลง & เสียง</strong><br>
         หากใช้เพลงที่มีลิขสิทธิ์ ต้องได้รับอนุญาตจากเจ้าของผลงานก่อนครับ แนะนำให้ใช้เพลงที่แต่งเอง หรือเพลงที่อนุญาตให้ใช้ฟรี
       </div>
       <input type="file" id="mediaFile" accept="video/*,image/*">
       <textarea id="videoDesc" placeholder="ใส่คำอธิบาย..." rows="2"></textarea>
-      <input type="text" id="musicName" placeholder="ชื่อเพลง (ถ้ามี)">
+      <input type="text" id="musicName" placeholder="ชื่อเพลง/เสียงประกอบ (ถ้ามี)">
       <input type="text" id="musicArtist" placeholder="ชื่อศิลปิน/เจ้าของผลงาน">
       <div class="modal-buttons">
         <button class="btn btn-cancel" onclick="closeModal('uploadModal')">ยกเลิก</button>
@@ -422,6 +446,7 @@
 
   <script>
     let cart = [];
+    let currentVideo = null;
 
     // เปลี่ยนหน้า
     function openPage(pageName) {
@@ -448,7 +473,14 @@
       el.classList.add('selected');
     }
 
-    // ========== อัปโหลด — เมนูด้านขวาโผล่ชัดเจน! ==========
+    // 🔊 เปิด/ปิดเสียง
+    function toggleSound(btn) {
+      if (!currentVideo) return;
+      currentVideo.muted = !currentVideo.muted;
+      btn.textContent = currentVideo.muted ? '🔇' : '🔊';
+    }
+
+    // 🎵 อัปโหลด — มีเสียง + ปุ่มเปิดปิดเสียง!
     function uploadMedia() {
       const fileInput = document.getElementById('mediaFile');
       const musicName = document.getElementById('musicName').value || 'เสียงต้นฉบับ';
@@ -464,16 +496,22 @@
       const url = URL.createObjectURL(file);
       const isVideo = file.type.startsWith('video/');
       
-      // สร้างการ์ด — ปุ่มด้านขวาใหญ่ ชัดเจน!
+      // สร้างการ์ด — มีปุ่มเสียง + กดเพื่อเปิดเสียง!
       const card = document.createElement('div');
       card.className = 'video-card';
       card.innerHTML = `
         ${isVideo 
-          ? `<video class="video-media" src="${url}" autoplay loop muted playsinline></video>`
+          ? `<video class="video-media" src="${url}" autoplay loop muted playsinline controls id="mainVideo"></video>`
           : `<img class="video-media" src="${url}" alt="รูปภาพ">`
         }
         
-        <!-- ปุ่มด้านขวา — ใหญ่ ชัดเจน! ติดขอบขวาแน่นอน! -->
+        <!-- 🔊 ปุ่มเปิดปิดเสียง -->
+        ${isVideo ? `<button class="sound-btn" onclick="toggleSound(this)">🔇</button>` : ''}
+        
+        <!-- 📢 คำแนะนำเปิดเสียง -->
+        ${isVideo ? `<div class="sound-hint">แตะเพื่อเปิดเสียง 🔊</div>` : ''}
+        
+        <!-- ปุ่มด้านขวา — ตำแหน่งถูก ไม่ซ้อนกัน! -->
         <div class="side-actions">
           <div class="side-btn" onclick="toggleLike(this)">
             <span class="side-icon">👤</span>
@@ -509,6 +547,17 @@
         </div>
       `;
       
+      // กดวิดีโอ → เปิดเสียง/ปิดเสียง
+      if (isVideo) {
+        card.addEventListener('click', (e) => {
+          if (e.target.closest('.side-btn') || e.target.closest('.sound-btn')) return;
+          const video = card.querySelector('video');
+          video.muted = !video.muted;
+          const soundBtn = card.querySelector('.sound-btn');
+          if (soundBtn) soundBtn.textContent = video.muted ? '🔇' : '🔊';
+        });
+      }
+      
       // ลบข้อความว่างเปล่า
       const noVideo = document.querySelector('.no-video');
       if (noVideo) noVideo.parentElement.removeChild(noVideo);
@@ -517,6 +566,11 @@
       const feed = document.getElementById('videoFeed');
       feed.insertBefore(card, feed.firstChild);
       
+      // เซตวิดีโอปัจจุบัน
+      if (isVideo) {
+        currentVideo = card.querySelector('video');
+      }
+      
       // รีเซ็ตฟอร์ม
       closeModal('uploadModal');
       fileInput.value = '';
@@ -524,7 +578,7 @@
       document.getElementById('musicName').value = '';
       document.getElementById('musicArtist').value = '';
       
-      alert('✅ โพสต์สำเร็จ! ปุ่มด้านขวาโผล่แล้วครับ!');
+      alert('✅ โพสต์สำเร็จ! แตะวิดีโอหรือกดปุ่ม 🔊 เพื่อเปิดเสียงครับ!');
     }
 
     // กดถูกใจ
