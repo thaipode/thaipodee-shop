@@ -3,290 +3,315 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>แพลตฟอร์มวิดีโอ</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="ไทยโพธิ์ดี — แพลตฟอร์มวิดีโอและร้านค้า">
+  
+  <!-- ===== PWA Manifest — ทำให้เป็นแอปได้ ===== -->
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi5LiT5a2Q56e75pWZ56iLIiwic2hvcnRfbmFtZSI6IuaYjuS4quS4quS4uuS4uSIsImRlc2NyaXB0aW9uIjoi5bqU55So5LqQ5b6u5Lq65b6u5Lq644CB55qE576O5Zu+5Y+W5b6u5Lq6Iiwic3RhcnRfdXJsIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwMDAwMDAiLCJ0aGVtZV9jb2xvciI6IiMwMDAwMDAiLCJpc29sdXRpb25zIjogWyJwb3J0cmFpdCJdLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxOTIgMTkyJyUzRSUzQ3RleHQgeD0nNTAlJyB5PSc1MCUnIHRleHQtYW5jaG9yPSdtaWRkbGUnIHRleHQtYmFzZWxpbmU9J21pZGRsZScgZm9udC1zaXplPSc4MCcgZmlsbD0nd2hpdGUnJTNF5LiT5a2Q56e75pWZ56iLJTNDc3ZnJTNFIiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifV19">
+  
+  <!-- ===== ไอคอนสำหรับ iPhone/iPad ===== -->
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23000' width='192' height='192'/><text x='50%' y='50%' text-anchor='middle' dominant-baseline='middle' font-size='64' fill='white'>ไทย</text></svg>">
+  
+  <title>ไทยโพธิ์ดี</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    html, body { background: #fff; color: #000; min-height: 100vh; padding-bottom: 70px; overflow-x: hidden; }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    html, body { background: #000; color: #fff; height: 100vh; overflow: hidden; overscroll-behavior: none; }
+    
+    /* ===== ซ่อนแถบเบราว์เซอร์เมื่อเปิดเป็นแอป ===== */
+    @media all and (display-mode: standalone) {
+      body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+    }
 
-    /* ===== TOP BAR ===== */
-    .top-bar { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; background: #fff; border-bottom: 1px solid #eee; }
-    .top-left, .top-right { display: flex; gap: 16px; align-items: center; }
-    .top-icon { font-size: 22px; cursor: pointer; }
+    /* ===== ปุ่มเลือกไซซ์วิดีโอ ===== */
+    .size-selector { position: fixed; top: 0; left: 0; right: 0; z-index: 130; padding: 8px 12px; display: flex; justify-content: center; gap: 6px; padding-top: calc(12px + env(safe-area-inset-top)); background: linear-gradient(180deg, rgba(0,0,0,0.6), transparent); }
+    .size-btn { padding: 5px 10px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.25); background: rgba(255,255,255,0.08); color: #fff; font-size: 12px; cursor: pointer; transition: all 0.2s; }
+    .size-btn.active { background: #fff; color: #000; border-color: #fff; font-weight: 600; }
 
-    /* ===== PROFILE CONTAINER — รูปแบบเหมือน TikTok เป๊ะ ===== */
-    .profile-container { padding-top: 60px; max-width: 700px; margin: 0 auto; }
-    .profile-header { text-align: center; padding: 20px 16px; }
+    /* ===== แถบเมนูด้านบน ===== */
+    .top-nav { position: fixed; top: 44px; left: 0; right: 0; z-index: 100; display: flex; justify-content: center; gap: 20px; }
+    .top-tab { font-size: 17px; color: rgba(255,255,255,0.6); cursor: pointer; }
+    .top-tab.active { color: #fff; font-weight: 700; position: relative; }
+    .top-tab.active::after { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); width: 24px; height: 2px; background: #fff; border-radius: 2px; }
 
-    /* Avatar — แต่ละคนอัปโหลดเองได้ */
-    .avatar-wrap { position: relative; display: inline-block; margin-bottom: 12px; }
-    .avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; border: 3px solid #eee; background: #ddd; }
-    .avatar-edit { position: absolute; bottom: 0; right: 0; width: 28px; height: 28px; border-radius: 50%; background: #000; color: #fff; font-size: 18px; font-weight: bold; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px solid #fff; line-height: 1; }
-    #avatarInput { display: none; }
+    /* ===== ฟีดวิดีโอ ===== */
+    .video-feed { width: 100%; height: 100vh; padding-top: 80px; padding-bottom: 70px; overflow-y: auto; scroll-snap-type: y mandatory; -webkit-overflow-scrolling: touch; }
+    .video-slide { position: relative; width: 100%; height: 100vh; scroll-snap-align: start; display: flex; align-items: center; justify-content: center; background: #000; }
 
-    /* ชื่อ — แต่ละคนตั้งเองได้ */
-    .full-name { font-size: 20px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 6px; margin-bottom: 4px; }
-    .age-badge { background: #eee; color: #666; font-size: 12px; padding: 2px 6px; border-radius: 10px; }
-    .username { font-size: 14px; color: #666; margin-bottom: 16px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-    .edit-name-btn { border: 1px solid #ccc; background: #fff; padding: 6px 16px; border-radius: 4px; font-size: 14px; cursor: pointer; }
+    /* ===== คอนเทนต์วิดีโอ — อยู่ตรงกลาง เปลี่ยนไซซ์ได้ ===== */
+    .video-wrapper { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .video-container { position: relative; border-radius: 0; overflow: hidden; transition: all 0.3s ease; }
+    /* แนวตั้ง — เหมือน TikTok เริ่มต้น */
+    .video-container.portrait { width: 100%; height: 100%; max-width: 100%; max-height: 100%; }
+    /* แนวนอน */
+    .video-container.landscape { width: 100vw; height: 56.25vw; max-width: 100%; max-height: 100%; }
+    /* จัตุรัส */
+    .video-container.square { width: 100vw; height: 100vw; max-width: 100%; max-height: 100%; }
 
-    /* สถิติ — แต่ละคนมีค่าของตัวเอง */
-    .stats-row { display: flex; justify-content: center; gap: 32px; margin-bottom: 16px; }
-    .stat { text-align: center; cursor: pointer; }
-    .stat-num { font-size: 18px; font-weight: 700; }
-    .stat-label { font-size: 12px; color: #666; margin-top: 2px; }
+    .video-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #1a1a2e, #16213e); z-index: 0; }
 
-    /* คำอธิบาย — แต่ละคนเขียนเองได้ */
-    .bio { font-size: 14px; line-height: 1.5; padding: 0 20px; margin-bottom: 16px; white-space: pre-wrap; }
-    .edit-bio-btn { color: #999; font-size: 13px; cursor: pointer; }
+    /* ===== ข้อมูลซ้ายล่าง ===== */
+    .post-info { position: absolute; left: 15px; bottom: 110px; right: 80px; z-index: 10; }
+    .author-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .author-name { font-size: 16px; font-weight: 700; color: #fff; }
+    .follow-btn { width: 22px; height: 22px; border-radius: 50%; background: #fff; color: #000; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 700; line-height: 1; cursor: pointer; }
+    .post-caption { font-size: 14px; line-height: 1.4; color: #fff; margin-bottom: 8px; }
+    .music-row { display: flex; align-items: center; gap: 6px; font-size: 14px; color: #fff; }
+    .music-icon { font-size: 14px; animation: spin 3s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-    /* ปุ่มการกระทำ */
-    .action-buttons { display: flex; justify-content: center; gap: 24px; margin-bottom: 20px; }
-    .action-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; font-size: 12px; }
-    .action-icon { font-size: 20px; }
-    .red-text { color: #fe2c55; }
+    /* ===== ไอคอนด้านขวาล่าง — เหมือน TikTok เป๊ะ! ===== */
+    .side-actions { position: absolute; right: 12px; bottom: 110px; display: flex; flex-direction: column; align-items: center; gap: 22px; z-index: 10; }
+    .action-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+    .action-icon { font-size: 28px; line-height: 1; }
+    .action-count { font-size: 11px; color: #fff; }
+    .music-disc { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #ff4757, #ff6b81); display: flex; align-items: center; justify-content: center; font-size: 20px; animation: rotate 4s linear infinite; }
+    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-    /* แถบไอคอนเมนู */
-    .tabs-bar { display: flex; justify-content: space-around; border-top: 1px solid #eee; border-bottom: 1px solid #eee; padding: 10px 0; margin-bottom: 4px; }
-    .tab-icon { font-size: 22px; cursor: pointer; opacity: 0.5; }
-    .tab-icon.active { opacity: 1; border-bottom: 2px solid #000; padding-bottom: 8px; }
-
-    /* ตารางวิดีโอ — 3 คอลัมน์ เหมือน TikTok */
-    .videos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 0 4px; }
-    .video-item { position: relative; aspect-ratio: 9/12; background: #eee; border-radius: 2px; overflow: hidden; cursor: pointer; }
-    .video-thumb { width: 100%; height: 100%; object-fit: cover; }
-    .video-views { position: absolute; bottom: 6px; left: 6px; color: #fff; font-size: 12px; text-shadow: 0 0 3px rgba(0,0,0,0.8); display: flex; align-items: center; gap: 4px; }
-    .play-icon { font-size: 10px; }
-    .empty-grid { grid-column: 1 / -1; padding: 60px 20px; text-align: center; color: #999; font-size: 14px; }
-
-    /* เมนูล่าง — เหมือน TikTok */
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #eee; display: flex; justify-content: space-around; padding: 8px 0 16px; z-index: 100; }
-    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; color: #000; opacity: 0.5; transition: all 0.2s; }
+    /* ===== แถบเมนูล่าง ===== */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 65px; background: #000; border-top: 1px solid #222; display: flex; justify-content: space-around; align-items: center; padding-bottom: env(safe-area-inset-bottom); z-index: 100; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 2px; cursor: pointer; color: #fff; opacity: 0.6; transition: opacity 0.2s; }
     .nav-item.active { opacity: 1; }
     .nav-icon { font-size: 24px; line-height: 1; }
     .nav-label { font-size: 10px; }
-    .nav-add { width: 44px; height: 32px; background: linear-gradient(90deg, #25f4ee, #fe2c55); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 24px; font-weight: bold; }
+    .nav-create { width: 46px; height: 32px; background: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 22px; color: #000; }
 
-    /* MODAL แก้ไขข้อมูล */
-    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
-    .modal.active { display: flex; }
-    .modal-box { background: #fff; border-radius: 16px; width: 100%; max-width: 360px; padding: 24px; }
-    .modal-title { font-size: 18px; font-weight: 700; text-align: center; margin-bottom: 20px; }
-    input, textarea { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
-    .modal-buttons { display: flex; gap: 10px; margin-top: 8px; }
-    .btn { flex: 1; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px; }
-    .btn-cancel { background: #eee; color: #333; }
-    .btn-save { background: #fe2c55; color: #fff; }
+    /* ===== หน้าอื่น ๆ ===== */
+    .page { display: none; position: fixed; inset: 0; background: #000; color: #fff; z-index: 150; overflow-y: auto; padding-bottom: 80px; }
+    .page.active { display: block; }
+    .page-header { padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #222; padding-top: env(safe-area-inset-top); }
+    .back-btn { font-size: 24px; cursor: pointer; color: #fff; }
+    .page-title { font-size: 18px; font-weight: 600; }
+
+    .profile-content { padding: 20px 16px; text-align: center; }
+    .prof-avatar { width: 96px; height: 96px; border-radius: 50%; background: #333; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+    .prof-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+    .prof-username { color: #888; font-size: 14px; margin-bottom: 20px; }
+    .prof-stats { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+    .stat-num { font-size: 18px; font-weight: 700; }
+    .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
+    .logout-btn { margin-top: 30px; padding: 12px 24px; background: #222; color: #fff; border: none; border-radius: 8px; font-size: 15px; cursor: pointer; }
+
+    .shop-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 16px; }
+    .product-card { background: #1a1a1a; border-radius: 12px; overflow: hidden; }
+    .product-img { width: 100%; height: 150px; background: #333; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+    .product-info { padding: 10px; }
+    .product-name { font-size: 14px; margin-bottom: 6px; }
+    .product-price { font-size: 16px; font-weight: 700; color: #ff4757; }
+
+    .install-banner { position: fixed; bottom: 80px; left: 20px; right: 20px; background: #fff; color: #000; padding: 14px; border-radius: 12px; z-index: 200; display: none; align-items: center; justify-content: space-between; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .install-banner.show { display: flex; }
+    .install-btn { background: #ff4757; color: #fff; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+    .close-btn { background: none; border: none; font-size: 20px; cursor: pointer; color: #888; }
   </style>
 </head>
 <body>
-
-  <!-- TOP BAR -->
-  <div class="top-bar">
-    <div class="top-left">
-      <span class="top-icon" onclick="alert('ค้นหา / เพิ่ม')">+</span>
-      <span class="top-icon" onclick="alert('โปรไฟล์สาธารณะ')">P</span>
+  <!-- ===== แจ้งติดตั้งแอป ===== -->
+  <div class="install-banner" id="installBanner">
+    <div>
+      <strong>ติดตั้งแอป ไทยโพธิ์ดี</strong>
+      <div style="font-size:13px; color:#666;">กดไอคอนหน้าจอ เข้าใช้งานง่ายขึ้น</div>
     </div>
-    <div class="top-right">
-      <span class="top-icon">👤</span>
-      <span class="top-icon">3</span>
-      <span class="top-icon">↗</span>
-      <span class="top-icon">☰</span>
+    <button class="install-btn" id="installBtn">ติดตั้ง</button>
+    <button class="close-btn" onclick="closeInstall()">×</button>
+  </div>
+
+  <!-- ===== ปุ่มเลือกไซซ์วิดีโอ ===== -->
+  <div class="size-selector">
+    <button class="size-btn active" onclick="setVideoSize('portrait')">แนวตั้ง</button>
+    <button class="size-btn" onclick="setVideoSize('landscape')">แนวนอน</button>
+    <button class="size-btn" onclick="setVideoSize('square')">จัตุรัส</button>
+  </div>
+
+  <!-- ===== แถบเมนูด้านบน ===== -->
+  <div class="top-nav">
+    <span class="top-tab">ติดตาม</span>
+    <span class="top-tab active">สำหรับคุณ</span>
+  </div>
+
+  <!-- ===== ฟีดวิดีโอ ===== -->
+  <div class="video-feed" id="videoFeed">
+    <div class="video-slide">
+      <div class="video-wrapper">
+        <div class="video-container portrait" id="videoContainer">
+          <div class="video-bg"></div>
+        </div>
+      </div>
+
+      <!-- ===== ข้อมูลซ้ายล่าง ===== -->
+      <div class="post-info">
+        <div class="author-row">
+          <span class="author-name">thaipodee</span>
+          <span class="follow-btn" onclick="toggleFollow(this)">+</span>
+        </div>
+        <div class="post-caption">ยินดีต้อนรับสู่ไทยโพธิ์ดี! 🇹🇭 #ไทยโพธิ์ดี #ดนตรีไทย</div>
+        <div class="music-row">
+          <span class="music-icon">🎵</span>
+          <span>เสียงต้นฉบับ - ไทยโพธิ์ดี</span>
+        </div>
+      </div>
+
+      <!-- ===== ไอคอนด้านขวาล่าง — เหมือน TikTok เป๊ะ! ===== -->
+      <div class="side-actions">
+        <div class="action-item" onclick="toggleLike(this)">
+          <span class="action-icon">❤️</span>
+          <span class="action-count">0</span>
+        </div>
+        <div class="action-item">
+          <span class="action-icon">💬</span>
+          <span class="action-count">0</span>
+        </div>
+        <div class="action-item">
+          <span class="action-icon">↗️</span>
+          <span class="action-count">แชร์</span>
+        </div>
+        <div class="action-item">
+          <span class="action-icon">⭐</span>
+          <span class="action-count">บันทึก</span>
+        </div>
+        <div class="action-item">
+          <div class="music-disc">🎵</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- ===== PROFILE PAGE — สาธารณะ ทุกคนสร้างเองได้ ===== -->
-  <div class="profile-container">
-    <div class="profile-header">
-      <!-- รูปโปรไฟล์ — แต่ละคนอัปโหลดเอง -->
-      <div class="avatar-wrap">
-        <img id="avatar" class="avatar" src="https://via.placeholder.com/96" alt="รูปโปรไฟล์">
-        <span class="avatar-edit" onclick="document.getElementById('avatarInput').click()">+</span>
-        <input type="file" id="avatarInput" accept="image/*" onchange="changeAvatar(this)">
-      </div>
-
-      <!-- ชื่อ — แต่ละคนตั้งเองได้ -->
-      <div class="full-name">
-        <span id="fullName">ชื่อผู้ใช้</span>
-        <span class="age-badge">9+</span>
-        <span class="edit-name-btn" onclick="openEditNameModal()">✏️</span>
-      </div>
-      <div class="username">
-        <span id="username">@username</span>
-      </div>
-
-      <!-- สถิติ — แต่ละคนมีของตัวเอง -->
-      <div class="stats-row">
-        <div class="stat">
-          <div class="stat-num" id="following">0</div>
-          <div class="stat-label">กำลังติดตาม</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num" id="followers">0</div>
-          <div class="stat-label">ผู้ติดตาม</div>
-        </div>
-        <div class="stat">
-          <div class="stat-num" id="likes">0</div>
-          <div class="stat-label">ถูกใจ</div>
-        </div>
-      </div>
-
-      <!-- คำอธิบาย — แต่ละคนเขียนเองได้ -->
-      <div class="bio" id="bio">ยินดีต้อนรับ! แก้ไขคำอธิบายได้ตามต้องการ</div>
-      <span class="edit-bio-btn" onclick="openEditBioModal()">แก้ไขคำอธิบาย</span>
-
-      <!-- ปุ่มการกระทำ -->
-      <div class="action-buttons">
-        <div class="action-btn">
-          <span class="action-icon red-text">✉️</span>
-          <span>อีเมล</span>
-        </div>
-        <div class="action-btn">
-          <span class="action-icon red-text">🛒</span>
-          <span>คำสั่งซื้อของคุณ</span>
-        </div>
-      </div>
+  <!-- ===== หน้าร้านค้า ===== -->
+  <div class="page" id="shopPage">
+    <div class="page-header">
+      <span class="back-btn" onclick="closePage()">←</span>
+      <span class="page-title">ร้านค้า</span>
+      <span></span>
     </div>
-
-    <!-- แถบไอคอนเมนู -->
-    <div class="tabs-bar">
-      <span class="tab-icon active" onclick="switchTab('grid')">☰</span>
-      <span class="tab-icon" onclick="switchTab('private')">🔒</span>
-      <span class="tab-icon" onclick="switchTab('liked')">↻</span>
-      <span class="tab-icon" onclick="switchTab('saved')">🔖</span>
-      <span class="tab-icon" onclick="switchTab('hearts')">❤️</span>
-    </div>
-
-    <!-- ตารางวิดีโอ -->
-    <div class="videos-grid" id="videosGrid">
-      <div class="empty-grid">ยังไม่มีวิดีโอ<br>กดปุ่ม + เพื่อสร้างวิดีโอแรกของคุณ</div>
+    <div class="shop-grid">
+      <div class="product-card"><div class="product-img">🎸</div><div class="product-info"><div class="product-name">กีตาร์โปร่ง คุณภาพดี</div><div class="product-price">฿1,590</div></div></div>
+      <div class="product-card"><div class="product-img">🎤</div><div class="product-info"><div class="product-name">ไมโครโฟนบันทึกเสียง</div><div class="product-price">฿890</div></div></div>
+      <div class="product-card"><div class="product-img">🔊</div><div class="product-info"><div class="product-name">ลำโพงพกพา Bluetooth</div><div class="product-price">฿1,290</div></div></div>
+      <div class="product-card"><div class="product-img">🎧</div><div class="product-info"><div class="product-name">หูฟังสเตอริโอ เบสแน่น</div><div class="product-price">฿590</div></div></div>
     </div>
   </div>
 
-  <!-- เมนูล่าง -->
+  <!-- ===== หน้าโปรไฟล์ ===== -->
+  <div class="page" id="profilePage">
+    <div class="page-header">
+      <span class="back-btn" onclick="closePage()">←</span>
+      <span class="page-title">โปรไฟล์</span>
+      <span></span>
+    </div>
+    <div class="profile-content">
+      <div class="prof-avatar">👤</div>
+      <div class="prof-name">เข้าสู่ระบบ</div>
+      <div class="prof-username">@thaipodee</div>
+      <div class="prof-stats">
+        <div><div class="stat-num">0</div><div class="stat-label">ติดตาม</div></div>
+        <div><div class="stat-num">0</div><div class="stat-label">ผู้ติดตาม</div></div>
+        <div><div class="stat-num">0</div><div class="stat-label">ถูกใจ</div></div>
+      </div>
+      <button class="logout-btn" id="logoutBtn" onclick="logout()" style="display:none;">ออกจากระบบ</button>
+    </div>
+  </div>
+
+  <!-- ===== แถบเมนูล่าง ===== -->
   <div class="bottom-nav">
-    <div class="nav-item active" onclick="switchPage('home')">
-      <span class="nav-icon">🏠</span>
-      <span class="nav-label">หน้าแรก</span>
-    </div>
-    <div class="nav-item" onclick="switchPage('shop')">
-      <span class="nav-icon">🛒</span>
-      <span class="nav-label">ร้านค้า</span>
-    </div>
-    <div class="nav-item" onclick="alert('เปิดหน้าต่างอัปโหลด')">
-      <span class="nav-add">+</span>
-    </div>
-    <div class="nav-item" onclick="switchPage('inbox')">
-      <span class="nav-icon">💬</span>
-      <span class="nav-label">กล่องข้อความ</span>
-    </div>
-    <div class="nav-item" onclick="switchPage('profile')">
-      <span class="nav-icon">👤</span>
-      <span class="nav-label">โปรไฟล์</span>
-    </div>
-  </div>
-
-  <!-- MODAL: แก้ไขชื่อ -->
-  <div class="modal" id="editNameModal">
-    <div class="modal-box">
-      <div class="modal-title">แก้ไขชื่อ</div>
-      <input type="text" id="inputFullName" placeholder="ชื่อที่แสดง">
-      <input type="text" id="inputUsername" placeholder="@ชื่อผู้ใช้">
-      <div class="modal-buttons">
-        <button class="btn btn-cancel" onclick="closeModal('editNameModal')">ยกเลิก</button>
-        <button class="btn btn-save" onclick="saveNames()">บันทึก</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL: แก้ไขคำอธิบาย -->
-  <div class="modal" id="editBioModal">
-    <div class="modal-box">
-      <div class="modal-title">แก้ไขคำอธิบาย</div>
-      <textarea id="inputBio" rows="4" placeholder="เขียนคำอธิบายโปรไฟล์ของคุณ..."></textarea>
-      <div class="modal-buttons">
-        <button class="btn btn-cancel" onclick="closeModal('editBioModal')">ยกเลิก</button>
-        <button class="btn btn-save" onclick="saveBio()">บันทึก</button>
-      </div>
-    </div>
+    <div class="nav-item active" id="nav-home" onclick="switchNav('home')"><span class="nav-icon">🏠</span><span class="nav-label">หน้าแรก</span></div>
+    <div class="nav-item" id="nav-discover"><span class="nav-icon">🔍</span><span class="nav-label">ค้นหา</span></div>
+    <div class="nav-item" onclick="openUploadOrLogin()"><span class="nav-create">+</span></div>
+    <div class="nav-item" id="nav-inbox"><span class="nav-icon">💬</span><span class="nav-label">กล่องข้อความ</span></div>
+    <div class="nav-item" id="nav-profile" onclick="openProfileOrLogin()"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></div>
   </div>
 
   <script>
-    // ===== เปลี่ยนรูปโปรไฟล์ — แต่ละคนอัปโหลดของตัวเอง =====
-    function changeAvatar(input) {
-      if (!input.files || !input.files[0]) return;
-      const url = URL.createObjectURL(input.files[0]);
-      document.getElementById('avatar').src = url;
-      saveUserData('avatar', url);
-    }
-
-    // ===== เปิด/ปิด MODAL =====
-    function openEditNameModal() {
-      document.getElementById('inputFullName').value = document.getElementById('fullName').textContent;
-      document.getElementById('inputUsername').value = document.getElementById('username').textContent.replace('@', '');
-      document.getElementById('editNameModal').classList.add('active');
-    }
-    function openEditBioModal() {
-      document.getElementById('inputBio').value = document.getElementById('bio').textContent;
-      document.getElementById('editBioModal').classList.add('active');
-    }
-    function closeModal(id) {
-      document.getElementById(id).classList.remove('active');
-    }
-
-    // ===== บันทึกชื่อ =====
-    function saveNames() {
-      const fullName = document.getElementById('inputFullName').value.trim() || 'ชื่อผู้ใช้';
-      const username = document.getElementById('inputUsername').value.trim() || 'username';
-      document.getElementById('fullName').textContent = fullName;
-      document.getElementById('username').textContent = '@' + username;
-      saveUserData('fullName', fullName);
-      saveUserData('username', username);
-      closeModal('editNameModal');
-    }
-
-    // ===== บันทึกคำอธิบาย =====
-    function saveBio() {
-      const bio = document.getElementById('inputBio').value.trim() || 'ยินดีต้อนรับ! แก้ไขคำอธิบายได้ตามต้องการ';
-      document.getElementById('bio').textContent = bio;
-      saveUserData('bio', bio);
-      closeModal('editBioModal');
-    }
-
-    // ===== สลับแท็บวิดีโอ =====
-    function switchTab(tabName) {
-      document.querySelectorAll('.tab-icon').forEach(t => t.classList.remove('active'));
-      event.target.classList.add('active');
-    }
-
-    // ===== สลับหน้า =====
-    function switchPage(pageName) {
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      event.currentTarget.classList.add('active');
-      alert('ไปที่หน้า: ' + pageName);
-    }
-
-    // ===== บันทึก/โหลดข้อมูลผู้ใช้ — แยกแต่ละคน =====
-    function saveUserData(key, value) {
-      localStorage.setItem('user_' + key, value);
-    }
-    function loadUserData(key, defaultValue) {
-      return localStorage.getItem('user_' + key) || defaultValue;
-    }
-
-    // ===== โหลดข้อมูลตอนเปิดหน้า =====
-    window.addEventListener('load', () => {
-      const savedAvatar = loadUserData('avatar', '');
-      if (savedAvatar) document.getElementById('avatar').src = savedAvatar;
-      
-      document.getElementById('fullName').textContent = loadUserData('fullName', 'ชื่อผู้ใช้');
-      document.getElementById('username').textContent = '@' + loadUserData('username', 'username');
-      document.getElementById('bio').textContent = loadUserData('bio', 'ยินดีต้อนรับ! แก้ไขคำอธิบายได้ตามต้องการ');
-      
-      // สถิติ — ในระบบจริงจะดึงจากฐานข้อมูล
-      document.getElementById('following').textContent = loadUserData('following', '0');
-      document.getElementById('followers').textContent = loadUserData('followers', '0');
-      document.getElementById('likes').textContent = loadUserData('likes', '0');
+    // ===== PWA — แจ้งติดตั้งแอป =====
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      setTimeout(() => {
+        document.getElementById('installBanner').classList.add('show');
+      }, 2000);
     });
+
+    document.getElementById('installBtn').addEventListener('click', async () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      document.getElementById('installBanner').classList.remove('show');
+    });
+
+    function closeInstall() {
+      document.getElementById('installBanner').classList.remove('show');
+    }
+
+    // ===== เปลี่ยนไซซ์วิดีโอ =====
+    function setVideoSize(size) {
+      const container = document.getElementById('videoContainer');
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+      event.target.classList.add('active');
+      container.classList.remove('portrait', 'landscape', 'square');
+      container.classList.add(size);
+    }
+
+    // ===== กดไลค์ =====
+    function toggleLike(el) {
+      const icon = el.querySelector('.action-icon');
+      const count = el.querySelector('.action-count');
+      if (icon.textContent === '❤️') {
+        icon.textContent = '🤍';
+        count.textContent = '0';
+      } else {
+        icon.textContent = '❤️';
+        count.textContent = '1';
+      }
+    }
+
+    // ===== กดติดตาม =====
+    function toggleFollow(el) {
+      if (el.textContent === '+') {
+        el.textContent = '✓';
+        el.style.background = 'transparent';
+        el.style.color = '#fff';
+        el.style.border = '1px solid #fff';
+      } else {
+        el.textContent = '+';
+        el.style.background = '#fff';
+        el.style.color = '#000';
+        el.style.border = 'none';
+      }
+    }
+
+    let isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+    function openUploadOrLogin() {
+      if (!isLoggedIn) { alert('กรุณาเข้าสู่ระบบก่อนครับ'); return; }
+      alert('หน้าอัปโหลด — เร็วๆ นี้ครับ');
+    }
+
+    function openProfileOrLogin() {
+      closeAllPages();
+      document.getElementById('profilePage').classList.add('active');
+    }
+
+    function closePage() {
+      closeAllPages();
+    }
+
+    function closeAllPages() {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    }
+
+    function switchNav(page) {
+      closeAllPages();
+    }
+
+    function logout() {
+      localStorage.removeItem('isLoggedIn');
+      isLoggedIn = false;
+      closeAllPages();
+      alert('ออกจากระบบเรียบร้อยแล้วครับ');
+    }
   </script>
 </body>
 </html>
