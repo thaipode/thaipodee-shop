@@ -5,93 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ไทยโพธิ์ดี ช็อป</title>
     <style>
-        * {margin:0; padding:0; box-sizing:border-box; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;}
-        body {background:linear-gradient(135deg, #f8f9fa, #e9ecef); min-height:100vh; padding-bottom:80px;}
-        .header {text-align:center; padding:25px 0; background:linear-gradient(90deg, #A51931, #FFFFFF, #2E42A5); border-radius:16px; margin:15px; box-shadow:0 4px 20px rgba(0,0,0,0.1);}
-        .header h1 {color:#162975; font-size:28px; font-weight:bold; text-shadow:2px 2px 4px rgba(0,0,0,0.15);}
-        .upload-box {background:white; border-radius:16px; padding:30px; margin:15px; box-shadow:0 4px 20px rgba(0,0,0,0.08); text-align:center;}
-        .upload-box input[type="file"] {display:none;}
-        .upload-btn {background:linear-gradient(90deg, #A51931, #D42F4B); color:white; padding:14px 28px; border-radius:30px; font-size:18px; cursor:pointer; border:none; font-weight:600; transition:transform 0.2s;}
-        .upload-btn:hover {transform:scale(1.05);}
-        .video-container {padding:15px; display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:20px;}
-        .video-card {background:white; border-radius:16px; overflow:hidden; box-shadow:0 4px 15px rgba(0,0,0,0.1);}
-        .video-card video {width:100%; height:400px; object-fit:cover; background:#000;}
-        .video-info {padding:12px;}
-        .video-info h3 {font-size:16px; margin-bottom:8px; color:#333;}
-        .actions {display:flex; gap:15px; margin-top:10px;}
-        .actions button {background:none; border:none; font-size:20px; cursor:pointer; color:#666; display:flex; align-items:center; gap:5px;}
-        .actions button:hover {color:#A51931;}
-        .nav-bar {position:fixed; bottom:0; left:0; right:0; background:white; display:flex; justify-content:space-around; padding:12px 0; box-shadow:0 -2px 10px rgba(0,0,0,0.1);}
-        .nav-btn {display:flex; flex-direction:column; align-items:center; border:none; background:none; font-size:12px; color:#666; cursor:pointer;}
-        .nav-btn span {font-size:24px; margin-bottom:4px;}
-        .nav-btn.active {color:#A51931;}
-    </style>
-</head>
-<body>
-    <div class="header"><h1>ไทยโพธิ์ดี ช็อป</h1></div>
-
-    <div class="upload-box">
-        <h2 style="margin-bottom:20px; color:#333;">📤 อัปโหลดวิดีโอของคุณ</h2>
-        <input type="file" id="video-upload" accept="video/*">
-        <button class="upload-btn" onclick="document.getElementById('video-upload').click()">เลือกไฟล์วิดีโอ</button>
-        <p style="margin-top:15px; color:#888; font-size:14px;">รองรับ MP4, MOV, WebM</p>
-    </div>
-
-    <div class="video-container" id="video-list"></div>
-
-    <div class="nav-bar">
-        <button class="nav-btn active"><span>🏠</span>หน้าแรก</button>
-        <button class="nav-btn"><span>🔍</span>ค้นหา</button>
-        <button class="nav-btn"><span>➕</span>สร้าง</button>
-        <button class="nav-btn"><span>💬</span>ข้อความ</button>
-        <button class="nav-btn"><span>👤</span>โปรไฟล์</button>
-    </div>
-
-    <script>
-        const uploadInput = document.getElementById('video-upload');
-        const videoList = document.getElementById('video-list');
-        let videos = JSON.parse(localStorage.getItem('thaipodee_videos') || '[]');
-
-        function renderVideos() {
-            videoList.innerHTML = '';
-            videos.forEach((vid, i) => {
-                const card = document.createElement('div');
-                card.className = 'video-card';
-                card.innerHTML = `
-                    <video src="${vid.url}" controls playsinline></video>
-                    <div class="video-info">
-                        <h3>${vid.title || 'วิดีโอไม่มีชื่อ'}</h3>
-                        <div class="actions">
-                            <button onclick="likeVideo(${i})">❤️ <span>${vid.likes}</span></button>
-                            <button>💬 ${vid.comments}</button>
-                            <button>↗️ แชร์</button>
-                        </div>
-                    </div>`;
-                videoList.appendChild(card);
-            });
-        }
-
-        function likeVideo(i) {
-            videos[i].likes++;
-            saveVideos();
-            renderVideos();
-        }
-
-        function saveVideos() {
-            localStorage.setItem('thaipodee_videos', JSON.stringify(videos));
-        }
-
-        uploadInput.addEventListener('change', e => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const url = URL.createObjectURL(file);
-            videos.unshift({url, title: file.name, likes:0, comments:0});
-            saveVideos();
-            renderVideos();
-            alert('✅ อัปโหลดวิดีโอสำเร็จ!');
-        });
-
-        renderVideos();
-    </script>
-</body>
-</html>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
+        body{background:#000;color:#fff;min-height:100vh;padding-bottom:70px;}
+        .header{position:fixed;top:0;left:0;right:0;z-index:100;text-align:center;padding:12px 0;background:linear-gradient(90deg,#A51931,#fff,#2E42A5);}
+        .header h1{color:#162975;font-size:20px;font-weight:bold;}
+        .video-feed{margin-top:50px;}
+        .video-item{position:relative;width:100%;height:calc(100vh - 50px);background:#000;display:flex;align-items:center;justify-content:center;}
+        .video-item video{width:100%;height:100%;object-fit:cover;}
+        .side-actions{position:absolute;right:12px;bottom:100px;display:flex;flex-direction:column;align-items:center;gap:22px;}
+        .side-btn{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;color:#fff;font-size:12px;cursor:pointer;}
+        .side-btn span{font-size:28px;}
+        .side-btn.liked span{color:#fe2c55;}
+        .video-info{position:absolute;left:16px;right:80px;bottom:80px;}
+        .video-info h3{font-size:16px;margin-bottom:8px;font-weight:600;}
+        .video-info p{font-size:14px;color:#eee;line-height:1.4;}
+        .music-tag{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px;color:#ddd;}
+        .nav-bar{position:fixed;bottom:0;left:0;right:0;background:#000;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #333;z-index:100;}
+        .nav-btn{display:flex;flex-direction:column;align-items:center;border:none;background:none;color:#fff;font-size:11px;cursor:pointer;}
+        .nav-btn span{font-size:22px;margin-bottom:3px;}
+        .nav-btn.active{color:#fff;font-weight:bold;}
+        .nav-btn.plus-btn{background:linear-gradient(90deg,#25f4ee
