@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ไทยโพดีช็อป — Thaipodee Shop</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+        body { background: #000; color: #fff; max-width: 500px; margin: 0 auto; padding: 20px; }
+        h1 { text-align: center; color: #ffcc00; margin-bottom: 20px; font-size: 24px; }
+        .video-card { background: #1a1a1a; border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+        video { width: 100%; border-radius: 8px; margin: 10px 0; }
+        .btn { background: #ffcc00; color: #000; border: none; padding: 8px 12px; border-radius: 8px; font-size: 14px; cursor: pointer; margin: 5px 3px; font-weight: bold; }
+        .btn:hover { background: #ffd633; }
+        .like-btn { background: transparent; color: #ff4757; border: 1px solid #ff4757; }
+        .creator { color: #aaa; font-size: 13px; margin: 5px 0; }
+        .no-video { text-align: center; color: #888; padding: 40px; }
+    </style>
+</head>
+<body>
+    <h1>🛒 ไทยโพดีช็อป</h1>
+    <div id="video-feed">
+        <p class="no-video">กำลังโหลดวิดีโอ...</p>
+    </div>
+
+    <script>
+        const API_URL = "https://thaipodee-shop.onrender.com";
+
+        async function loadVideos() {
+            try {
+                const res = await fetch(`${API_URL}/videos/feed?skip=0&limit=20`);
+                const videos = await res.json();
+                const feed = document.getElementById("video-feed");
+                
+                if (videos.length === 0) {
+                    feed.innerHTML = `<p class="no-video">ยังไม่มีวิดีโอ เป็นคนแรกที่อัปโหลดได้เลย!</p>`;
+                    return;
+                }
+
+                feed.innerHTML = "";
+                videos.forEach(v => {
+                    feed.innerHTML += `
+                        <div class="video-card">
+                            <h3>${v.title}</h3>
+                            <video controls src="${API_URL}/${v.video_url}" playsinline></video>
+                            <p class="creator">@${v.creator_id} · ${new Date(v.created_at).toLocaleDateString('th-TH')}</p>
+                            <button class="btn like-btn">❤️ ${v.likes_count}</button>
+                            <button class="btn">💬 คอมเมนต์</button>
+                            <button class="btn">🔁 แชร์</button>
+                        </div>
+                    `;
+                });
+            } catch (err) {
+                document.getElementById("video-feed").innerHTML = 
+                    `<p class="no-video">โหลดไม่ได้ กรุณารอสักครู่แล้วรีเฟรชหน้าเว็บใหม่</p>`;
+            }
+        }
+
+        loadVideos();
+    </script>
+</body>
+</html>
