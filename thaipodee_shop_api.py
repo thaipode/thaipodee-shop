@@ -6,6 +6,7 @@ from fastapi.responses import JSONResponse, FileResponse
 
 import uuid
 from datetime import datetime
+import os
 
 os.makedirs("uploads/videos", exist_ok=True)
 
