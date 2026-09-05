@@ -1,0 +1,8 @@
+const firebaseConfig = {
+  apiKey: "AIzaSyBJrmW8nHxGQGkgwRTHdk6TOAE8mlwCYbE",
+  authDomain: "thaipodee-shop.firebaseapp.com",
+  projectId: "thaipodee-shop",
+  storageBucket: "thaipodee-shop.firebasestorage.app",
+  messagingSenderId: "385782986912",
+  appId: "1:385782986912:web:77c4e12dc6fd88cb70b1c5"
+};
