@@ -1,97 +1,69 @@
-<h1>🛒 ไทยโพธิ์ดีช็อป</h1>
-
-<div id="upload-form" style="margin: 30px 0; padding: 20px; background: #222; border-radius: 12px;">
-  <h3 style="color: #ffd700; margin-bottom: 15px;">📤 อัปโหลดวิดีโอ</h3>
-  <input type="text" id="video-name" placeholder="ชื่อวิดีโอ" style="width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 6px; border: none; background: #333; color: #fff;">
-  <input type="file" id="video-file" accept="video/*" style="width: 100%; padding: 10px; margin-bottom: 15px; color: #fff;">
-  <button onclick="uploadVideo()" style="background: #ffd700; color: #000; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;">อัปโหลดเลย</button>
-  <div id="upload-status" style="margin-top: 15px; color: #0f0;"></div>
-</div>
-
-<div id="video-feed">
-  <p class="no-video" id="no-video-text">ยังไม่มีวิดีโอ เป็นคนแรกที่อัปโหลดได้เลย!</p>
-</div>
-
-<script>
-const API_URL = window.location.origin;
-
-async function uploadVideo() {
-  const nameInput = document.getElementById("video-name");
-  const fileInput = document.getElementById("video-file");
-  const status = document.getElementById("upload-status");
-  
-  if (!nameInput.value.trim()) {
-    status.textContent = "⚠️ กรุณาใส่ชื่อวิดีโอ";
-    status.style.color = "#f00";
-    return;
-  }
-  if (!fileInput.files[0]) {
-    status.textContent = "⚠️ กรุณาเลือกไฟล์วิดีโอ";
-    status.style.color = "#f00";
-    return;
-  }
-  
-  status.textContent = "⏳ กำลังอัปโหลด...";
-  status.style.color = "#ffd700";
-  
-  const formData = new FormData();
-  formData.append("file", fileInput.files[0]);
-  formData.append("title", nameInput.value);
-  
-  try {
-    const res = await fetch(`${API_URL}/videos/`, {
-      method: "POST",
-      body: formData
-    });
-    const data = await res.json();
-    if (res.ok) {
-      status.textContent = "✅ อัปโหลดสำเร็จ!";
-      status.style.color = "#0f0";
-      nameInput.value = "";
-      fileInput.value = "";
-      loadVideos();
-    } else {
-      status.textContent = "❌ " + (data.detail || "อัปโหลดไม่สำเร็จ");
-      status.style.color = "#f00";
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ไทยโพธิ์ดี ช็อป</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+    body { background: linear-gradient(135deg, #f8f9fa, #e9ecef); min-height: 100vh; padding: 20px; }
+    .header { 
+      text-align: center; 
+      padding: 25px 0; 
+      background: linear-gradient(90deg, #A51931, #FFFFFF, #2E42A5); 
+      border-radius: 16px; 
+      margin-bottom: 30px; 
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1); 
     }
-  } catch (err) {
-    status.textContent = "❌ เกิดข้อผิดพลาด: " + err.message;
-    status.style.color = "#f00";
-  }
-}
-
-async function loadVideos() {
-  try {
-    const res = await fetch(`${API_URL}/videos/`);
-    const videos = await res.json();
-    const feed = document.getElementById("video-feed");
-    const noVideo = document.getElementById("no-video-text");
-    
-    if (videos.length === 0) {
-      noVideo.style.display = "block";
-      return;
+    .header h1 { 
+      color: #162975; 
+      font-size: 28px; 
+      font-weight: bold; 
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.15); 
     }
-    
-    noVideo.style.display = "none";
-    feed.innerHTML = "";
-    
-    videos.forEach(v => {
-      const card = document.createElement("div");
-      card.className = "video-card";
-      card.innerHTML = `
-        <h3 style="color: #ffd700; margin: 0 0 10px 0;">${v.title}</h3>
-        <video controls style="width: 100%; border-radius: 8px;">
-          <source src="${API_URL}${v.video_url}" type="video/mp4">
-          เบราว์เซอร์ไม่รองรับวิดีโอ
-        </video>
-        <p style="color: #888; font-size: 12px; margin-top: 8px;">อัปโหลดเมื่อ: ${new Date(v.created_at).toLocaleString('th-TH')}</p>
-      `;
-      feed.appendChild(card);
-    });
-  } catch (err) {
-    console.error("โหลดวิดีโอไม่ได้:", err);
-  }
-}
-
-loadVideos();
-</script>
+    .upload-box { 
+      background: white; 
+      border-radius: 16px; 
+      padding: 25px; 
+      margin-bottom: 30px; 
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+      border: 3px solid #2E42A5; 
+    }
+    .upload-box h3 { color: #A51931; margin-bottom: 15px; font-size: 20px; }
+    input[type="text"], input[type="file"] { 
+      width: 100%; 
+      padding: 12px; 
+      margin: 8px 0 15px 0; 
+      border: 2px solid #ddd; 
+      border-radius: 8px; 
+      font-size: 16px; 
+    }
+    input:focus { border-color: #A51931; outline: none; }
+    button { 
+      background: linear-gradient(90deg, #A51931, #c02440); 
+      color: white; 
+      border: none; 
+      padding: 14px 30px; 
+      border-radius: 8px; 
+      font-size: 18px; 
+      font-weight: bold; 
+      cursor: pointer; 
+      width: 100%; 
+      transition: all 0.3s ease; 
+      box-shadow: 0 3px 10px rgba(165, 25, 49, 0.3);
+    }
+    button:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(165, 25, 49, 0.4); }
+    #upload-status { margin-top: 15px; font-weight: bold; font-size: 16px; }
+    .video-card { 
+      background: white; 
+      border-radius: 16px; 
+      padding: 15px; 
+      margin-bottom: 20px; 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
+      border-left: 5px solid #A51931; 
+      transition: transform 0.2s ease;
+    }
+    .video-card:hover { transform: translateY(-3px); }
+    .video-card h3 { color: #162975; margin-bottom: 10px; }
+    video { width: 100%; border-radius: 12px; }
+    .no-video { text-align: center; color: #666
