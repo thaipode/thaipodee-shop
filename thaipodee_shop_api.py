@@ -56,3 +56,9 @@ async def upload_video(
 @app.get("/videos/feed", summary="ดูรายการวิดีโอ")
 async def get_feed(skip: int = 0, limit: int = 10):
     return videos_db[skip : skip + limit]
+
+@app.get("/")
+async def read_root():
+    if os.path.exists("index.html"):
+        return FileResponse("index.html")
+    return {"message": "Thaipodee Shop API is running!"}
