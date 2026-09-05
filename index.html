@@ -7,31 +7,153 @@
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
     body { background: #000; color: #fff; min-height: 100vh; padding-bottom: 80px; }
-    .header { background: linear-gradient(90deg, #d81e05 0%, #005aff 100%); padding: 12px; text-align: center; font-size: 22px; font-weight: bold; }
-    .video-container { width: 100%; max-width: 480px; margin: 0 auto; }
-    .video-card { width: 100%; aspect-ratio: 9/16; background: #1a1a1a; position: relative; margin-bottom: 10px; border-radius: 8px; overflow: hidden; }
+    .header {
+      background: linear-gradient(90deg, #d81e05 0%, #005aff 100%);
+      padding: 12px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
+    .video-container { width: 100%; max-width: 480px; margin: 60px auto 0; }
+    .video-card {
+      width: 100%;
+      aspect-ratio: 9/16;
+      background: #1a1a1a;
+      position: relative;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      overflow: hidden;
+    }
     video { width: 100%; height: 100%; object-fit: cover; }
-    .no-video { display: flex; align-items: center; justify-content: center; height: 60vh; color: #888; font-size: 18px; }
-    .side-icons { position: absolute; right: 12px; bottom: 100px; display: flex; flex-direction: column; gap: 22px; align-items: center; z-index: 10; }
-    .side-icons .icon { font-size: 26px; cursor: pointer; text-align: center; transition: transform 0.2s; }
+    .no-video {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 60vh;
+      color: #888;
+      font-size: 18px;
+      margin-top: 60px;
+    }
+    .side-icons {
+      position: fixed;
+      right: 12px;
+      bottom: 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      align-items: center;
+      z-index: 9999;
+    }
+    .side-icons .icon {
+      font-size: 28px;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.2s;
+      color: #fff;
+      display: block;
+    }
     .side-icons .icon:active { transform: scale(0.9); }
-    .side-icons .icon span { display: block; font-size: 11px; margin-top: 3px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+    .side-icons .icon span {
+      display: block;
+      font-size: 10px;
+      margin-top: 2px;
+      color: #fff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
     .side-icons .icon.liked { color: #ff2e54; filter: drop-shadow(0 0 4px #ff2e54); }
     .side-icons .icon.saved { color: #ffd700; filter: drop-shadow(0 0 4px #ffd700); }
-    .master-badge { background: linear-gradient(135deg, #ffd700, #ff9500); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px rgba(255,215,0,0.5); }
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #333; z-index: 50; }
+    .master-badge {
+      background: linear-gradient(135deg, #ffd700, #ff9500);
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 8px rgba(255,215,0,0.5);
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #000;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-top: 1px solid #333;
+      z-index: 50;
+    }
     .nav-item { text-align: center; cursor: pointer; }
     .nav-item .icon { font-size: 24px; }
     .nav-item span { font-size: 11px; display: block; margin-top: 2px; }
     .nav-item.create { background: linear-gradient(180deg, #ff0050, #00f2ea); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
-    .upload-btn { position: fixed; top: 12px; right: 12px; background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 15px; cursor: pointer; z-index: 100; }
+    .upload-btn {
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      background: #e74c3c;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 15px;
+      cursor: pointer;
+      z-index: 100;
+    }
     #fileInput { display: none; }
-    .profile-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100vh; background: #111; z-index: 200; transition: right 0.3s ease; padding: 20px; overflow-y: auto; }
+    .profile-panel {
+      position: fixed;
+      top: 0;
+      right: -100%;
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      background: #111;
+      z-index: 200;
+      transition: right 0.3s ease;
+      padding: 20px;
+      overflow-y: auto;
+    }
     .profile-panel.open { right: 0; }
     .close-btn { font-size: 24px; cursor: pointer; text-align: right; margin-bottom: 20px; }
-    .profile-avatar { width: 100px; height: 100px; border-radius: 50%; background: #333; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
-    .profile-input { width: 100%; padding: 10px; margin: 8px 0; background: #222; border: none; color: #fff; border-radius: 6px; font-size: 15px; }
-    .profile-save { width: 100%; padding: 12px; background: #2563e9; color: white; border: none; border-radius: 6px; font-size: 16px; margin-top: 10px; cursor: pointer; }
+    .profile-avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: #333;
+      margin: 0 auto 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+    .profile-input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      background: #222;
+      border: none;
+      color: #fff;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+    .profile-save {
+      width: 100%;
+      padding: 12px;
+      background: #2563e9;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
     .profile-info { text-align: center; margin-bottom: 20px; }
     .profile-info h2 { font-size: 20px; margin-bottom: 5px; }
     .profile-info p { color: #aaa; font-size: 14px; }
@@ -49,17 +171,14 @@
 
 <div class="profile-panel" id="profilePanel">
   <div class="close-btn" onclick="toggleProfile()">✕</div>
-  <div class="profile-info" id="profileView">
+  <div class="profile-info">
     <div class="profile-avatar" id="avatarDisplay">👤</div>
     <h2 id="displayName">ผู้ใช้ไม่ระบุ</h2>
     <p id="displayBio">ยังไม่ได้ตั้งค่าชีวิตสั้นๆ</p>
-    <button class="profile-save" onclick="showEditProfile()">แก้ไขโปรไฟล์</button>
   </div>
-  <div id="profileEdit" style="display:none;">
-    <input type="text" class="profile-input" id="inputName" placeholder="ชื่อผู้ใช้">
-    <input type="text" class="profile-input" id="inputBio" placeholder="ชีวิตสั้นๆ" style="height:80px;">
-    <button class="profile-save" onclick="saveProfile()">บันทึกโปรไฟล์</button>
-  </div>
+  <input type="text" class="profile-input" id="inputName" placeholder="ชื่อผู้ใช้">
+  <input type="text" class="profile-input" id="inputBio" placeholder="ชีวิตสั้นๆ" style="height:80px;">
+  <button class="profile-save" onclick="saveProfile()">บันทึกโปรไฟล์</button>
 </div>
 
 <div class="bottom-nav">
@@ -67,7 +186,7 @@
   <div class="nav-item" onclick="switchTab('search')"><div class="icon">🔍</div><span>ค้นหา</span></div>
   <div class="nav-item" onclick="document.getElementById('fileInput').click()"><div class="icon create">+</div><span>สร้าง</span></div>
   <div class="nav-item" onclick="switchTab('inbox')"><div class="icon">💬</div><span>ข้อความ</span></div>
-  <div class="nav-item" onclick="toggleProfile(); return false;"><div class="icon">👤</div><span>โปรไฟล์</span></div>
+  <div class="nav-item" onclick="toggleProfile()"><div class="icon">👤</div><span>โปรไฟล์</span></div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -87,10 +206,13 @@ firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
 const db = firebase.database();
 
+let currentVideoId = null;
+
 function getProfile() {
   const saved = localStorage.getItem('thaipodee_profile');
   return saved ? JSON.parse(saved) : { name: '', bio: '' };
 }
+
 function showEditProfile() {
   const p = getProfile();
   document.getElementById('inputName').value = p.name;
@@ -98,25 +220,25 @@ function showEditProfile() {
   document.getElementById('profileView').style.display = 'none';
   document.getElementById('profileEdit').style.display = 'block';
 }
+
 function saveProfile() {
   const name = document.getElementById('inputName').value.trim() || 'ผู้ใช้ไม่ระบุ';
   const bio = document.getElementById('inputBio').value.trim() || 'ยังไม่ได้ตั้งค่าชีวิตสั้นๆ';
   localStorage.setItem('thaipodee_profile', JSON.stringify({ name, bio }));
   updateProfileDisplay();
-  document.getElementById('profileEdit').style.display = 'none';
-  document.getElementById('profileView').style.display = 'block';
+  toggleProfile();
   alert('บันทึกโปรไฟล์สำเร็จ! ✅');
 }
+
 function updateProfileDisplay() {
   const p = getProfile();
   document.getElementById('displayName').textContent = p.name;
   document.getElementById('displayBio').textContent = p.bio;
 }
+
 function toggleProfile() {
   const panel = document.getElementById('profilePanel');
-  if (!panel) return;
-  if (panel.classList.contains('open')) { panel.classList.remove('open'); }
-  else { panel.classList.add('open'); updateProfileDisplay(); document.getElementById('profileView').style.display = 'block'; document.getElementById('profileEdit').style.display = 'none'; }
+  panel.classList.toggle('open');
 }
 
 async function uploadVideo(event) {
@@ -125,23 +247,33 @@ async function uploadVideo(event) {
   try {
     const profile = getProfile();
     const ref = storage.ref('videos/' + Date.now() + '_' + file.name);
-    const snap = await ref.put(file);
-    const url = await snap.ref.getDownloadURL();
-    await db.ref('videos').push({ url: url, name: file.name, uploader: profile.name || 'ไม่ระบุชื่อ', createdAt: Date.now(), likes: 0 });
+    const snapshot = await ref.put(file);
+    const url = await snapshot.ref.getDownloadURL();
+    await db.ref('videos').push({
+      url: url,
+      name: file.name,
+      uploader: profile.name || 'ไม่ระบุชื่อ',
+      createdAt: Date.now(),
+      likes: 0
+    });
     alert('อัปโหลดสำเร็จ! ✅');
     loadVideos();
-  } catch (err) { alert('อัปโหลดล้มเหลว: ' + err.message); }
+  } catch (err) {
+    alert('อัปโหลดล้มเหลว: ' + err.message);
+  }
 }
 
 async function loadVideos() {
   const container = document.getElementById('videoContainer');
   const noVideo = document.getElementById('noVideoMsg');
   container.innerHTML = '';
-  container.appendChild(noVideo);
   try {
     const snap = await db.ref('videos').orderByChild('createdAt').once('value');
-    if (!snap.exists()) return;
-    noVideo.style.display = 'none';
+    if (!snap.exists()) {
+      container.appendChild(noVideo);
+      return;
+    }
+    noVideo.remove();
     const data = snap.val();
     const entries = Object.entries(data).sort((a, b) => b[1].createdAt - a[1].createdAt);
     for (const [id, vid] of entries) {
@@ -161,7 +293,9 @@ async function loadVideos() {
       `;
       container.appendChild(card);
     }
-  } catch (err) { console.error('โหลดวิดีโอไม่สำเร็จ:', err); }
+  } catch (err) {
+    console.error('โหลดวิดีโอไม่สำเร็จ:', err);
+  }
 }
 
 function openUserProfile(name) { alert('โปรไฟล์ผู้ใช้: @' + name); }
@@ -174,17 +308,17 @@ async function toggleLike(videoId) {
   btn.classList.add('liked');
   count.textContent = current + 1;
 }
-function openComments(videoId) { alert('เปิดคอมเมนต์ 💬'); }
+function openComments(videoId) { alert('เปิดคอมเมนต์ 🗨️'); }
 function toggleSave(videoId) {
   const btn = document.getElementById('saveBtn-' + videoId);
   btn.classList.toggle('saved');
-  alert(btn.classList.contains('saved') ? 'บันทึกเรียบร้อย! ⭐' : 'ยกเลิกการบันทึกแล้ว');
+  alert(btn.classList.contains('saved') ? 'บันทึกเรียบร้อย! ⭐' : 'ยกเลิกการบันทึก');
 }
 function sharePost(url) {
   if (navigator.share) navigator.share({ title: 'ไทยโพธิ์ดี ช็อป', url: url });
-  else { navigator.clipboard.writeText(url); alert('คัดลอกลิงก์เรียบร้อย! 🔗'); }
+  else { navigator.clipboard.writeText(url); alert('คัดลอกลิงก์เรียบร้อย! 📋'); }
 }
-function viewCreator(name) { alert('🎵 เจ้าของผลงาน\nชื่อ: ' + name + '\nสิทธิ์: เจ้าของลิขสิทธิ์ ✅'); }
+function viewCreator(name) { alert('🎵 เจ้าของผลงาน\nชื่อ: ' + name + '\nสิทธิ์: เจ้าของลิขสิทธิ์'); }
 function switchTab(tab) { if (tab === 'home') loadVideos(); alert('ไปที่: ' + tab); }
 
 updateProfileDisplay();
