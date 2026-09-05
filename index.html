@@ -5,23 +5,122 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ไทยโพธิ์ดี ช็อป</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;}
-        body{background:#000;color:#fff;min-height:100vh;padding-bottom:70px;}
-        .header{position:fixed;top:0;left:0;right:0;z-index:100;text-align:center;padding:12px 0;background:linear-gradient(90deg,#A51931,#fff,#2E42A5);}
-        .header h1{color:#162975;font-size:20px;font-weight:bold;}
-        .video-feed{margin-top:50px;}
-        .video-item{position:relative;width:100%;height:calc(100vh - 50px);background:#000;display:flex;align-items:center;justify-content:center;}
-        .video-item video{width:100%;height:100%;object-fit:cover;}
-        .side-actions{position:absolute;right:12px;bottom:100px;display:flex;flex-direction:column;align-items:center;gap:22px;}
-        .side-btn{display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;color:#fff;font-size:12px;cursor:pointer;}
-        .side-btn span{font-size:28px;}
-        .side-btn.liked span{color:#fe2c55;}
-        .video-info{position:absolute;left:16px;right:80px;bottom:80px;}
-        .video-info h3{font-size:16px;margin-bottom:8px;font-weight:600;}
-        .video-info p{font-size:14px;color:#eee;line-height:1.4;}
-        .music-tag{display:flex;align-items:center;gap:8px;margin-top:10px;font-size:13px;color:#ddd;}
-        .nav-bar{position:fixed;bottom:0;left:0;right:0;background:#000;display:flex;justify-content:space-around;padding:10px 0;border-top:1px solid #333;z-index:100;}
-        .nav-btn{display:flex;flex-direction:column;align-items:center;border:none;background:none;color:#fff;font-size:11px;cursor:pointer;}
-        .nav-btn span{font-size:22px;margin-bottom:3px;}
-        .nav-btn.active{color:#fff;font-weight:bold;}
-        .nav-btn.plus-btn{background:linear-gradient(90deg,#25f4ee
+        * {margin:0; padding:0; box-sizing:border-box; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;}
+        body {background:#000; color:#fff; min-height:100vh; padding-bottom:70px;}
+        .header {position:fixed; top:0; left:0; right:0; z-index:100; text-align:center; padding:12px 0; background:linear-gradient(90deg, #A51931, #FFFFFF, #2E42A5);}
+        .header h1 {color:#162975; font-size:20px; font-weight:bold;}
+        .video-feed {margin-top:50px;}
+        .empty-state {display:flex; flex-direction:column; align-items:center; justify-content:center; height:calc(100vh - 50px); color:#888; text-align:center; padding:20px;}
+        .empty-state h2 {font-size:18px; margin-bottom:10px; color:#aaa;}
+        .empty-state p {font-size:14px;}
+        .video-item {position:relative; width:100%; height:calc(100vh - 50px); background:#000; display:flex; align-items:center; justify-content:center;}
+        .video-item video {width:100%; height:100%; object-fit:cover;}
+        .side-actions {position:absolute; right:12px; bottom:100px; display:flex; flex-direction:column; align-items:center; gap:22px;}
+        .side-btn {display:flex; flex-direction:column; align-items:center; gap:4px; background:none; border:none; color:#fff; font-size:12px; cursor:pointer;}
+        .side-btn span {font-size:28px;}
+        .side-btn.liked span {color:#fe2c55;}
+        .video-info {position:absolute; left:16px; right:80px; bottom:80px;}
+        .video-info h3 {font-size:16px; margin-bottom:8px; font-weight:600;}
+        .video-info p {font-size:14px; color:#eee; line-height:1.4;}
+        .music-tag {display:flex; align-items:center; gap:8px; margin-top:10px; font-size:13px; color:#ddd;}
+        .nav-bar {position:fixed; bottom:0; left:0; right:0; background:#000; display:flex; justify-content:space-around; padding:10px 0; border-top:1px solid #333; z-index:100;}
+        .nav-btn {display:flex; flex-direction:column; align-items:center; border:none; background:none; color:#fff; font-size:11px; cursor:pointer;}
+        .nav-btn span {font-size:22px; margin-bottom:3px;}
+        .nav-btn.active {color:#fff; font-weight:bold;}
+        .nav-btn.plus-btn {background:linear-gradient(90deg, #25f4ee, #fe2c55); padding:4px 12px; border-radius:8px; color:#000; font-weight:bold;}
+        #video-upload {display:none;}
+        .upload-btn-fixed {position:fixed; top:60px; right:16px; background:linear-gradient(90deg, #A51931, #D42F4B); color:white; border:none; padding:10px 16px; border-radius:20px; font-size:14px; z-index:99; cursor:pointer;}
+    </style>
+</head>
+<body>
+    <div class="header"><h1>ไทยโพธิ์ดี ช็อป</h1></div>
+    <button class="upload-btn-fixed" onclick="document.getElementById('video-upload').click()">📤 อัปโหลด</button>
+    <input type="file" id="video-upload" accept="video/*">
+    <div class="video-feed" id="video-feed"></div>
+    <div class="nav-bar">
+        <button class="nav-btn active"><span>🏠</span>หน้าแรก</button>
+        <button class="nav-btn"><span>🔍</span>ค้นหา</button>
+        <button class="nav-btn plus-btn" onclick="document.getElementById('video-upload').click();"><span>➕</span>สร้าง</button>
+        <button class="nav-btn"><span>💬</span>ข้อความ</button>
+        <button class="nav-btn"><span>👤</span>โปรไฟล์</button>
+    </div>
+
+    <script>
+        const uploadInput = document.getElementById('video-upload');
+        const videoFeed = document.getElementById('video-feed');
+        let videos = JSON.parse(localStorage.getItem('thaipodee_videos') || '[]');
+
+        function renderVideos() {
+            videoFeed.innerHTML = '';
+            if (videos.length === 0) {
+                videoFeed.innerHTML = '<div class="empty-state"><h2>ยินดีต้อนรับสู่ ไทยโพธิ์ดี ช็อป</h2><p>ยังไม่มีวิดีโอ กดปุ่ม ➕ หรือ 📤 เพื่ออัปโหลดวิดีโอของคุณเลยครับ!</p></div>';
+                return;
+            }
+            videos.forEach((vid, index) => {
+                const item = document.createElement('div');
+                item.className = 'video-item';
+                item.innerHTML = `
+                    <video src="${vid.url}" controls playsinline loop></video>
+                    <div class="video-info">
+                        <h3>@ไทยโพธิ์ดี ช็อป</h3>
+                        <p>${vid.title || 'วิดีโอใหม่'}</p>
+                        <div class="music-tag">🎵 เสียงต้นฉบับ - ไทยโพธิ์ดี</div>
+                    </div>
+                    <div class="side-actions">
+                        <button class="side-btn ${vid.liked ? 'liked' : ''}" onclick="toggleLike(${index}, this)">
+                            <span>❤️</span>
+                            <span>${vid.likes}</span>
+                        </button>
+                        <button class="side-btn">
+                            <span>💬</span>
+                            <span>${vid.comments || 0}</span>
+                        </button>
+                        <button class="side-btn">
+                            <span>⭐</span>
+                            <span>บันทึก</span>
+                        </button>
+                        <button class="side-btn" onclick="shareVideo()">
+                            <span>↗️</span>
+                            <span>แชร์</span>
+                        </button>
+                    </div>
+                `;
+                videoFeed.appendChild(item);
+            });
+        }
+
+        function toggleLike(index, btn) {
+            videos[index].liked = !videos[index].liked;
+            videos[index].likes += videos[index].liked ? 1 : -1;
+            saveVideos();
+            btn.classList.toggle('liked');
+            btn.querySelector('span:last-child').textContent = videos[index].likes;
+        }
+
+        function shareVideo() {
+            if (navigator.share) {
+                navigator.share({title: 'ไทยโพธิ์ดี ช็อป', text: 'มาดูวิดีโอของฉันกัน!', url: window.location.href});
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert('คัดลอกลิงก์แล้ว! แชร์ให้เพื่อนได้เลยครับ!');
+            }
+        }
+
+        function saveVideos() {
+            localStorage.setItem('thaipodee_videos', JSON.stringify(videos));
+        }
+
+        uploadInput.addEventListener('change', e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const url = URL.createObjectURL(file);
+            videos.unshift({url, title: file.name, likes:0, comments:0, liked:false});
+            saveVideos();
+            renderVideos();
+            alert('✅ อัปโหลดสำเร็จ! 🎉');
+        });
+
+        renderVideos();
+    </script>
+</body>
+</html>
