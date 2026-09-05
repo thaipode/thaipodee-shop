@@ -39,6 +39,7 @@
       font-size: 18px;
       margin-top: 60px;
     }
+    /* ===== ไอคอนด้านขวา — แสดงตลอด ตอนเปิดเว็บเลย! ===== */
     .side-icons {
       position: fixed;
       right: 12px;
@@ -165,6 +166,16 @@
 <button class="upload-btn" onclick="document.getElementById('fileInput').click()">อัปโหลด</button>
 <input type="file" id="fileInput" accept="video/*" onchange="uploadVideo(event)">
 
+<!-- ===== ไอคอนด้านขวา — แสดงทันทีตอนเปิดเว็บ! ===== -->
+<div class="side-icons">
+  <div class="icon" onclick="alert('โปรไฟล์ผู้ใช้')">👤<span>โปรไฟล์</span></div>
+  <div class="icon" id="likeBtnMain" onclick="this.classList.toggle('liked'); alert('กดถูกใจ! ❤️')">❤️<span>0</span></div>
+  <div class="icon" onclick="alert('เปิดคอมเมนต์ 💬')">💬<span>0</span></div>
+  <div class="icon" id="saveBtnMain" onclick="this.classList.toggle('saved'); alert('บันทึกเรียบร้อย! ⭐')">⭐<span>บันทึก</span></div>
+  <div class="icon" onclick="alert('แชร์ 🔁')">🔁<span>แชร์</span></div>
+  <div class="icon master-badge" onclick="alert('🎵 เจ้าของผลงาน')">🎵<span>เจ้าของ</span></div>
+</div>
+
 <div class="video-container" id="videoContainer">
   <div class="no-video" id="noVideoMsg">ยังไม่มีวิดีโอ อัปโหลดวิดีโอแรกของคุณเลย!</div>
 </div>
@@ -206,19 +217,9 @@ firebase.initializeApp(firebaseConfig);
 const storage = firebase.storage();
 const db = firebase.database();
 
-let currentVideoId = null;
-
 function getProfile() {
   const saved = localStorage.getItem('thaipodee_profile');
   return saved ? JSON.parse(saved) : { name: '', bio: '' };
-}
-
-function showEditProfile() {
-  const p = getProfile();
-  document.getElementById('inputName').value = p.name;
-  document.getElementById('inputBio').value = p.bio;
-  document.getElementById('profileView').style.display = 'none';
-  document.getElementById('profileEdit').style.display = 'block';
 }
 
 function saveProfile() {
@@ -282,12 +283,12 @@ async function loadVideos() {
       card.innerHTML = `
         <video src="${vid.url}" controls loop playsinline></video>
         <div class="side-icons">
-          <div class="icon" onclick="openUserProfile('${vid.uploader}')">👤<span>โปรไฟล์</span></div>
-          <div class="icon" id="likeBtn-${id}" onclick="toggleLike('${id}')">❤️<span id="likeCount-${id}">${vid.likes || 0}</span></div>
-          <div class="icon" onclick="openComments('${id}')">💬<span>0</span></div>
-          <div class="icon" id="saveBtn-${id}" onclick="toggleSave('${id}')">⭐<span>บันทึก</span></div>
-          <div class="icon" onclick="sharePost('${vid.url}')">🔁<span>แชร์</span></div>
-          <div class="icon master-badge" onclick="viewCreator('${vid.uploader}')">🎵<span>เจ้าของ</span></div>
+          <div class="icon" onclick="alert('โปรไฟล์: @${vid.uploader}')">👤<span>โปรไฟล์</span></div>
+          <div class="icon" onclick="this.classList.toggle('liked'); alert('กดถูกใจ! ❤️')">❤️<span>${vid.likes || 0}</span></div>
+          <div class="icon" onclick="alert('คอมเมนต์ 💬')">💬<span>0</span></div>
+          <div class="icon" onclick="this.classList.toggle('saved'); alert('บันทึก ⭐')">⭐<span>บันทึก</span></div>
+          <div class="icon" onclick="alert('แชร์ 🔁')">🔁<span>แชร์</span></div>
+          <div class="icon master-badge" onclick="alert('เจ้าของ: ${vid.uploader}')">🎵<span>เจ้าของ</span></div>
         </div>
         <div style="position:absolute; bottom:20px; left:12px;"><div style="font-weight:bold;">@${vid.uploader}</div></div>
       `;
@@ -298,27 +299,6 @@ async function loadVideos() {
   }
 }
 
-function openUserProfile(name) { alert('โปรไฟล์ผู้ใช้: @' + name); }
-async function toggleLike(videoId) {
-  const btn = document.getElementById('likeBtn-' + videoId);
-  const count = document.getElementById('likeCount-' + videoId);
-  const snap = await db.ref('videos/' + videoId + '/likes').once('value');
-  const current = snap.val() || 0;
-  await db.ref('videos/' + videoId + '/likes').set(current + 1);
-  btn.classList.add('liked');
-  count.textContent = current + 1;
-}
-function openComments(videoId) { alert('เปิดคอมเมนต์ 🗨️'); }
-function toggleSave(videoId) {
-  const btn = document.getElementById('saveBtn-' + videoId);
-  btn.classList.toggle('saved');
-  alert(btn.classList.contains('saved') ? 'บันทึกเรียบร้อย! ⭐' : 'ยกเลิกการบันทึก');
-}
-function sharePost(url) {
-  if (navigator.share) navigator.share({ title: 'ไทยโพธิ์ดี ช็อป', url: url });
-  else { navigator.clipboard.writeText(url); alert('คัดลอกลิงก์เรียบร้อย! 📋'); }
-}
-function viewCreator(name) { alert('🎵 เจ้าของผลงาน\nชื่อ: ' + name + '\nสิทธิ์: เจ้าของลิขสิทธิ์'); }
 function switchTab(tab) { if (tab === 'home') loadVideos(); alert('ไปที่: ' + tab); }
 
 updateProfileDisplay();
