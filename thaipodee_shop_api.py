@@ -2,8 +2,8 @@
 from fastapi import FastAPI, UploadFile, File, Query
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
-import os
+from fastapi.responses import JSONResponse, FileResponse
+
 import uuid
 from datetime import datetime
 
