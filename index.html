@@ -1,126 +1,195 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ไทยโพธิ์ดี ช็อป</title>
-    <style>
-        * {margin:0; padding:0; box-sizing:border-box; font-family:-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;}
-        body {background:#000; color:#fff; min-height:100vh; padding-bottom:70px;}
-        .header {position:fixed; top:0; left:0; right:0; z-index:100; text-align:center; padding:12px 0; background:linear-gradient(90deg, #A51931, #FFFFFF, #2E42A5);}
-        .header h1 {color:#162975; font-size:20px; font-weight:bold;}
-        .video-feed {margin-top:50px;}
-        .empty-state {display:flex; flex-direction:column; align-items:center; justify-content:center; height:calc(100vh - 50px); color:#888; text-align:center; padding:20px;}
-        .empty-state h2 {font-size:18px; margin-bottom:10px; color:#aaa;}
-        .empty-state p {font-size:14px;}
-        .video-item {position:relative; width:100%; height:calc(100vh - 50px); background:#000; display:flex; align-items:center; justify-content:center;}
-        .video-item video {width:100%; height:100%; object-fit:cover;}
-        .side-actions {position:absolute; right:12px; bottom:100px; display:flex; flex-direction:column; align-items:center; gap:22px;}
-        .side-btn {display:flex; flex-direction:column; align-items:center; gap:4px; background:none; border:none; color:#fff; font-size:12px; cursor:pointer;}
-        .side-btn span {font-size:28px;}
-        .side-btn.liked span {color:#fe2c55;}
-        .video-info {position:absolute; left:16px; right:80px; bottom:80px;}
-        .video-info h3 {font-size:16px; margin-bottom:8px; font-weight:600;}
-        .video-info p {font-size:14px; color:#eee; line-height:1.4;}
-        .music-tag {display:flex; align-items:center; gap:8px; margin-top:10px; font-size:13px; color:#ddd;}
-        .nav-bar {position:fixed; bottom:0; left:0; right:0; background:#000; display:flex; justify-content:space-around; padding:10px 0; border-top:1px solid #333; z-index:100;}
-        .nav-btn {display:flex; flex-direction:column; align-items:center; border:none; background:none; color:#fff; font-size:11px; cursor:pointer;}
-        .nav-btn span {font-size:22px; margin-bottom:3px;}
-        .nav-btn.active {color:#fff; font-weight:bold;}
-        .nav-btn.plus-btn {background:linear-gradient(90deg, #25f4ee, #fe2c55); padding:4px 12px; border-radius:8px; color:#000; font-weight:bold;}
-        #video-upload {display:none;}
-        .upload-btn-fixed {position:fixed; top:60px; right:16px; background:linear-gradient(90deg, #A51931, #D42F4B); color:white; border:none; padding:10px 16px; border-radius:20px; font-size:14px; z-index:99; cursor:pointer;}
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ไทยโพธิ์ดี ช็อป</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+    body { background: #000; color: #fff; min-height: 100vh; padding-bottom: 80px; }
+    .header { background: linear-gradient(90deg, #d81e05 0%, #005aff 100%); padding: 12px; text-align: center; font-size: 22px; font-weight: bold; }
+    .video-container { width: 100%; max-width: 480px; margin: 0 auto; }
+    .video-card { width: 100%; aspect-ratio: 9/16; background: #1a1a1a; position: relative; margin-bottom: 10px; border-radius: 8px; overflow: hidden; }
+    video { width: 100%; height: 100%; object-fit: cover; }
+    .no-video { display: flex; align-items: center; justify-content: center; height: 60vh; color: #888; font-size: 18px; }
+    .side-icons { position: absolute; right: 12px; bottom: 100px; display: flex; flex-direction: column; gap: 22px; align-items: center; z-index: 10; }
+    .side-icons .icon { font-size: 26px; cursor: pointer; text-align: center; transition: transform 0.2s; }
+    .side-icons .icon:active { transform: scale(0.9); }
+    .side-icons .icon span { display: block; font-size: 11px; margin-top: 3px; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+    .side-icons .icon.liked { color: #ff2e54; filter: drop-shadow(0 0 4px #ff2e54); }
+    .side-icons .icon.saved { color: #ffd700; filter: drop-shadow(0 0 4px #ffd700); }
+    .master-badge { background: linear-gradient(135deg, #ffd700, #ff9500); border-radius: 50%; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 8px rgba(255,215,0,0.5); }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; display: flex; justify-content: space-around; padding: 10px 0; border-top: 1px solid #333; z-index: 50; }
+    .nav-item { text-align: center; cursor: pointer; }
+    .nav-item .icon { font-size: 24px; }
+    .nav-item span { font-size: 11px; display: block; margin-top: 2px; }
+    .nav-item.create { background: linear-gradient(180deg, #ff0050, #00f2ea); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; }
+    .upload-btn { position: fixed; top: 12px; right: 12px; background: #e74c3c; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 15px; cursor: pointer; z-index: 100; }
+    #fileInput { display: none; }
+    .profile-panel { position: fixed; top: 0; right: -100%; width: 100%; max-width: 400px; height: 100vh; background: #111; z-index: 200; transition: right 0.3s ease; padding: 20px; overflow-y: auto; }
+    .profile-panel.open { right: 0; }
+    .close-btn { font-size: 24px; cursor: pointer; text-align: right; margin-bottom: 20px; }
+    .profile-avatar { width: 100px; height: 100px; border-radius: 50%; background: #333; margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+    .profile-input { width: 100%; padding: 10px; margin: 8px 0; background: #222; border: none; color: #fff; border-radius: 6px; font-size: 15px; }
+    .profile-save { width: 100%; padding: 12px; background: #2563e9; color: white; border: none; border-radius: 6px; font-size: 16px; margin-top: 10px; cursor: pointer; }
+    .profile-info { text-align: center; margin-bottom: 20px; }
+    .profile-info h2 { font-size: 20px; margin-bottom: 5px; }
+    .profile-info p { color: #aaa; font-size: 14px; }
+  </style>
 </head>
 <body>
-    <div class="header"><h1>ไทยโพธิ์ดี ช็อป</h1></div>
-    <button class="upload-btn-fixed" onclick="document.getElementById('video-upload').click()">📤 อัปโหลด</button>
-    <input type="file" id="video-upload" accept="video/*">
-    <div class="video-feed" id="video-feed"></div>
-    <div class="nav-bar">
-        <button class="nav-btn active"><span>🏠</span>หน้าแรก</button>
-        <button class="nav-btn"><span>🔍</span>ค้นหา</button>
-        <button class="nav-btn plus-btn" onclick="document.getElementById('video-upload').click();"><span>➕</span>สร้าง</button>
-        <button class="nav-btn"><span>💬</span>ข้อความ</button>
-        <button class="nav-btn"><span>👤</span>โปรไฟล์</button>
-    </div>
 
-    <script>
-        const uploadInput = document.getElementById('video-upload');
-        const videoFeed = document.getElementById('video-feed');
-        let videos = JSON.parse(localStorage.getItem('thaipodee_videos') || '[]');
+<div class="header">ไทยโพธิ์ดี ช็อป</div>
+<button class="upload-btn" onclick="document.getElementById('fileInput').click()">อัปโหลด</button>
+<input type="file" id="fileInput" accept="video/*" onchange="uploadVideo(event)">
 
-        function renderVideos() {
-            videoFeed.innerHTML = '';
-            if (videos.length === 0) {
-                videoFeed.innerHTML = '<div class="empty-state"><h2>ยินดีต้อนรับสู่ ไทยโพธิ์ดี ช็อป</h2><p>ยังไม่มีวิดีโอ กดปุ่ม ➕ หรือ 📤 เพื่ออัปโหลดวิดีโอของคุณเลยครับ!</p></div>';
-                return;
-            }
-            videos.forEach((vid, index) => {
-                const item = document.createElement('div');
-                item.className = 'video-item';
-                item.innerHTML = `
-                    <video src="${vid.url}" controls playsinline loop></video>
-                    <div class="video-info">
-                        <h3>@ไทยโพธิ์ดี ช็อป</h3>
-                        <p>${vid.title || 'วิดีโอใหม่'}</p>
-                        <div class="music-tag">🎵 เสียงต้นฉบับ - ไทยโพธิ์ดี</div>
-                    </div>
-                    <div class="side-actions">
-                        <button class="side-btn ${vid.liked ? 'liked' : ''}" onclick="toggleLike(${index}, this)">
-                            <span>❤️</span>
-                            <span>${vid.likes}</span>
-                        </button>
-                        <button class="side-btn">
-                            <span>💬</span>
-                            <span>${vid.comments || 0}</span>
-                        </button>
-                        <button class="side-btn">
-                            <span>⭐</span>
-                            <span>บันทึก</span>
-                        </button>
-                        <button class="side-btn" onclick="shareVideo()">
-                            <span>↗️</span>
-                            <span>แชร์</span>
-                        </button>
-                    </div>
-                `;
-                videoFeed.appendChild(item);
-            });
-        }
+<div class="video-container" id="videoContainer">
+  <div class="no-video" id="noVideoMsg">ยังไม่มีวิดีโอ อัปโหลดวิดีโอแรกของคุณเลย!</div>
+</div>
 
-        function toggleLike(index, btn) {
-            videos[index].liked = !videos[index].liked;
-            videos[index].likes += videos[index].liked ? 1 : -1;
-            saveVideos();
-            btn.classList.toggle('liked');
-            btn.querySelector('span:last-child').textContent = videos[index].likes;
-        }
+<div class="profile-panel" id="profilePanel">
+  <div class="close-btn" onclick="toggleProfile()">✕</div>
+  <div class="profile-info" id="profileView">
+    <div class="profile-avatar" id="avatarDisplay">👤</div>
+    <h2 id="displayName">ผู้ใช้ไม่ระบุ</h2>
+    <p id="displayBio">ยังไม่ได้ตั้งค่าชีวิตสั้นๆ</p>
+    <button class="profile-save" onclick="showEditProfile()">แก้ไขโปรไฟล์</button>
+  </div>
+  <div id="profileEdit" style="display:none;">
+    <input type="text" class="profile-input" id="inputName" placeholder="ชื่อผู้ใช้">
+    <input type="text" class="profile-input" id="inputBio" placeholder="ชีวิตสั้นๆ" style="height:80px;">
+    <button class="profile-save" onclick="saveProfile()">บันทึกโปรไฟล์</button>
+  </div>
+</div>
 
-        function shareVideo() {
-            if (navigator.share) {
-                navigator.share({title: 'ไทยโพธิ์ดี ช็อป', text: 'มาดูวิดีโอของฉันกัน!', url: window.location.href});
-            } else {
-                navigator.clipboard.writeText(window.location.href);
-                alert('คัดลอกลิงก์แล้ว! แชร์ให้เพื่อนได้เลยครับ!');
-            }
-        }
+<div class="bottom-nav">
+  <div class="nav-item" onclick="switchTab('home')"><div class="icon">🏠</div><span>หน้าแรก</span></div>
+  <div class="nav-item" onclick="switchTab('search')"><div class="icon">🔍</div><span>ค้นหา</span></div>
+  <div class="nav-item" onclick="document.getElementById('fileInput').click()"><div class="icon create">+</div><span>สร้าง</span></div>
+  <div class="nav-item" onclick="switchTab('inbox')"><div class="icon">💬</div><span>ข้อความ</span></div>
+  <div class="nav-item" onclick="toggleProfile(); return false;"><div class="icon">👤</div><span>โปรไฟล์</span></div>
+</div>
 
-        function saveVideos() {
-            localStorage.setItem('thaipodee_videos', JSON.stringify(videos));
-        }
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
 
-        uploadInput.addEventListener('change', e => {
-            const file = e.target.files[0];
-            if (!file) return;
-            const url = URL.createObjectURL(file);
-            videos.unshift({url, title: file.name, likes:0, comments:0, liked:false});
-            saveVideos();
-            renderVideos();
-            alert('✅ อัปโหลดสำเร็จ! 🎉');
-        });
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBJrmW8nHxGQGkgwRTHdk6TOAE8m1wCYbE",
+  authDomain: "thaipodee-shop.firebaseapp.com",
+  projectId: "thaipodee-shop",
+  storageBucket: "thaipodee-shop.appspot.com",
+  messagingSenderId: "385782986912",
+  appId: "1:385782986912:web:77c4e12dc6fd88cb70b1c5"
+};
+firebase.initializeApp(firebaseConfig);
+const storage = firebase.storage();
+const db = firebase.database();
 
-        renderVideos();
-    </script>
+function getProfile() {
+  const saved = localStorage.getItem('thaipodee_profile');
+  return saved ? JSON.parse(saved) : { name: '', bio: '' };
+}
+function showEditProfile() {
+  const p = getProfile();
+  document.getElementById('inputName').value = p.name;
+  document.getElementById('inputBio').value = p.bio;
+  document.getElementById('profileView').style.display = 'none';
+  document.getElementById('profileEdit').style.display = 'block';
+}
+function saveProfile() {
+  const name = document.getElementById('inputName').value.trim() || 'ผู้ใช้ไม่ระบุ';
+  const bio = document.getElementById('inputBio').value.trim() || 'ยังไม่ได้ตั้งค่าชีวิตสั้นๆ';
+  localStorage.setItem('thaipodee_profile', JSON.stringify({ name, bio }));
+  updateProfileDisplay();
+  document.getElementById('profileEdit').style.display = 'none';
+  document.getElementById('profileView').style.display = 'block';
+  alert('บันทึกโปรไฟล์สำเร็จ! ✅');
+}
+function updateProfileDisplay() {
+  const p = getProfile();
+  document.getElementById('displayName').textContent = p.name;
+  document.getElementById('displayBio').textContent = p.bio;
+}
+function toggleProfile() {
+  const panel = document.getElementById('profilePanel');
+  if (!panel) return;
+  if (panel.classList.contains('open')) { panel.classList.remove('open'); }
+  else { panel.classList.add('open'); updateProfileDisplay(); document.getElementById('profileView').style.display = 'block'; document.getElementById('profileEdit').style.display = 'none'; }
+}
+
+async function uploadVideo(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  try {
+    const profile = getProfile();
+    const ref = storage.ref('videos/' + Date.now() + '_' + file.name);
+    const snap = await ref.put(file);
+    const url = await snap.ref.getDownloadURL();
+    await db.ref('videos').push({ url: url, name: file.name, uploader: profile.name || 'ไม่ระบุชื่อ', createdAt: Date.now(), likes: 0 });
+    alert('อัปโหลดสำเร็จ! ✅');
+    loadVideos();
+  } catch (err) { alert('อัปโหลดล้มเหลว: ' + err.message); }
+}
+
+async function loadVideos() {
+  const container = document.getElementById('videoContainer');
+  const noVideo = document.getElementById('noVideoMsg');
+  container.innerHTML = '';
+  container.appendChild(noVideo);
+  try {
+    const snap = await db.ref('videos').orderByChild('createdAt').once('value');
+    if (!snap.exists()) return;
+    noVideo.style.display = 'none';
+    const data = snap.val();
+    const entries = Object.entries(data).sort((a, b) => b[1].createdAt - a[1].createdAt);
+    for (const [id, vid] of entries) {
+      const card = document.createElement('div');
+      card.className = 'video-card';
+      card.innerHTML = `
+        <video src="${vid.url}" controls loop playsinline></video>
+        <div class="side-icons">
+          <div class="icon" onclick="openUserProfile('${vid.uploader}')">👤<span>โปรไฟล์</span></div>
+          <div class="icon" id="likeBtn-${id}" onclick="toggleLike('${id}')">❤️<span id="likeCount-${id}">${vid.likes || 0}</span></div>
+          <div class="icon" onclick="openComments('${id}')">💬<span>0</span></div>
+          <div class="icon" id="saveBtn-${id}" onclick="toggleSave('${id}')">⭐<span>บันทึก</span></div>
+          <div class="icon" onclick="sharePost('${vid.url}')">🔁<span>แชร์</span></div>
+          <div class="icon master-badge" onclick="viewCreator('${vid.uploader}')">🎵<span>เจ้าของ</span></div>
+        </div>
+        <div style="position:absolute; bottom:20px; left:12px;"><div style="font-weight:bold;">@${vid.uploader}</div></div>
+      `;
+      container.appendChild(card);
+    }
+  } catch (err) { console.error('โหลดวิดีโอไม่สำเร็จ:', err); }
+}
+
+function openUserProfile(name) { alert('โปรไฟล์ผู้ใช้: @' + name); }
+async function toggleLike(videoId) {
+  const btn = document.getElementById('likeBtn-' + videoId);
+  const count = document.getElementById('likeCount-' + videoId);
+  const snap = await db.ref('videos/' + videoId + '/likes').once('value');
+  const current = snap.val() || 0;
+  await db.ref('videos/' + videoId + '/likes').set(current + 1);
+  btn.classList.add('liked');
+  count.textContent = current + 1;
+}
+function openComments(videoId) { alert('เปิดคอมเมนต์ 💬'); }
+function toggleSave(videoId) {
+  const btn = document.getElementById('saveBtn-' + videoId);
+  btn.classList.toggle('saved');
+  alert(btn.classList.contains('saved') ? 'บันทึกเรียบร้อย! ⭐' : 'ยกเลิกการบันทึกแล้ว');
+}
+function sharePost(url) {
+  if (navigator.share) navigator.share({ title: 'ไทยโพธิ์ดี ช็อป', url: url });
+  else { navigator.clipboard.writeText(url); alert('คัดลอกลิงก์เรียบร้อย! 🔗'); }
+}
+function viewCreator(name) { alert('🎵 เจ้าของผลงาน\nชื่อ: ' + name + '\nสิทธิ์: เจ้าของลิขสิทธิ์ ✅'); }
+function switchTab(tab) { if (tab === 'home') loadVideos(); alert('ไปที่: ' + tab); }
+
+updateProfileDisplay();
+loadVideos();
+</script>
+
 </body>
 </html>
