@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ไทยโพธิ์ดี ช็อป - ช้อป & ชม & แชร์</title>
+    <title>ไทยโพธิ์ดี ช็อป — ตลาดซื้อขาย</title>
     <link rel="icon" type="image/png" href="logo.png">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Noto Sans Thai, sans-serif; }
@@ -14,7 +14,6 @@
             --light: #ffffff;
             --gray: #f5f5f5;
             --dark-gray: #2a2a2a;
-            --accent-blue: #2563eb;
         }
         body { background: var(--dark); color: white; min-height: 100vh; overflow-x: hidden; }
 
@@ -72,7 +71,7 @@
         }
         .screen.active { display: block; }
 
-        /* ====== ฟีดวิดีโอ ====== */
+        /* ====== ฟีดวิดีโอ — ตลาดซื้อขาย ====== */
         .video-container {
             width: 100%;
             height: 75vh;
@@ -90,9 +89,8 @@
             right: 70px;
         }
         .video-owner { font-weight: bold; font-size: 16px; margin-bottom: 5px; }
-        .video-desc { font-size: 14px; margin-bottom: 8px; line-height: 1.4; }
-        .music-name { font-size: 14px; color: #ddd; animation: fade 2s infinite; margin-bottom: 10px; }
-        @keyframes fade { 0%,100%{opacity:1} 50%{opacity:0.5} }
+        .video-desc { font-size: 14px; margin-bottom: 8px; line-height: 1.4; color: #eee; }
+        .music-name { font-size: 14px; color: #aaa; margin-bottom: 10px; }
         .product-tag {
             background: var(--primary);
             color: white;
@@ -106,8 +104,7 @@
             cursor: pointer;
             border: none;
         }
-        .product-tag.locked { background: #666; cursor: not-allowed; }
-        .status-badge { font-size: 12px; color: #aaa; margin-top: 8px; }
+        .status-badge { font-size: 12px; color: #888; margin-top: 8px; }
 
         /* ====== ปุ่มด้านข้าง ====== */
         .side-actions {
@@ -196,9 +193,8 @@
         .btn:active { opacity: 0.85; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-outline { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
-        .btn-block { width: 100%; }
 
-        /* ====== ขายสินค้า — แยก 2 ประเภท ====== */
+        /* ====== ขายสินค้า ====== */
         .tabs {
             display: flex;
             border-bottom: 1px solid #333;
@@ -219,7 +215,7 @@
         }
         .form-group { padding: 0 15px; margin-bottom: 15px; }
         label { display: block; margin-bottom: 6px; font-size: 14px; color: #ddd; }
-        input, select, textarea {
+        input, select {
             width: 100%;
             padding: 12px;
             border: 1px solid #444;
@@ -239,7 +235,6 @@
         }
         .badge.person { background: #1e40af; color: #dbeafe; }
         .badge.company { background: #15803d; color: #dcfce7; }
-        .note { font-size: 13px; color: #888; margin-top: 5px; }
 
         /* ====== บัญชีของฉัน ====== */
         .profile-header {
@@ -318,17 +313,6 @@
         }
         .modal-title { font-size: 20px; font-weight: bold; margin-bottom: 15px; padding-right: 25px; }
         .modal-text { line-height: 1.8; color: #444; margin-bottom: 20px; }
-        .price-tag { font-size: 24px; font-weight: bold; color: var(--primary); margin: 10px 0; }
-        .price-tag del { font-size: 16px; color: #999; font-weight: normal; margin-left: 10px; }
-        .discount-badge {
-            display: inline-block;
-            background: var(--primary);
-            color: white;
-            padding: 3px 8px;
-            border-radius: 4px;
-            font-size: 13px;
-            margin-left: 8px;
-        }
         table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: center; }
         th { background: #f5f5f5; }
@@ -379,16 +363,16 @@
 </div>
 
 <!-- ======================================
-            หน้าที่ 1 — ฟีดวิดีโอ
+            หน้าที่ 1 — ฟีดวิดีโอ / ตลาดซื้อขาย
      ====================================== -->
 <div id="screen-feed" class="screen active">
     <div class="video-container">
         <div class="play-btn" onclick="showToast('▶ กำลังเล่นวิดีโอ...')">▶</div>
         <div class="video-info">
-            <div class="video-owner">@thaipodee_official</div>
-            <div class="video-desc">กางเกงยีนส์ขายดี ไซส์ S–XXL ทุกสี พร้อมส่ง ✅</div>
-            <div class="music-name">🎵 เพลง: สายลม — วงไทยโพธิ์ดี</div>
-            <button class="product-tag" id="productBtn" onclick="openModal('productModal')">🛒 ดูสินค้า ฿540</button>
+            <div class="video-owner">@thaipodee_shop</div>
+            <div class="video-desc">สมาชิกใส่รายละเอียดสินค้าของตนเอง ✅</div>
+            <div class="music-name">🎵 เพลงที่สมาชิกเลือก</div>
+            <button class="product-tag" id="productBtn" onclick="openModal('productModal')">🛒 ดูสินค้า — ดูรายละเอียดสินค้า</button>
             <div class="status-badge">ไลก์ครบ 1,000 ครั้ง · เปิดขายได้ ✅</div>
         </div>
     </div>
@@ -422,22 +406,9 @@
         <div class="cart-item">
             <div class="cart-img"></div>
             <div class="cart-info">
-                <div class="cart-name">กางเกงยีนส์ ทรงกระบอกใหญ่</div>
-                <div class="cart-price">฿540 <del>฿599</del></div>
-                <div style="font-size:13px; color:#888; margin-top:4px;">ไซส์ · M</div>
-            </div>
-            <div class="qty-control">
-                <button class="qty-btn">−</button>
-                <span>1</span>
-                <button class="qty-btn">+</button>
-            </div>
-        </div>
-        <div class="cart-item">
-            <div class="cart-img"></div>
-            <div class="cart-info">
-                <div class="cart-name">เสื้อยืดคอกลม สีดำ</div>
-                <div class="cart-price">฿199</div>
-                <div style="font-size:13px; color:#888; margin-top:4px;">ไซส์ · L</div>
+                <div class="cart-name">สินค้าจากสมาชิก</div>
+                <div class="cart-price">ราคาแต่ละสินค้า <del>เดิม</del></div>
+                <div style="font-size:13px; color:#888; margin-top:4px;">จำนวน · ผู้ขาย</div>
             </div>
             <div class="qty-control">
                 <button class="qty-btn">−</button>
@@ -449,7 +420,7 @@
     <div class="cart-footer">
         <div class="total-row">
             <span>รวมทั้งหมด</span>
-            <span class="total-price">฿739</span>
+            <span class="total-price">ตามราคาสินค้า</span>
         </div>
         <button class="btn btn-primary" onclick="showToast('⏳ กำลังไปหน้าชำระเงิน...')">สั่งซื้อสินค้า</button>
     </div>
@@ -465,7 +436,6 @@
         <div class="tab" data-tab="company" onclick="switchTab('company')">🏢 นิติบุคคล</div>
     </div>
 
-    <!-- บุคคลธรรมดา -->
     <div id="form-person">
         <div class="form-group">
             <label>ชื่อ-นามสกุล *</label>
@@ -496,7 +466,6 @@
         </div>
     </div>
 
-    <!-- นิติบุคคล -->
     <div id="form-company" class="hidden">
         <div class="form-group">
             <label>ชื่อนิติบุคคล *</label>
@@ -509,15 +478,10 @@
         <div class="form-group">
             <label>📄 ใบรับรองจดทะเบียนนิติบุคคล *</label>
             <input type="file" accept="image/*,.pdf">
-            <p class="note">รูปถ่ายหรือไฟล์ PDF ออกให้ไม่เกิน 6 เดือน</p>
         </div>
         <div class="form-group">
             <label>ชื่อผู้มีอำนาจลงนาม *</label>
             <input type="text" placeholder="ชื่อ-นามสกุล ผู้มีอำนาจ">
-        </div>
-        <div class="form-group">
-            <label>เลขประจำตัวผู้เสียภาษี (ถ้ามี)</label>
-            <input type="text" placeholder="เลข 13 หลัก">
         </div>
         <div class="form-group">
             <label>ที่อยู่สำนักงาน *</label>
@@ -565,7 +529,8 @@
     </div>
 
     <div class="policy-note">
-        <strong>🚫 นโยบายสำคัญของไทยโพธิ์ดี ช็อป:</strong><br>
+        <strong>🚫 นโยบายสำคัญของ ไทยโพธิ์ดี ช็อป — ตลาดซื้อขาย:</strong><br>
+        • เราคือศูนย์กลางตลาดซื้อขาย ให้สมาชิกซื้อ-ขายกันเอง<br>
         • ไม่มีการระงับบัญชีตลอดอายุการใช้งาน<br>
         • ไม่ระงับเงิน — เบิกถอนได้ตลอดเวลา<br>
         • หักส่วนแบ่ง 6% เพื่อดูแลระบบ เซิร์ฟเวอร์ และค่าใช้จ่ายแพลตฟอร์ม
@@ -595,36 +560,15 @@
 </div>
 
 <!-- ======================================
-            โมดอล 1 — รายละเอียดสินค้า
+            โมดอล — รายละเอียดสินค้า
      ====================================== -->
 <div id="productModal" class="modal">
     <div class="modal-box">
         <span class="modal-close" onclick="closeModal('productModal')">&times;</span>
-        <h3 class="modal-title">กางเกงยีนส์ ทรงกระบอกใหญ่</h3>
-        <p style="color:#666; font-size:14px; margin-bottom:10px;">โดย: ไทยโพธิ์ดี ช็อป <span class="badge company">นิติบุคคล</span></p>
+        <h3 class="modal-title">รายละเอียดสินค้า</h3>
+        <p style="color:#666; font-size:14px; margin-bottom:10px;">โดย: ผู้ขายสมาชิก</p>
         <div style="width:100%; height:200px; background:linear-gradient(135deg,#eee,#ddd); border-radius:8px; margin:10px 0;"></div>
-        <div class="price-tag">฿540 <del>฿599</del><span class="discount-badge">ลด 9%</span></div>
-
-        <h4 style="margin-top:20px; margin-bottom:10px;">📏 ตารางไซส์</h4>
-        <table>
-            <tr><th>ไซส์</th><th>เอว (นิ้ว)</th><th>สะโพก (นิ้ว)</th><th>ความยาว (นิ้ว)</th></tr>
-            <tr><td>S</td><td>26–28</td><td>36–38</td><td>38</td></tr>
-            <tr><td>M</td><td>28–30</td><td>38–40</td><td>39</td></tr>
-            <tr><td>L</td><td>30–32</td><td>40–42</td><td>40</td></tr>
-            <tr><td>XL</td><td>32–34</td><td>42–44</td><td>40.5</td></tr>
-            <tr><td>XXL</td><td>34–36</td><td>44–46</td><td>41</td></tr>
-        </table>
-
-        <label style="margin-top:15px;">เลือกไซส์ *</label>
-        <select>
-            <option>-- กรุณาเลือกไซส์ --</option>
-            <option>S — พร้อมส่ง</option>
-            <option>M — พร้อมส่ง</option>
-            <option>L — พร้อมส่ง</option>
-            <option>XL — พร้อมส่ง</option>
-            <option>XXL — พร้อมส่ง</option>
-        </select>
-
+        <p style="color:#444; line-height:1.6; margin:15px 0;">รายละเอียดสินค้าจะแสดงที่นี่ ตามที่ผู้ขายระบุ</p>
         <div style="display:flex; gap:10px; margin-top:20px;">
             <button class="btn btn-outline" style="flex:1;" onclick="addToCart()">🛒 ใส่ตะกร้า</button>
             <button class="btn btn-primary" style="flex:1;" onclick="buyNow()">⚡ ซื้อเลย</button>
@@ -633,7 +577,7 @@
 </div>
 
 <!-- ======================================
-            โมดอล 2 — ตะกร้า
+            โมดอล — ตะกร้า
      ====================================== -->
 <div id="cartModal" class="modal">
     <div class="modal-box">
@@ -645,7 +589,7 @@
 </div>
 
 <!-- ======================================
-            โมดอล 3 — โปรโมท
+            โมดอล — โปรโมท
      ====================================== -->
 <div id="promoteModal" class="modal">
     <div class="modal-box">
@@ -675,7 +619,7 @@
 </div>
 
 <!-- ======================================
-            โมดอล 4 — เงื่อนไขค่าคอม
+            โมดอล — เงื่อนไขค่าคอม
      ====================================== -->
 <div id="ruleModal" class="modal">
     <div class="modal-box">
@@ -712,7 +656,7 @@
 </div>
 
 <!-- ======================================
-            โมดอล 5 — เบิกถอน
+            โมดอล — เบิกถอน
      ====================================== -->
 <div id="withdrawModal" class="modal">
     <div class="modal-box">
@@ -738,7 +682,7 @@
 <div id="toast" class="toast"></div>
 
 <!-- ======================================
-            JAVASCRIPT ทั้งหมด
+            JAVASCRIPT
      ====================================== -->
 <script>
 // ====== ตัวแปรสถานะ ======
@@ -852,8 +796,8 @@ document.querySelectorAll('.modal').forEach(m => {
 
 // ====== เริ่มทำงานเมื่อโหลดเสร็จ ======
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 ไทยโพธิ์ดี ช็อป — พร้อมใช้งานแล้ว!');
-    console.log('✅ รองรับมือถือทุกเครื่อง · เปิดพร้อมกันหลายเครื่องได้');
+    console.log('🚀 ไทยโพธิ์ดี ช็อป — ตลาดซื้อขาย พร้อมใช้งานแล้ว!');
+    console.log('✅ เราคือศูนย์กลางตลาดซื้อขาย ให้สมาชิกซื้อ-ขายกันเอง');
     console.log('✅ ไม่มีระบบระงับบัญชี · ไม่ระงับเงิน ตลอดอายุการใช้งาน');
     showToast('👋 ยินดีต้อนรับสู่ ไทยโพธิ์ดี ช็อป!');
 });
