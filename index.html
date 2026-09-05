@@ -3,393 +3,153 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <!-- ✅ รองรับหมุนจออัตโนมัติ -->
-  <meta name="screen-orientation" content="portrait|landscape">
-  <meta name="orientation" content="auto">
   <title>ไทยโพธิ์ดี</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    html, body { 
-      background: #000; color: #fff; min-height: 100vh; 
-      padding-bottom: 85px; overflow-x: hidden;
-      /* ✅ รองรับทุกทิศทางจอ */
-      -webkit-text-size-adjust: 100%;
-      -webkit-transform: translate3d(0,0,0);
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: sans-serif; }
+    html, body { background: #000; color: #fff; min-height: 100vh; padding-bottom: 85px; overflow-x: hidden; }
 
-    /* ========== HEADER ========== */
-    .header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 12px 16px; display: flex; justify-content: center; align-items: center;
-      background: linear-gradient(180deg, rgba(0,0,0,0.6), transparent);
-    }
-    .header-title { font-size: 20px; font-weight: 700; color: #fff; }
-    .header-right { position: absolute; right: 16px; display: flex; gap: 16px; align-items: center; }
-    .upload-btn {
-      background: linear-gradient(90deg, #25F4EE, #FE2C55); color: #fff; border: none;
-      padding: 8px 16px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 15px;
-    }
-    .cart-icon { font-size: 26px; cursor: pointer; position: relative; }
-    .cart-badge {
-      position: absolute; top: -6px; right: -6px; background: #ff2442; color: #fff;
-      font-size: 11px; font-weight: 800; width: 20px; height: 20px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .sound-btn {
-      position: absolute; top: 55px; right: 16px; z-index: 30;
-      width: 42px; height: 42px; border-radius: 50%;
-      background: rgba(0,0,0,0.5); border: none;
-      font-size: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center;
-    }
+    /* ===== HEADER ===== */
+    .header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 14px 20px; display: flex; justify-content: center; align-items: center; background: linear-gradient(180deg, rgba(0,0,0,0.6), transparent); }
+    .header-title { font-size: 22px; font-weight: 700; }
+    .header-right { position: absolute; right: 20px; display: flex; gap: 20px; align-items: center; }
+    .upload-btn { background: linear-gradient(90deg, #25F4EE, #FE2C55); color: #fff; border: none; padding: 10px 18px; border-radius: 20px; font-weight: 700; cursor: pointer; font-size: 16px; }
+    .cart-icon { font-size: 28px; cursor: pointer; position: relative; }
+    .cart-badge { position: absolute; top: -8px; right: -8px; background: #ff2442; color: #fff; font-size: 12px; font-weight: 800; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-    /* ========== PAGES ========== */
-    .page { display: none; padding-top: 55px; min-height: calc(100vh - 55px); }
+    /* ===== PAGES ===== */
+    .page { display: none; padding-top: 60px; min-height: calc(100vh - 60px); }
     .page.active { display: block; }
 
-    /* ========== VIDEO FEED — รองรับทุกอัตราส่วน + หมุนจอ ========== */
-    .video-feed { 
-      width: 100%; 
-      /* ✅ ปรับความสูงตามทิศทางจออัตโนมัติ */
-      height: calc(100vh - 55px); 
-      overflow-y: auto; 
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-    }
-    .video-card {
-      position: relative; width: 100%; 
-      /* ✅ ปรับความสูงอัตโนมัติตามจอและอัตราส่วน */
-      min-height: calc(100vh - 55px);
-      background: #000; display: flex; align-items: center; justify-content: center;
-      overflow: hidden; cursor: pointer;
-      border-bottom: 1px solid #222;
-    }
-    /* ✅ คลาสอัตราส่วนต่างๆ */
-    .aspect-9-16  { aspect-ratio: 9/16;  width: 100%; max-height: 100%; }
-    .aspect-1-1   { aspect-ratio: 1/1;   width: 100%; max-width: 100vmin; }
-    .aspect-16-9  { aspect-ratio: 16/9;  width: 100%; }
-    .aspect-4-5   { aspect-ratio: 4/5;   width: 100%; max-height: 100%; }
-    .aspect-2-3   { aspect-ratio: 2/3;   width: 100%; max-height: 100%; }
-    
-    .video-media { 
-      width: 100%; height: 100%; object-fit: contain; 
-      background: #000;
-    }
-    .no-video {
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      height: calc(100vh - 55px); color: #888; font-size: 17px; text-align: center; padding: 20px;
-    }
-    .no-video div:first-child { font-size: 60px; margin-bottom: 18px; }
-    .sound-hint {
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: rgba(0,0,0,0.7); padding: 12px 22px; border-radius: 30px;
-      font-size: 15px; z-index: 25; pointer-events: none;
-      animation: fadeOut 3s forwards;
-    }
-    @keyframes fadeOut {
-      0% { opacity: 1; } 70% { opacity: 1; } 100% { opacity: 0; }
-    }
+    /* ===== VIDEO FEED ===== */
+    .video-feed { width: 100%; height: calc(100vh - 60px); overflow-y: auto; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
+    .video-card { position: relative; width: 100%; min-height: calc(100vh - 60px); background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 1px solid #222; }
+    .video-media { width: 100%; height: 100%; object-fit: contain; background: #000; }
+    .no-video { display: flex; flex-direction: column; align-items: center; justify-content: center; height: calc(100vh - 60px); color: #888; font-size: 18px; text-align: center; padding: 20px; }
+    .no-video div:first-child { font-size: 64px; margin-bottom: 20px; }
 
-    /* ========== 📐 เมนูเลือกอัตราส่วน ========== */
-    .aspect-ratio-selector {
-      background: #1a1a1a; border-radius: 12px; padding: 14px; margin-bottom: 16px;
-    }
+    /* ===== ASPECT RATIO ===== */
+    .aspect-ratio-selector { background: #1a1a1a; border-radius: 12px; padding: 14px; margin-bottom: 16px; }
     .aspect-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; }
     .aspect-options { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
-    .aspect-btn {
-      background: #2a2a2a; border: 2px solid transparent; color: #fff;
-      border-radius: 8px; padding: 10px 6px; font-size: 12px; cursor: pointer;
-      text-align: center; transition: all 0.2s;
-    }
-    .aspect-btn.active {
-      background: linear-gradient(90deg, #25F4EE, #FE2C55);
-      border-color: #fff; font-weight: 700; transform: scale(1.05);
-    }
-    .aspect-btn .ratio-label { font-size: 13px; font-weight: 600; }
-    .aspect-btn .ratio-desc { font-size: 10px; color: #ccc; margin-top: 2px; }
+    .aspect-btn { background: #2a2a2a; border: 2px solid transparent; color: #fff; border-radius: 8px; padding: 10px 6px; font-size: 12px; cursor: pointer; text-align: center; }
+    .aspect-btn.active { background: linear-gradient(90deg, #25F4EE, #FE2C55); border-color: #fff; font-weight: 700; transform: scale(1.05); }
+    .ratio-label { font-size: 13px; font-weight: 600; }
+    .ratio-desc { font-size: 10px; color: #ccc; margin-top: 2px; }
 
-    /* ========== SIDE ACTIONS ========== */
-    .side-actions {
-      position: absolute; right: 12px; bottom: 160px;
-      display: flex; flex-direction: column; gap: 24px; align-items: center;
-      z-index: 20;
-    }
-    .side-btn {
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      cursor: pointer; transition: transform 0.15s ease;
-    }
+    /* ===== SIDE ACTIONS ===== */
+    .side-actions { position: absolute; right: 16px; bottom: 180px; display: flex; flex-direction: column; gap: 28px; align-items: center; z-index: 20; }
+    .side-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
     .side-btn:active { transform: scale(0.9); }
-    .side-btn span { font-size: 11px; font-weight: 600; }
-    .side-icon { font-size: 32px; line-height: 1; }
+    .side-icon { font-size: 34px; line-height: 1; }
     .like-btn.liked .side-icon { color: #ff2442; }
-    
-    .music-disc {
-      width: 52px; height: 52px; border-radius: 50%;
-      background: linear-gradient(135deg, #333, #555);
-      display: flex; align-items: center; justify-content: center;
-      animation: spin 3s linear infinite;
-      border: 3px solid #222;
-    }
-    .music-disc-inner { width: 16px; height: 16px; border-radius: 50%; background: #fff; }
-    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    .music-disc { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #333, #555); display: flex; align-items: center; justify-content: center; animation: spin 3s linear infinite; border: 3px solid #222; }
+    .music-disc-inner { width: 18px; height: 18px; border-radius: 50%; background: #fff; }
+    @keyframes spin { from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
 
-    /* ========== VIDEO INFO — BOTTOM LEFT ========== */
-    .video-info {
-      position: absolute; left: 16px; bottom: 100px; right: 80px;
-      z-index: 20;
-    }
-    .video-author { font-weight: 700; font-size: 16px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+    /* ===== VIDEO INFO ===== */
+    .video-info { position: absolute; left: 20px; bottom: 120px; right: 90px; z-index: 20; }
+    .video-author { font-weight: 700; font-size: 17px; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
     .follow-btn { background: #ff2442; color: #fff; border: none; padding: 5px 12px; border-radius: 4px; font-size: 13px; font-weight: 700; cursor: pointer; }
-    .video-desc { font-size: 14px; line-height: 1.5; margin-bottom: 10px; }
-    .music-info { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #fff; }
+    .video-desc { font-size: 15px; line-height: 1.5; margin-bottom: 10px; }
+    .music-info { display: flex; align-items: center; gap: 6px; font-size: 14px; color: #ddd; }
 
-    /* ========== BOTTOM NAV ========== */
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: #000; border-top: 1px solid #222;
-      display: flex; justify-content: space-around; padding: 8px 0 20px;
-      z-index: 100;
-    }
-    .nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 4px;
-      cursor: pointer; color: #fff; opacity: 0.7; transition: opacity 0.2s;
-    }
-    .nav-item.active { opacity: 1; }
+    /* ===== BOTTOM NAV ===== */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #000; border-top: 1px solid #222; display: flex; justify-content: space-around; padding: 8px 0 20px; z-index: 100; }
+    .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; color: #fff; opacity: 0.6; transition: all 0.2s; }
+    .nav-item.active { opacity: 1; transform: scale(1.05); }
     .nav-item span { font-size: 11px; font-weight: 600; }
     .nav-icon { font-size: 24px; line-height: 1; }
-    .nav-create {
-      width: 48px; height: 34px; border-radius: 8px;
-      background: linear-gradient(90deg, #25F4EE, #FE2C55);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 24px; font-weight: 700;
-    }
-    .nav-create-inner {
-      width: 40px; height: 28px; background: #fff; border-radius: 6px;
-      display: flex; align-items: center; justify-content: center;
-      color: #000; font-size: 20px;
-    }
 
-    /* ========== MODAL ========== */
-    .modal {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.85); z-index: 200;
-      display: none; align-items: flex-end; justify-content: center;
-    }
-    .modal-content {
-      background: #1a1a1a; border-radius: 20px 20px 0 0;
-      width: 100%; max-width: 520px; max-height: 90vh;
-      padding: 22px; overflow-y: auto;
-    }
-    .modal-title { font-size: 19px; font-weight: 700; text-align: center; margin-bottom: 20px; }
-    input, textarea, select {
-      width: 100%; padding: 13px; margin-bottom: 13px;
-      border: none; border-radius: 10px; background: #2a2a2a;
-      color: #fff; font-size: 15px;
-    }
-    input[type="file"] { padding: 12px; }
-    .modal-buttons { display: flex; gap: 12px; margin-top: 15px; }
-    .btn {
-      flex: 1; padding: 13px; border: none; border-radius: 10px;
-      font-weight: 700; cursor: pointer; font-size: 15px;
-    }
-    .btn-cancel { background: #333; color: #fff; }
-    .btn-submit { background: #ff2442; color: #fff; }
-    .copyright-warning {
-      background: rgba(255,204,0,0.1); border: 1px solid #ffcc00;
-      padding: 13px; border-radius: 10px; margin-bottom: 18px;
-      font-size: 13px; line-height: 1.6;
-    }
-
-    /* ========== PROFILE — อัปโหลดรูปได้จริง! ========== */
-    .profile-avatar-container {
-      position: relative; width: 110px; height: 110px; margin: 0 auto 20px;
-      cursor: pointer;
-    }
-    .profile-avatar {
-      width: 110px; height: 110px; border-radius: 50%;
-      background: linear-gradient(135deg, #25F4EE, #FE2C55);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 50px; object-fit: cover;
-      border: 3px solid #fff;
-    }
-    .profile-avatar-edit {
-      position: absolute; bottom: 0; right: 0;
-      width: 32px; height: 32px; border-radius: 50%;
-      background: linear-gradient(90deg, #25F4EE, #FE2C55);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 16px; color: #fff; border: 2px solid #000;
-    }
+    /* ===== PROFILE ===== */
+    .profile-avatar-container { position: relative; width: 110px; height: 110px; margin: 0 auto 20px; cursor: pointer; }
+    .profile-avatar { width: 110px; height: 110px; border-radius: 50%; background: linear-gradient(135deg, #25F4EE, #FE2C55); display: flex; align-items: center; justify-content: center; font-size: 50px; object-fit: cover; border: 3px solid #fff; }
+    .profile-avatar-edit { position: absolute; bottom: 0; right: 0; width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(90deg, #25F4EE, #FE2C55); display: flex; align-items: center; justify-content: center; font-size: 16px; color: #fff; border: 2px solid #000; }
     #profileAvatarInput { display: none; }
-    .profile-stats {
-      display: flex; justify-content: space-around; margin: 25px 0;
-    }
+    .profile-name { font-size: 22px; font-weight: 700; margin-bottom: 5px; }
+    .profile-username { color: #888; margin-bottom: 20px; font-size: 14px; }
+    .profile-stats { display: flex; justify-content: space-around; margin: 25px 0; }
     .profile-stat { text-align: center; }
     .profile-stat-num { font-size: 22px; font-weight: 800; }
     .profile-stat-label { font-size: 12px; color: #888; margin-top: 3px; }
-    .edit-profile-btn {
-      background: #2a2a2a; color: #fff; border: none;
-      padding: 12px 30px; border-radius: 10px; font-size: 15px; cursor: pointer; font-weight: 600; width: 100%;
-    }
-    .edit-profile-form { display: none; margin-top: 20px; }
-    .edit-profile-form.active { display: block; }
+    .edit-profile-btn { background: #2a2a2a; color: #fff; border: none; padding: 12px 30px; border-radius: 10px; font-size: 15px; cursor: pointer; font-weight: 600; width: 100%; }
 
-    /* ========== SHOP & CART ========== */
-    .shop-container, .cart-container { padding: 16px; padding-top: 65px; }
-    .shop-title { font-size: 20px; font-weight: 700; margin-bottom: 18px; }
-    .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .product-card { background: #1a1a1a; border-radius: 12px; overflow: hidden; border: 1px solid #333; }
-    .product-img { width: 100%; aspect-ratio: 1; background: #2a2a2a; display: flex; align-items: center; justify-content: center; font-size: 44px; }
-    .product-info { padding: 12px; }
-    .product-name { font-weight: 700; font-size: 14px; margin-bottom: 5px; }
-    .product-price { color: #ffcc00; font-weight: 800; font-size: 17px; margin-bottom: 8px; }
-    .add-cart-btn {
-      width: 100%; background: linear-gradient(90deg, #25F4EE, #FE2C55);
-      color: #fff; border: none; padding: 9px; border-radius: 8px;
-      font-weight: 700; cursor: pointer; font-size: 14px;
-    }
-    .cart-item {
-      display: flex; background: #1a1a1a; padding: 14px; border-radius: 10px; margin-bottom: 12px;
-      align-items: center; gap: 14px;
-    }
-    .cart-item-info { flex: 1; }
-    .cart-item-name { font-weight: 700; margin-bottom: 5px; font-size: 15px; }
-    .cart-item-price { color: #ffcc00; font-size: 16px; font-weight: 700; }
-    .cart-item-qty { display: flex; align-items: center; gap: 12px; margin-top: 8px; }
-    .qty-btn { width: 30px; height: 30px; border-radius: 50%; border: none; background: #333; color: #fff; cursor: pointer; font-size: 16px; font-weight: 700; }
-    .cart-total {
-      margin-top: 20px; padding: 16px; background: #1a1a1a; border-radius: 10px;
-      display: flex; justify-content: space-between; font-size: 18px; font-weight: 800;
-    }
-    .checkout-btn {
-      width: 100%; margin-top: 16px; padding: 15px; border: none; border-radius: 10px;
-      background: linear-gradient(90deg, #25F4EE, #FE2C55); color: #fff;
-      font-size: 17px; font-weight: 800; cursor: pointer;
-    }
-    .empty-cart { text-align: center; padding: 70px 20px; color: #888; font-size: 15px; }
-    .empty-cart div:first-child { font-size: 56px; margin-bottom: 12px; }
-
-    /* Payment Options */
-    .payment-option {
-      background: #2a2a2a; padding: 14px; border-radius: 10px; margin-bottom: 12px;
-      cursor: pointer; border: 2px solid transparent;
-      font-size: 15px;
-    }
-    .payment-option.selected { border-color: #ff2442; background: #3a1a2e; }
-    .payment-name { font-weight: 700; margin-bottom: 5px; font-size: 15px; }
-    .payment-desc { font-size: 13px; color: #aaa; }
-
-    /* Order Status Timeline */
-    .status-timeline {
-      display: flex; justify-content: space-between; margin: 20px 0; position: relative;
-    }
-    .status-timeline::before {
-      content: ''; position: absolute; top: 16px; left: 10%; right: 10%;
-      height: 3px; background: #333; z-index: 1;
-    }
-    .status-step {
-      display: flex; flex-direction: column; align-items: center; position: relative; z-index: 2;
-      width: 24%;
-    }
-    .status-dot {
-      width: 32px; height: 32px; border-radius: 50%; background: #333;
-      display: flex; align-items: center; justify-content: center; font-size: 14px;
-      margin-bottom: 6px;
-    }
-    .status-step.active .status-dot { background: #ff2442; color: #fff; }
-    .status-step.completed .status-dot { background: #00cc66; color: #fff; }
-    .status-text { font-size: 10px; text-align: center; color: #888; line-height: 1.3; }
-    .status-step.active .status-text, .status-step.completed .status-text { color: #fff; }
+    /* ===== MODAL ===== */
+    .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.85); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
+    .modal-content { background: #1a1a1a; border-radius: 20px 20px 0 0; width: 100%; max-width: 520px; max-height: 90vh; padding: 22px; overflow-y: auto; }
+    .modal-title { font-size: 19px; font-weight: 700; text-align: center; margin-bottom: 20px; }
+    input, textarea { width: 100%; padding: 13px; margin-bottom: 13px; border: none; border-radius: 10px; background: #2a2a2a; color: #fff; font-size: 15px; }
+    .modal-buttons { display: flex; gap: 12px; margin-top: 15px; }
+    .btn { flex: 1; padding: 13px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 15px; }
+    .btn-cancel { background: #333; color: #fff; }
+    .btn-submit { background: #ff2442; color: #fff; }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- HEADER -->
   <div class="header">
     <div class="header-title" id="pageTitle">ไทยโพธิ์ดี</div>
     <div class="header-right">
-      <div class="cart-icon" onclick="openPage('cart')">
-        🛒 <span class="cart-badge" id="cartBadge">0</span>
-      </div>
+      <div class="cart-icon" onclick="openPage('cart')">🛒 <span class="cart-badge" id="cartBadge">0</span></div>
       <button class="upload-btn" onclick="openUploadModal()">อัปโหลด</button>
     </div>
   </div>
 
-  <!-- ========== หน้าแรก ========== -->
+  <!-- ===== HOME ===== -->
   <div class="page active" id="page-home">
     <div class="video-feed" id="videoFeed">
       <div class="no-video">
         <div>📹</div>
         <div>ยังไม่มีวิดีโอหรือรูปภาพ</div>
-        <div style="margin-top: 12px; font-size: 14px; color: #666;">กดปุ่ม "อัปโหลด" เพื่อโพสต์สิ่งแรกของคุณ</div>
+        <div style="margin-top:12px; font-size:14px; color:#666;">กดปุ่ม "อัปโหลด" เพื่อโพสต์สิ่งแรกของคุณ</div>
       </div>
     </div>
   </div>
 
-  <!-- ========== หน้า ค้นหา ========== -->
+  <!-- ===== SEARCH ===== -->
   <div class="page" id="page-search">
-    <div style="padding: 16px; padding-top: 65px;">
-      <h2 class="shop-title">🔍 ค้นหา</h2>
+    <div style="padding:16px; padding-top:65px;">
+      <h2 style="font-size:20px; font-weight:700; margin-bottom:18px;">🔍 ค้นหา</h2>
       <input type="text" placeholder="ค้นหาวิดีโอ, สินค้า, ผู้ใช้...">
-      <p style="color:#888; margin-top: 40px; text-align: center; font-size: 15px;">เริ่มพิมพ์เพื่อค้นหา</p>
+      <p style="color:#888; margin-top:40px; text-align:center; font-size:15px;">เริ่มพิมพ์เพื่อค้นหา</p>
     </div>
   </div>
 
-  <!-- ========== หน้า ร้านค้า ========== -->
+  <!-- ===== SHOP ===== -->
   <div class="page" id="page-shop">
-    <div class="shop-container">
-      <h2 class="shop-title">🛍️ ร้านค้า</h2>
-      <div class="product-grid" id="productGrid">
-        <div class="product-card">
-          <div class="product-img">📦</div>
-          <div class="product-info">
-            <div class="product-name">สินค้าตัวอย่าง</div>
-            <div class="product-price">฿299</div>
-            <button class="add-cart-btn" onclick="addToCart('สินค้าตัวอย่าง', 299)">เพิ่มลงตะกร้า</button>
-          </div>
+    <div style="padding:16px; padding-top:65px;">
+      <h2 style="font-size:20px; font-weight:700; margin-bottom:18px;">🛍️ ร้านค้า</h2>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+        <div style="background:#1a1a1a; border-radius:12px; padding:12px;">
+          <div style="width:100%; aspect-ratio:1; background:#2a2a2a; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:44px;">📦</div>
+          <div style="font-weight:700; margin-top:10px;">สินค้าตัวอย่าง</div>
+          <div style="color:#ffcc00; font-weight:800; margin-top:5px;">฿299</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ========== หน้า ตะกร้า ========== -->
-  <div class="page" id="page-cart">
-    <div class="cart-container">
-      <h2 class="shop-title">🛒 ตะกร้าสินค้า</h2>
-      <div id="cartList">
-        <div class="empty-cart">
-          <div>🛒</div>
-          <div>ตะกร้าว่างเปล่า</div>
-          <div style="margin-top: 10px; font-size: 14px; color: #666;">ไปเลือกสินค้าก่อนนะ</div>
-        </div>
-      </div>
-      <div class="cart-total" id="cartTotal" style="display:none;">
-        <span>รวมทั้งหมด</span>
-        <span id="totalPrice">0 บาท</span>
-      </div>
-      <button class="checkout-btn" id="checkoutBtn" style="display:none;" onclick="openCheckoutModal()">สั่งซื้อสินค้า</button>
-    </div>
-  </div>
-
-  <!-- ========== หน้า ข้อความ ========== -->
+  <!-- ===== INBOX ===== -->
   <div class="page" id="page-message">
-    <div style="padding: 16px; padding-top: 65px; text-align: center;">
-      <h2 class="shop-title">💬 ข้อความ</h2>
-      <div style="font-size: 60px; margin: 40px 0 15px;">📭</div>
-      <p style="color:#888; font-size: 15px;">ยังไม่มีข้อความ</p>
+    <div style="padding:16px; padding-top:65px; text-align:center;">
+      <h2 style="font-size:20px; font-weight:700; margin-bottom:18px;">💬 ข้อความ</h2>
+      <div style="font-size:60px; margin:40px 0 15px;">📭</div>
+      <p style="color:#888; font-size:15px;">ยังไม่มีข้อความ</p>
     </div>
   </div>
 
-  <!-- ========== หน้า โปรไฟล์ — แก้ไขรูปได้จริง! ========== -->
+  <!-- ===== PROFILE ===== -->
   <div class="page" id="page-profile">
-    <div style="padding: 20px; padding-top: 70px; text-align: center;">
-      <!-- ✅ อัปโหลดรูปโปรไฟล์ -->
+    <div style="padding:20px; padding-top:70px; text-align:center;">
       <div class="profile-avatar-container" onclick="document.getElementById('profileAvatarInput').click()">
-        <img id="profileAvatar" class="profile-avatar" src="" alt="โปรไฟล์">
+        <img id="profileAvatar" class="profile-avatar" src="" alt="โปรไฟล์" style="display:none;">
+        <div id="profileAvatarPlaceholder" class="profile-avatar">👤</div>
         <div class="profile-avatar-edit">✏️</div>
       </div>
       <input type="file" id="profileAvatarInput" accept="image/*" onchange="changeProfileAvatar(this)">
       
-      <div id="profileNameDisplay" style="font-size: 22px; font-weight: 700; margin-bottom: 6px;">ชื่อผู้ใช้</div>
-      <div style="color:#888; margin-bottom: 20px; font-size: 14px;">@thaipodee_user</div>
+      <div class="profile-name" id="profileNameDisplay">ชื่อผู้ใช้</div>
+      <div class="profile-username">@thaipodee_user</div>
       
       <div class="profile-stats">
         <div class="profile-stat">
@@ -407,60 +167,38 @@
       </div>
       
       <button class="edit-profile-btn" id="editProfileBtn" onclick="toggleEditProfile()">แก้ไขโปรไฟล์</button>
-      
-      <!-- ฟอร์มแก้ไขโปรไฟล์ -->
-      <div class="edit-profile-form" id="editProfileForm">
-        <input type="text" id="inputDisplayName" placeholder="ชื่อที่แสดง" style="text-align: center;">
-        <input type="text" placeholder="ชื่อผู้ใช้ (@...)" style="text-align: center;">
-        <textarea placeholder="คำอธิบายตัวเอง" rows="2" style="text-align: center;"></textarea>
-        <div class="modal-buttons">
-          <button class="btn btn-cancel" onclick="toggleEditProfile()">ยกเลิก</button>
-          <button class="btn btn-submit" onclick="saveProfile()">บันทึก</button>
-        </div>
-      </div>
     </div>
   </div>
 
-  <!-- ========== อัปโหลด — มีเมนูเลือกอัตราส่วน! ========== -->
+  <!-- ===== UPLOAD MODAL ===== -->
   <div class="modal" id="uploadModal">
     <div class="modal-content">
       <div class="modal-title">อัปโหลด</div>
       
-      <!-- 📐 เลือกอัตราส่วน เหมือน TikTok! -->
       <div class="aspect-ratio-selector">
         <div class="aspect-title">📐 อัตราส่วนหน้าจอ</div>
         <div class="aspect-options">
           <button class="aspect-btn active" data-ratio="9-16" onclick="selectAspect(this)">
-            <div class="ratio-label">9:16</div>
-            <div class="ratio-desc">แนวตั้ง</div>
+            <div class="ratio-label">9:16</div><div class="ratio-desc">แนวตั้ง</div>
           </button>
           <button class="aspect-btn" data-ratio="1-1" onclick="selectAspect(this)">
-            <div class="ratio-label">1:1</div>
-            <div class="ratio-desc">จัตุรัส</div>
+            <div class="ratio-label">1:1</div><div class="ratio-desc">จัตุรัส</div>
           </button>
           <button class="aspect-btn" data-ratio="16-9" onclick="selectAspect(this)">
-            <div class="ratio-label">16:9</div>
-            <div class="ratio-desc">แนวนอน</div>
+            <div class="ratio-label">16:9</div><div class="ratio-desc">แนวนอน</div>
           </button>
           <button class="aspect-btn" data-ratio="4-5" onclick="selectAspect(this)">
-            <div class="ratio-label">4:5</div>
-            <div class="ratio-desc">ตั้งแคบ</div>
+            <div class="ratio-label">4:5</div><div class="ratio-desc">ตั้งแคบ</div>
           </button>
           <button class="aspect-btn" data-ratio="2-3" onclick="selectAspect(this)">
-            <div class="ratio-label">2:3</div>
-            <div class="ratio-desc">มาตรฐาน</div>
+            <div class="ratio-label">2:3</div><div class="ratio-desc">มาตรฐาน</div>
           </button>
         </div>
       </div>
       
-      <div class="copyright-warning">
-        <strong>⚠️ เรื่องลิขสิทธิ์เพลง & เสียง</strong><br>
-        หากใช้เพลงที่มีลิขสิทธิ์ ต้องได้รับอนุญาตจากเจ้าของผลงานก่อนครับ แนะนำให้ใช้เพลงที่แต่งเอง หรือเพลงที่อนุญาตให้ใช้ฟรี
-      </div>
       <input type="file" id="mediaFile" accept="video/*,image/*">
       <textarea id="videoDesc" placeholder="ใส่คำอธิบาย..." rows="2"></textarea>
       <input type="text" id="musicName" placeholder="ชื่อเพลง/เสียงประกอบ (ถ้ามี)">
-      <input type="text" id="musicArtist" placeholder="ชื่อศิลปิน/เจ้าของผลงาน">
       <div class="modal-buttons">
         <button class="btn btn-cancel" onclick="closeModal('uploadModal')">ยกเลิก</button>
         <button class="btn btn-submit" onclick="uploadMedia()">โพสต์</button>
@@ -468,123 +206,30 @@
     </div>
   </div>
 
-  <!-- ========== เช็คเอาต์ ========== -->
-  <div class="modal" id="checkoutModal">
-    <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
-      <div class="modal-title">ยืนยันการสั่งซื้อ</div>
-      <div style="margin-bottom: 22px;">
-        <div style="font-weight: 700; margin-bottom: 10px; font-size: 15px;">📍 ที่อยู่จัดส่ง</div>
-        <input type="text" placeholder="ชื่อผู้รับ">
-        <input type="text" placeholder="เบอร์โทรศัพท์">
-        <textarea placeholder="ที่อยู่เต็ม บ้านเลขที่ หมู่ ถนน ตำบล อำเภอ จังหวัด รหัสไปรษณีย์" rows="3"></textarea>
-      </div>
-      <div style="margin-bottom: 22px;">
-        <div style="font-weight: 700; margin-bottom: 10px; font-size: 15px;">💳 ช่องทางชำระเงิน</div>
-        <div class="payment-option selected" onclick="selectPayment(this)">
-          <div class="payment-name">💰 เก็บเงินปลายทาง</div>
-          <div class="payment-desc">จ่ายเงินตอนสินค้าถึงมือ — ปลอดภัย ไม่ต้องโอนก่อน</div>
-        </div>
-        <div class="payment-option" onclick="selectPayment(this)">
-          <div class="payment-name">🏦 โอนเงิน (แจ้งทางแชท)</div>
-          <div class="payment-desc">รอข้อมูลบัญชีจากผู้ขายทางข้อความ — ไม่แสดงสาธารณะ</div>
-        </div>
-      </div>
-      <div style="margin-bottom: 22px;">
-        <div style="font-weight: 700; margin-bottom: 10px; font-size: 15px;">🚚 สถานะการจัดส่ง</div>
-        <div class="status-timeline">
-          <div class="status-step active">
-            <div class="status-dot">✓</div>
-            <div class="status-text">รอตรวจสอบ</div>
-          </div>
-          <div class="status-step">
-            <div class="status-dot">📦</div>
-            <div class="status-text">กำลังแพ็ค</div>
-          </div>
-          <div class="status-step">
-            <div class="status-dot">🚚</div>
-            <div class="status-text">กำลังขนส่ง</div>
-          </div>
-          <div class="status-step">
-            <div class="status-dot">✅</div>
-            <div class="status-text">จัดส่งสำเร็จ</div>
-          </div>
-        </div>
-        <div style="font-size: 13px; color: #888; margin-top: 8px;">🕐 ประมาณ 3–7 วันทำการ</div>
-      </div>
-      <div class="modal-buttons">
-        <button class="btn btn-cancel" onclick="closeModal('checkoutModal')">ยกเลิก</button>
-        <button class="btn btn-submit" onclick="confirmOrder()">ยืนยันการสั่งซื้อ</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========== คอมเมนต์ ========== -->
-  <div class="modal" id="commentModal">
-    <div class="modal-content">
-      <div class="modal-title">💬 ความคิดเห็น (0)</div>
-      <div style="max-height: 380px; overflow-y: auto; margin-bottom: 18px;" id="commentList">
-        <p style="color:#888; text-align:center; padding:30px; font-size:15px;">ยังไม่มีความคิดเห็น เป็นคนแรกที่แสดงความคิดเห็น!</p>
-      </div>
-      <div style="display:flex; gap:12px;">
-        <input type="text" id="commentInput" placeholder="เขียนความคิดเห็น..." style="flex:1; margin:0; font-size:15px;">
-        <button class="btn btn-submit" style="flex:0.35; padding:13px 10px;" onclick="addComment()">ส่ง</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ========== แชร์ ========== -->
-  <div class="modal" id="shareModal">
-    <div class="modal-content">
-      <div class="modal-title">↗️ แชร์ไปยัง</div>
-      <div style="display:grid; grid-template-columns: repeat(4,1fr); gap:18px; text-align:center; padding:10px 0;">
-        <div style="cursor:pointer;"><div style="font-size:30px; margin-bottom:5px;">🔗</div><div style="font-size:12px;">คัดลอกลิงก์</div></div>
-        <div style="cursor:pointer;"><div style="font-size:30px; margin-bottom:5px;">📘</div><div style="font-size:12px;">Facebook</div></div>
-        <div style="cursor:pointer;"><div style="font-size:30px; margin-bottom:5px;">💬</div><div style="font-size:12px;">Line</div></div>
-        <div style="cursor:pointer;"><div style="font-size:30px; margin-bottom:5px;">🐦</div><div style="font-size:12px;">Twitter</div></div>
-      </div>
-      <button class="btn btn-cancel" style="margin-top:22px;" onclick="closeModal('shareModal')">ยกเลิก</button>
-    </div>
-  </div>
-
-  <!-- ========== BOTTOM NAV ========== -->
+  <!-- ===== BOTTOM NAV ===== -->
   <div class="bottom-nav">
     <div class="nav-item active" onclick="openPage('home')">
-      <span class="nav-icon">🏠</span>
-      <span>หน้าแรก</span>
+      <span class="nav-icon">🏠</span><span>หน้าแรก</span>
     </div>
     <div class="nav-item" onclick="openPage('search')">
-      <span class="nav-icon">🔍</span>
-      <span>ค้นหา</span>
+      <span class="nav-icon">🔍</span><span>ค้นหา</span>
     </div>
     <div class="nav-item" onclick="openPage('shop')">
-      <span class="nav-icon">🛍️</span>
-      <span>ร้านค้า</span>
+      <span class="nav-icon">🛍️</span><span>ร้านค้า</span>
     </div>
     <div class="nav-item" onclick="openPage('message')">
-      <span class="nav-icon">💬</span>
-      <span>ข้อความ</span>
+      <span class="nav-icon">💬</span><span>ข้อความ</span>
     </div>
     <div class="nav-item" onclick="openPage('profile')">
-      <span class="nav-icon">👤</span>
-      <span>โปรไฟล์</span>
+      <span class="nav-icon">👤</span><span>โปรไฟล์</span>
     </div>
   </div>
 
   <script>
-    let cart = [];
-    let currentVideo = null;
-    let selectedAspectRatio = '9-16'; // ✅ ค่าเริ่มต้น
+    let selectedAspectRatio = '9-16';
 
-    // ========== 📐 เลือกอัตราส่วน ==========
-    function selectAspect(btn) {
-      document.querySelectorAll('.aspect-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      selectedAspectRatio = btn.dataset.ratio;
-    }
-
-    // เปลี่ยนหน้า — กลับมาหน้าแรก → วิดีโอไม่หาย!
+    // เปลี่ยนหน้า
     function openPage(pageName) {
-      // ✅ บันทึกตำแหน่งเลื่อนหน้าแรก ก่อนออกไปหน้าอื่น
       if (document.getElementById('page-home').classList.contains('active')) {
         sessionStorage.setItem('scrollPosition', document.getElementById('videoFeed').scrollTop);
       }
@@ -596,183 +241,94 @@
       const navMap = { home:0, search:1, shop:2, message:3, profile:4 };
       document.querySelectorAll('.nav-item')[navMap[pageName]].classList.add('active');
       
-      const titleMap = { home:'ไทยโพธิ์ดี', search:'ค้นหา', shop:'ร้านค้า', cart:'ตะกร้าสินค้า', message:'ข้อความ', profile:'โปรไฟล์' };
+      const titleMap = { home:'ไทยโพธิ์ดี', search:'ค้นหา', shop:'ร้านค้า', message:'ข้อความ', profile:'โปรไฟล์' };
       document.getElementById('pageTitle').textContent = titleMap[pageName];
       
-      // ✅ กลับมาหน้าแรก → คืนตำแหน่งเดิม!
       if (pageName === 'home') {
-        const savedPos = sessionStorage.getItem('scrollPosition');
-        if (savedPos) document.getElementById('videoFeed').scrollTop = parseInt(savedPos);
+        const saved = sessionStorage.getItem('scrollPosition');
+        if (saved) document.getElementById('videoFeed').scrollTop = parseInt(saved);
       }
     }
 
-    // เปิด/ปิด Modal
-    function openModal(id) { document.getElementById(id).style.display = 'flex'; }
+    // เปิดปิด Modal
+    function openUploadModal() { document.getElementById('uploadModal').style.display = 'flex'; }
     function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-    function openUploadModal() { openModal('uploadModal'); }
-    function openCheckoutModal() { closeModal('cart'); openModal('checkoutModal'); }
 
-    // เลือกช่องทางชำระเงิน
-    function selectPayment(el) {
-      document.querySelectorAll('.payment-option').forEach(p => p.classList.remove('selected'));
-      el.classList.add('selected');
+    // เลือกอัตราส่วน
+    function selectAspect(btn) {
+      document.querySelectorAll('.aspect-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedAspectRatio = btn.dataset.ratio;
     }
 
-    // 🔊 เปิด/ปิดเสียง
-    function toggleSound(btn) {
-      if (!currentVideo) return;
-      currentVideo.muted = !currentVideo.muted;
-      btn.textContent = currentVideo.muted ? '🔇' : '🔊';
-    }
-
-    // ========== 📸 เปลี่ยนรูปโปรไฟล์ — บันทึกคงอยู่! ==========
+    // เปลี่ยนรูปโปรไฟล์
     function changeProfileAvatar(input) {
       if (!input.files || !input.files[0]) return;
-      const file = input.files[0];
-      const url = URL.createObjectURL(file);
-      const avatar = document.getElementById('profileAvatar');
-      avatar.src = url;
-      avatar.style.background = 'transparent';
-      // ✅ บันทึกลง localStorage — เปิดใหม่ก็ไม่หาย!
+      const url = URL.createObjectURL(input.files[0]);
+      const img = document.getElementById('profileAvatar');
+      const placeholder = document.getElementById('profileAvatarPlaceholder');
+      img.src = url; img.style.display = 'flex';
+      placeholder.style.display = 'none';
       localStorage.setItem('profileAvatar', url);
     }
 
-    // โหลดรูปโปรไฟล์ที่บันทึกไว้
+    // โหลดรูปโปรไฟล์ตอนเปิด
     window.addEventListener('load', () => {
-      const savedAvatar = localStorage.getItem('profileAvatar');
-      if (savedAvatar) {
-        const avatar = document.getElementById('profileAvatar');
-        avatar.src = savedAvatar;
-        avatar.style.background = 'transparent';
+      const saved = localStorage.getItem('profileAvatar');
+      if (saved) {
+        const img = document.getElementById('profileAvatar');
+        const ph = document.getElementById('profileAvatarPlaceholder');
+        img.src = saved; img.style.display = 'flex';
+        ph.style.display = 'none';
       }
     });
 
-    // แก้ไข/บันทึกโปรไฟล์
-    function toggleEditProfile() {
-      const form = document.getElementById('editProfileForm');
-      const btn = document.getElementById('editProfileBtn');
-      form.classList.toggle('active');
-      btn.textContent = form.classList.contains('active') ? 'ยกเลิก' : 'แก้ไขโปรไฟล์';
-    }
-    function saveProfile() {
-      const name = document.getElementById('inputDisplayName').value.trim();
-      if (name) {
-        document.getElementById('profileNameDisplay').textContent = name;
-        localStorage.setItem('profileName', name);
-      }
-      toggleEditProfile();
-      alert('✅ บันทึกเรียบร้อย!');
-    }
-
-    // 🎵 อัปโหลด — มีอัตราส่วน + เสียง + รองรับหมุนจอ!
+    // อัปโหลดสื่อ
     function uploadMedia() {
-      const fileInput = document.getElementById('mediaFile');
-      const musicName = document.getElementById('musicName').value || 'เสียงต้นฉบับ';
-      const musicArtist = document.getElementById('musicArtist').value || '';
-      const desc = document.getElementById('videoDesc').value || '';
+      const file = document.getElementById('mediaFile').files[0];
+      if (!file) { alert('กรุณาเลือกไฟล์'); return; }
       
-      if (!fileInput.files || fileInput.files.length === 0) {
-        alert('กรุณาเลือกไฟล์วิดีโอหรือรูปภาพ');
-        return;
-      }
-      
-      const file = fileInput.files[0];
       const url = URL.createObjectURL(file);
       const isVideo = file.type.startsWith('video/');
+      const desc = document.getElementById('videoDesc').value || '';
+      const music = document.getElementById('musicName').value || '';
       
-      // ✅ สร้างการ์ด — ใส่อัตราส่วนที่เลือก!
+      const feed = document.getElementById('videoFeed');
+      const noVideo = feed.querySelector('.no-video');
+      if (noVideo) noVideo.remove();
+      
       const card = document.createElement('div');
-      card.className = `video-card aspect-${selectedAspectRatio}`;
+      card.className = 'video-card';
       card.innerHTML = `
         ${isVideo 
-          ? `<video class="video-media" src="${url}" autoplay loop muted playsinline controls id="mainVideo"></video>`
+          ? `<video class="video-media" src="${url}" autoplay loop muted playsinline controls></video>` 
           : `<img class="video-media" src="${url}" alt="รูปภาพ">`
         }
-        
-        ${isVideo ? `<button class="sound-btn" onclick="toggleSound(this)">🔇</button>` : ''}
-        ${isVideo ? `<div class="sound-hint">แตะเพื่อเปิดเสียง 🔊</div>` : ''}
-        
         <div class="side-actions">
-          <div class="side-btn" onclick="toggleLike(this)">
-            <span class="side-icon">👤</span>
-          </div>
-          <div class="side-btn like-btn" onclick="toggleLike(this)">
-            <span class="side-icon">❤️</span>
-            <span>0</span>
-          </div>
-          <div class="side-btn" onclick="openModal('commentModal')">
-            <span class="side-icon">💬</span>
-            <span>0</span>
-          </div>
-          <div class="side-btn" onclick="toggleLike(this)">
-            <span class="side-icon">⭐</span>
-            <span>บันทึก</span>
-          </div>
-          <div class="side-btn" onclick="openModal('shareModal')">
-            <span class="side-icon">↗️</span>
-            <span>แชร์</span>
-          </div>
-          <div class="side-btn">
-            <div class="music-disc"><div class="music-disc-inner"></div></div>
-          </div>
+          <div class="side-btn like-btn" onclick="this.classList.toggle('liked')"><span class="side-icon">❤️</span><span>0</span></div>
+          <div class="side-btn"><span class="side-icon">💬</span><span>0</span></div>
+          <div class="side-btn"><span class="side-icon">⭐</span><span>บันทึก</span></div>
+          <div class="side-btn"><span class="side-icon">↗️</span><span>แชร์</span></div>
+          <div class="side-btn"><div class="music-disc"><div class="music-disc-inner"></div></div></div>
         </div>
-        
         <div class="video-info">
-          <div class="video-author">
-            @thaipodee <button class="follow-btn">+ ติดตาม</button>
-          </div>
+          <div class="video-author">@thaipodee <button class="follow-btn">+ ติดตาม</button></div>
           <div class="video-desc">${desc}</div>
-          <div class="music-info">🎵 ${musicName} ${musicArtist ? `- ${musicArtist}` : ''}</div>
+          ${music ? `<div class="music-info">🎵 ${music}</div>` : ''}
         </div>
       `;
       
-      // กดวิดีโอ → เปิด/ปิดเสียง
-      if (isVideo) {
-        card.addEventListener('click', (e) => {
-          if (e.target.closest('.side-btn') || e.target.closest('.sound-btn')) return;
-          const video = card.querySelector('video');
-          video.muted = !video.muted;
-          const soundBtn = card.querySelector('.sound-btn');
-          if (soundBtn) soundBtn.textContent = video.muted ? '🔇' : '🔊';
-        });
-      }
-      
-      // ลบข้อความว่างเปล่า
-      const noVideo = document.querySelector('.no-video');
-      if (noVideo) noVideo.parentElement.removeChild(noVideo);
-      
-      // เพิ่มการ์ดด้านบนสุด
-      const feed = document.getElementById('videoFeed');
       feed.insertBefore(card, feed.firstChild);
-      
-      // นับจำนวนวิดีโอ
       document.getElementById('statVideos').textContent = document.querySelectorAll('.video-card').length;
       
-      // เซตวิดีโอปัจจุบัน
-      if (isVideo) currentVideo = card.querySelector('video');
-      
-      // รีเซ็ตฟอร์ม
+      // เคลียร์ฟอร์ม
       closeModal('uploadModal');
-      fileInput.value = '';
+      document.getElementById('mediaFile').value = '';
       document.getElementById('videoDesc').value = '';
       document.getElementById('musicName').value = '';
-      document.getElementById('musicArtist').value = '';
       
-      alert(`✅ โพสต์สำเร็จ! อัตราส่วน ${selectedAspectRatio.replace('-', ':')} — แตะวิดีโอเพื่อเปิดเสียงครับ!`);
+      alert('✅ โพสต์สำเร็จ!');
     }
-
-    // กดถูกใจ
-    function toggleLike(el) {
-      el.classList.toggle('liked');
-      const countSpan = el.querySelector('span:last-child');
-      if (countSpan && countSpan.textContent !== 'บันทึก') {
-        const current = parseInt(countSpan.textContent) || 0;
-        countSpan.textContent = el.classList.contains('liked') ? current + 1 : current - 1;
-      }
-    }
-
-    // เพิ่มคอมเมนต์
-    function addComment() {
-      const input = document.getElementById('commentInput');
-      const text = input.value.trim();
-      if (!text) return;
+  </script>
+</body>
+</html>
