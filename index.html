@@ -10,43 +10,46 @@
     .page{display:none;position:absolute;inset:0;overflow-y:auto}
     .page.active{display:block}
 
-    /* แถบด้านบน */
+    /* แถบบน — เหมือนเดิม */
     .tabs{position:fixed;top:0;left:0;right:0;padding:12px 0;text-align:center;background:linear-gradient(180deg,#000,transparent);z-index:10}
     .tab{display:inline-block;margin:0 14px;font-size:15px;color:#aaa;cursor:pointer}
     .tab.active{color:#fff;border-bottom:2px solid #fff;padding-bottom:4px;font-weight:bold}
 
-    /* พื้นที่วิดีโอ */
+    /* พื้นที่วิดีโอ — เหมือนเดิม */
     .video-wrap{padding-top:50px;padding-bottom:80px}
     .video-card{height:calc(100vh - 130px);position:relative;background:linear-gradient(135deg,#1a1a2e,#16213e);border-bottom:8px solid #000}
 
-    /* ปุ่มด้านขวา */
-    .side-buttons{position:absolute;right:12px;bottom:100px;display:flex;flex-direction:column;align-items:center;gap:24px}
+    /* ปุ่มด้านขวา — ครบ 6 ตัว เหมือนติ๊กต็อก เปลี่ยนแค่นี้! */
+    .side-buttons{position:absolute;right:12px;bottom:100px;display:flex;flex-direction:column;align-items:center;gap:22px;z-index:6}
     .side-btn{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
     .side-icon{font-size:30px}
     .side-num{font-size:11px;color:#fff}
     .like.liked .side-icon{color:#fe2c55}
 
-    /* ข้อมูลด้านซ้ายล่าง — จัดระเบียบ ไม่ทับกันแน่นอน */
+    /* ข้อมูลด้านซ้ายล่าง — แก้ไม่ให้ทับกัน เหมือนเดิมทุกอย่าง */
     .info{position:absolute;left:15px;right:90px;bottom:100px;z-index:5}
     .author{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:nowrap}
     .avatar{width:42px;height:42px;border-radius:50%;background:#555;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
     .username{font-weight:bold;font-size:15px;white-space:nowrap;flex-shrink:0}
-    .follow-btn{background:#fe2c55;color:#fff;border:none;padding:5px 12px;border-radius:4px;font-size:13px;cursor:pointer;flex-shrink:0}
-    .desc{font-size:14px;line-height:1.6;margin-bottom:8px;color:#f1f1f1;word-wrap:break-word}
-    .music{font-size:13px;display:flex;align-items:center;gap:6px;color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .follow-btn{background:#fe2c55;color:#fff;border:none;padding:5px 12px;border-radius:4px;font-size:13px;cursor:pointer;flex-shrink:0;white-space:nowrap}
+    .desc{font-size:14px;line-height:1.6;margin-bottom:8px;color:#f1f1f1;word-wrap:break-word;max-width:100%}
+    .music{font-size:13px;display:flex;align-items:center;gap:6px;color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 
-    /* เมนูด้านล่าง — ครบ 5 ปุ่ม ชัดเจน */
+    /* เมนูล่าง — เหมือนเดิมเป๊ะ ไม่แตะเลย! */
     .nav{position:fixed;bottom:0;left:0;right:0;height:65px;background:#000;display:flex;justify-content:space-around;align-items:center;border-top:1px solid #333;z-index:10}
     .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
     .nav-icon{font-size:24px}
     .nav-label{font-size:10px;color:#aaa}
     .nav-item.active .nav-label{color:#fff}
     .plus-btn{width:45px;height:35px;background:linear-gradient(90deg,#25f4ee,#fe2c55);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;color:#fff}
+
+    /* ซ่อนของที่ไม่จำเป็น — ไม่ให้มีอะไรโผล่กลางจอ */
+    .middle-ghost, .center-float, .extra-icon{display:none !important}
   </style>
 </head>
 <body>
 
-  <!-- หน้าแรก -->
+  <!-- หน้าแรก — เหมือนเดิมทุกอย่าง -->
   <div class="page active" id="page-home">
     <div class="tabs">
       <span class="tab active">ติดตาม</span>
@@ -54,9 +57,10 @@
     </div>
     <div class="video-wrap">
       <div class="video-card">
+        <!-- ปุ่มด้านขวา — ครบ 6 ตัว เหมือนติ๊กต็อก! -->
         <div class="side-buttons">
           <div class="side-btn like" onclick="this.classList.toggle('liked')">
-            <span class="side-icon">🤍</span>
+            <span class="side-icon">❤️</span>
             <span class="side-num">28.6K</span>
           </div>
           <div class="side-btn">
@@ -71,7 +75,16 @@
             <span class="side-icon">↗️</span>
             <span class="side-num">1,150</span>
           </div>
+          <div class="side-btn">
+            <span class="side-icon">🎵</span>
+            <span class="side-num">เสียง</span>
+          </div>
+          <div class="side-btn">
+            <span class="side-icon">👤</span>
+            <span class="side-num">เจ้าของ</span>
+          </div>
         </div>
+        <!-- ข้อมูลด้านซ้ายล่าง — ไม่ทับกันแล้ว! -->
         <div class="info">
           <div class="author">
             <div class="avatar">🏷️</div>
@@ -85,13 +98,13 @@
     </div>
   </div>
 
-  <!-- หน้าอื่นๆ -->
+  <!-- หน้าอื่นๆ — เหมือนเดิม -->
   <div class="page" id="page-shop" style="display:flex;align-items:center;justify-content:center;font-size:24px">🛒 ร้านค้า</div>
   <div class="page" id="page-camera" style="display:flex;align-items:center;justify-content:center;font-size:24px">📷 อัปโหลดวิดีโอ</div>
   <div class="page" id="page-msg" style="display:flex;align-items:center;justify-content:center;font-size:24px">💬 ข้อความ</div>
   <div class="page" id="page-profile" style="display:flex;align-items:center;justify-content:center;font-size:24px">👤 โปรไฟล์</div>
 
-  <!-- เมนูล่าง -->
+  <!-- เมนูล่าง — เหมือนเดิมเป๊ะ ไม่เปลี่ยน! -->
   <div class="nav">
     <div class="nav-item active" onclick="goPage('home',0)"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></div>
     <div class="nav-item" onclick="goPage('shop',1)"><span class="nav-icon">🛒</span><span class="nav-label">ร้านค้า</span></div>
