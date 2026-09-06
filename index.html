@@ -10,61 +10,73 @@
     .page{display:none;position:absolute;inset:0;overflow-y:auto}
     .page.active{display:block}
 
-    /* หน้าแรก */
-    .home{background:#000}
-    .tabs{position:fixed;top:0;left:0;right:0;padding:12px;text-align:center;background:linear-gradient(180deg,#000,transparent);z-index:10}
-    .tab{display:inline-block;margin:0 12px;font-size:15px;color:#aaa;cursor:pointer}
-    .tab.active{color:#fff;border-bottom:2px solid #fff;padding-bottom:4px}
+    /* แถบด้านบน */
+    .tabs{position:fixed;top:0;left:0;right:0;padding:12px 0;text-align:center;background:linear-gradient(180deg,#000,transparent);z-index:10}
+    .tab{display:inline-block;margin:0 14px;font-size:15px;color:#aaa;cursor:pointer}
+    .tab.active{color:#fff;border-bottom:2px solid #fff;padding-bottom:4px;font-weight:bold}
 
-    .video-container{padding-top:50px;padding-bottom:80px}
-    .video-slide{height:calc(100vh - 130px);display:flex;align-items:center;justify-content:center;position:relative;border-bottom:8px solid #000;background:linear-gradient(135deg,#1a1a2e,#16213e)}
-    
-    .side-buttons{position:absolute;right:15px;bottom:100px;display:flex;flex-direction:column;gap:25px}
-    .btn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
-    .btn span:first-child{font-size:30px}
-    .btn span:last-child{font-size:11px}
-    .like.liked span:first-child{color:#fe2c55}
+    /* พื้นที่วิดีโอ */
+    .video-wrap{padding-top:50px;padding-bottom:80px}
+    .video-card{height:calc(100vh - 130px);position:relative;background:linear-gradient(135deg,#1a1a2e,#16213e);border-bottom:8px solid #000}
 
-    .info{position:absolute;left:15px;right:80px;bottom:100px}
-    .user{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-    .avatar{width:40px;height:40px;border-radius:50%;background:#555;display:flex;align-items:center;justify-content:center;font-size:20px}
-    .username{font-weight:bold;font-size:15px}
-    .follow{background:#fe2c55;color:#fff;border:none;padding:5px 12px;border-radius:4px;margin-left:10px;cursor:pointer}
-    .desc{font-size:14px;margin:8px 0;line-height:1.5}
-    .music{font-size:13px;display:flex;align-items:center;gap:6px;color:#ddd}
+    /* ปุ่มด้านขวา */
+    .side-buttons{position:absolute;right:12px;bottom:100px;display:flex;flex-direction:column;align-items:center;gap:24px}
+    .side-btn{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+    .side-icon{font-size:30px}
+    .side-num{font-size:11px;color:#fff}
+    .like.liked .side-icon{color:#fe2c55}
 
-    /* เมนูล่าง */
+    /* ข้อมูลด้านซ้ายล่าง — จัดระเบียบ ไม่ทับกันแน่นอน */
+    .info{position:absolute;left:15px;right:90px;bottom:100px;z-index:5}
+    .author{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:nowrap}
+    .avatar{width:42px;height:42px;border-radius:50%;background:#555;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+    .username{font-weight:bold;font-size:15px;white-space:nowrap;flex-shrink:0}
+    .follow-btn{background:#fe2c55;color:#fff;border:none;padding:5px 12px;border-radius:4px;font-size:13px;cursor:pointer;flex-shrink:0}
+    .desc{font-size:14px;line-height:1.6;margin-bottom:8px;color:#f1f1f1;word-wrap:break-word}
+    .music{font-size:13px;display:flex;align-items:center;gap:6px;color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    /* เมนูด้านล่าง — ครบ 5 ปุ่ม ชัดเจน */
     .nav{position:fixed;bottom:0;left:0;right:0;height:65px;background:#000;display:flex;justify-content:space-around;align-items:center;border-top:1px solid #333;z-index:10}
     .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
-    .nav-item span:first-child{font-size:24px}
-    .nav-item span:last-child{font-size:10px;color:#aaa}
-    .nav-item.active span:last-child{color:#fff}
-    .plus-btn{width:45px;height:35px;background:linear-gradient(90deg,#25f4ee,#fe2c55);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold}
+    .nav-icon{font-size:24px}
+    .nav-label{font-size:10px;color:#aaa}
+    .nav-item.active .nav-label{color:#fff}
+    .plus-btn{width:45px;height:35px;background:linear-gradient(90deg,#25f4ee,#fe2c55);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;color:#fff}
   </style>
 </head>
 <body>
 
   <!-- หน้าแรก -->
-  <div class="page home active" id="page-home">
+  <div class="page active" id="page-home">
     <div class="tabs">
       <span class="tab active">ติดตาม</span>
       <span class="tab">สำหรับคุณ</span>
     </div>
-    <div class="video-container">
-      <div class="video-slide">
+    <div class="video-wrap">
+      <div class="video-card">
         <div class="side-buttons">
-          <div class="btn like" onclick="this.classList.toggle('liked')">
-            <span>🤍</span><span>28.6K</span>
+          <div class="side-btn like" onclick="this.classList.toggle('liked')">
+            <span class="side-icon">🤍</span>
+            <span class="side-num">28.6K</span>
           </div>
-          <div class="btn"><span>💬</span><span>116</span></div>
-          <div class="btn"><span>⭐</span><span>4,415</span></div>
-          <div class="btn"><span>↗️</span><span>1,150</span></div>
+          <div class="side-btn">
+            <span class="side-icon">💬</span>
+            <span class="side-num">116</span>
+          </div>
+          <div class="side-btn">
+            <span class="side-icon">⭐</span>
+            <span class="side-num">4,415</span>
+          </div>
+          <div class="side-btn">
+            <span class="side-icon">↗️</span>
+            <span class="side-num">1,150</span>
+          </div>
         </div>
         <div class="info">
-          <div class="user">
+          <div class="author">
             <div class="avatar">🏷️</div>
             <span class="username">@thaipodee_shop</span>
-            <button class="follow">ติดตาม</button>
+            <button class="follow-btn">ติดตาม</button>
           </div>
           <div class="desc">ยินดีต้อนรับสู่ ThaiPodee Shop 🇹🇭 ช้อปปิ้งและวิดีโอทุกประเภท</div>
           <div class="music">🎵 เสียงต้นฉบับ - ไทยโพธิ์ดี ช็อป</div>
@@ -74,22 +86,21 @@
   </div>
 
   <!-- หน้าอื่นๆ -->
-  <div class="page" id="page-shop" style="display:flex;align-items:center;justify-content:center;font-size:24px">🛒 ร้านค้า - สินค้าและบริการ</div>
-  <div class="page" id="page-camera" style="display:flex;align-items:center;justify-content:center;font-size:24px">📷 อัปโหลดวิดีโอและโพสต์</div>
-  <div class="page" id="page-msg" style="display:flex;align-items:center;justify-content:center;font-size:24px">💬 กล่องข้อความและการแจ้งเตือน</div>
-  <div class="page" id="page-profile" style="display:flex;align-items:center;justify-content:center;font-size:24px">👤 โปรไฟล์ของฉัน - @thaipodee_shop</div>
+  <div class="page" id="page-shop" style="display:flex;align-items:center;justify-content:center;font-size:24px">🛒 ร้านค้า</div>
+  <div class="page" id="page-camera" style="display:flex;align-items:center;justify-content:center;font-size:24px">📷 อัปโหลดวิดีโอ</div>
+  <div class="page" id="page-msg" style="display:flex;align-items:center;justify-content:center;font-size:24px">💬 ข้อความ</div>
+  <div class="page" id="page-profile" style="display:flex;align-items:center;justify-content:center;font-size:24px">👤 โปรไฟล์</div>
 
   <!-- เมนูล่าง -->
   <div class="nav">
-    <div class="nav-item active" onclick="goPage('home',0)"><span>🏠</span><span>หน้าหลัก</span></div>
-    <div class="nav-item" onclick="goPage('shop',1)"><span>🛒</span><span>ร้านค้า</span></div>
+    <div class="nav-item active" onclick="goPage('home',0)"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></div>
+    <div class="nav-item" onclick="goPage('shop',1)"><span class="nav-icon">🛒</span><span class="nav-label">ร้านค้า</span></div>
     <div class="nav-item" onclick="goPage('camera',2)"><span class="plus-btn">+</span></div>
-    <div class="nav-item" onclick="goPage('msg',3)"><span>💬</span><span>ข้อความ</span></div>
-    <div class="nav-item" onclick="goPage('profile',4)"><span>👤</span><span>โปรไฟล์</span></div>
+    <div class="nav-item" onclick="goPage('msg',3)"><span class="nav-icon">💬</span><span class="nav-label">ข้อความ</span></div>
+    <div class="nav-item" onclick="goPage('profile',4)"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></div>
   </div>
 
   <script>
-    const pages = ['home','shop','camera','msg','profile'];
     function goPage(id, idx){
       document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
       document.getElementById('page-'+id).classList.add('active');
