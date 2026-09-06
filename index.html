@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ไทยโพธิ์ดี ช็อป — ตลาดซื้อขาย</title>
     <link rel="icon" type="image/png" href="logo.png">
+    
+    <!-- ====== FIREBASE ====== -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Roboto, Noto Sans Thai, sans-serif; }
         :root {
@@ -401,6 +407,26 @@
 <body>
 
 <!-- ======================================
+            FIREBASE CONFIG — ใส่ของคุณตรงนี้
+     ====================================== -->
+<script>
+// 👇 ใส่ Config Firebase ของคุณจาก Firebase Console ตรงนี้ครับ
+const firebaseConfig = {
+  apiKey: "AIzaSyCwXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  authDomain: "thaipodee-shop.firebaseapp.com",
+  projectId: "thaipodee-shop",
+  storageBucket: "thaipodee-shop.appspot.com",
+  messagingSenderId: "123456789012",
+  appId: "1:123456789012:web:abcdefghijklmnopqrstuv"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const storage = firebase.storage();
+const db = firebase.firestore();
+</script>
+
+<!-- ======================================
             แถบบน — โลโก้แอป
      ====================================== -->
 <div class="app-header">
@@ -766,7 +792,7 @@
 <div id="toast" class="toast"></div>
 
 <!-- ======================================
-            JAVASCRIPT — ครบทุกฟังก์ชัน
+            JAVASCRIPT — ครบทุกฟังก์ชัน + FIREBASE
      ====================================== -->
 <script>
 // ====== ตัวแปรสถานะ ======
@@ -829,34 +855,82 @@ function previewVideo(e) {
     showToast('✅ วิดีโอพร้อมแล้ว! กดโพสต์ได้เลยครับ');
 }
 
-// ====== โพสต์วิดีโอ ======
-function uploadVideo() {
-    if (!uploadedVideoURL) {
+// ====== อัปโหลดวิดีโอขึ้น FIREBASE STORAGE จริงๆ ======
+async function uploadVideo() {
+    const fileInput = document.getElementById('videoInput');
+    const file = fileInput.files[0];
+    
+    if (!file) {
         showToast('⚠️ กดเลือกวิดีโอก่อนครับ');
         return;
     }
-    showToast('⏳ กำลังบันทึกวิดีโอ...');
-    
-    setTimeout(() => {
-        // นำวิดีโอที่อัปโหลดไปแสดงที่หน้าแรก
-        const mainVid = document.getElementById('mainVideo');
-        mainVid.src = uploadedVideoURL;
-        
-        // อัปเดตคำอธิบาย
+
+    showToast('⏳ กำลังอัปโหลดวิดีโอ...');
+
+    try {
+        // 1. อัปโหลดไฟล์ไปที่ Firebase Storage
+        const fileExt = file.name.split('.').pop();
+        const fileName = `videos/${Date.now()}_${Math.random().toString(36).substr(2, 9)}.${fileExt}`;
+        const storageRef = storage.ref(fileName);
+        const uploadTask = await storageRef.put(file);
+        const videoURL = await uploadTask.ref.getDownloadURL();
+
+        // 2. บันทึกข้อมูลลง Firestore
         const desc = document.getElementById('postDesc').value;
         const music = document.getElementById('postMusic').value;
+        
+        await db.collection('videos').add({
+            videoURL: videoURL,
+            description: desc || 'สมาชิกใส่รายละเอียดสินค้าของตนเอง',
+            music: music || '🎵 เพลงที่สมาชิกเลือก',
+            owner: '@thaipodee_shop',
+            likes: 0,
+            shares: 0,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        // 3. แสดงวิดีโอที่หน้าแรก
+        const mainVid = document.getElementById('mainVideo');
+        mainVid.src = videoURL;
+        
         if (desc) document.querySelector('.video-desc').textContent = desc;
         if (music) document.querySelector('.music-name').textContent = '🎵 ' + music;
-        
-        showToast('✅ โพสต์สำเร็จ!');
+
+        showToast('✅ โพสต์สำเร็จ! วิดีโออยู่ตลอดแล้วครับ');
         switchScreen('screen-feed');
-        
+
         // ล้างค่า
         document.getElementById('previewContainer').style.display = 'none';
         document.getElementById('postDesc').value = '';
         document.getElementById('postMusic').value = '';
+        fileInput.value = '';
         uploadedVideoURL = null;
-    }, 1500);
+
+    } catch (error) {
+        console.error('Upload error:', error);
+        showToast('❌ เกิดข้อผิดพลาด: ' + error.message);
+    }
+}
+
+// ====== โหลดวิดีโอล่าสุดเมื่อเปิดหน้าแรก ======
+async function loadLatestVideo() {
+    try {
+        const snapshot = await db.collection('videos')
+            .orderBy('createdAt', 'desc')
+            .limit(1)
+            .get();
+
+        if (!snapshot.empty) {
+            const doc = snapshot.docs[0].data();
+            const mainVid = document.getElementById('mainVideo');
+            mainVid.src = doc.videoURL;
+            
+            if (doc.description) document.querySelector('.video-desc').textContent = doc.description;
+            if (doc.music) document.querySelector('.music-name').textContent = doc.music;
+        }
+    } catch (error) {
+        console.log('Load video skipped:', error);
+    }
 }
 
 // ====== กดไลก์ ======
@@ -928,23 +1002,4 @@ function showToast(msg) {
     setTimeout(() => t.style.display = 'none', 2800);
 }
 
-// ====== ปิดโมดอลเมื่อกดภายนอก ======
-document.querySelectorAll('.modal').forEach(m => {
-    m.addEventListener('click', e => {
-        if (e.target === m) {
-            m.classList.remove('show');
-            document.body.style.overflow = 'auto';
-        }
-    });
-});
-
-// ====== เริ่มทำงานเมื่อโหลดเสร็จ ======
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('🚀 ไทยโพธิ์ดี ช็อป — ตลาดซื้อขาย พร้อมใช้งานแล้ว!');
-    console.log('✅ กด ➕ เพื่ออัปโหลดวิดีโอ');
-    showToast('👋 ยินดีต้อนรับสู่ ไทยโพธิ์ดี ช็อป!');
-});
-</script>
-
-</body>
-</html>
+// ====== ปิดโมดอลเมื่อกดภ
