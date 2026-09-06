@@ -8,32 +8,28 @@
     *{margin:0;padding:0;box-sizing:border-box}
     html,body{background:#000;color:#fff;width:100%;height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 
-    /* ===== ซ่อนของเก่าทั้งหมด — เด็ดขาด! ===== */
-    body > *:not(.page), .center-float, .middle-icon, .floating-text, 
-    .video-card > .center-icon, .video-card::before, .video-card::after,
-    [class*="old"], [id*="old"], .ghost, .overlay-text, .center-text { display: none !important; }
+    /* ===== บังคับซ่อนทุกอย่างตรงกลางจอ — เด็ดขาด! ===== */
+    .video-card > *:not(.side-buttons):not(.info),
+    .center-icon, .center-text, .middle-box, .profile-preview,
+    [class*="center"], [id*="center"], .avatar-large,
+    .video-card::before, .video-card::after { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
 
     .page{display:none;position:absolute;inset:0;overflow-y:auto}
     .page.active{display:block}
 
-    /* ===== แถบเมนูด้านบน ===== */
     .tabs{position:fixed;top:0;left:0;right:0;padding:12px 0;text-align:center;background:linear-gradient(180deg,#000,transparent);z-index:10}
     .tab{display:inline-block;margin:0 14px;font-size:15px;color:#aaa;cursor:pointer}
     .tab.active{color:#fff;border-bottom:2px solid #fff;padding-bottom:4px;font-weight:bold}
 
-    /* ===== พื้นที่วิดีโอ/เนื้อหา ===== */
     .video-wrap{padding-top:50px;padding-bottom:80px}
     .video-card{height:calc(100vh - 130px);position:relative;background:linear-gradient(135deg,#0f172a,#1e293b);border-bottom:8px solid #000}
 
-    /* ===== ปุ่มด้านขวา 6 ปุ่ม — เหมือน TikTok เป๊ะ! กดทำงานได้แน่นอน! ===== */
     .side-buttons{position:absolute;right:12px;bottom:120px;display:flex;flex-direction:column;align-items:center;gap:24px;z-index:20}
     .side-btn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;pointer-events:auto !important}
-    .side-icon{font-size:28px;user-select:none;transition:transform 0.2s}
-    .side-btn:active .side-icon{transform:scale(0.9)}
+    .side-icon{font-size:28px;user-select:none}
     .side-num{font-size:11px;color:#fff;opacity:0.9}
     .like.liked .side-icon{color:#fe2c55;filter:drop-shadow(0 0 4px #fe2c55)}
 
-    /* ===== ข้อมูลด้านซ้ายล่าง — ชัดเจน ไม่ทับกัน! ===== */
     .info{position:absolute;left:16px;right:95px;bottom:120px;z-index:5}
     .author{display:flex;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:nowrap}
     .avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
@@ -42,7 +38,6 @@
     .desc{font-size:14px;line-height:1.7;margin-bottom:10px;color:#f8fafc;word-wrap:break-word;max-width:100%}
     .music{font-size:13px;display:flex;align-items:center;gap:8px;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 
-    /* ===== เมนูล่าง 5 ปุ่ม — กดทำงานได้แน่นอน! ===== */
     .nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:#000;display:flex;justify-content:space-around;align-items:center;border-top:1px solid #1f2937;z-index:20;padding-bottom:env(safe-area-inset-bottom)}
     .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;pointer-events:auto !important}
     .nav-icon{font-size:24px}
@@ -53,7 +48,6 @@
 </head>
 <body>
 
-  <!-- ===== หน้าหลัก ===== -->
   <div class="page active" id="page-home">
     <div class="tabs">
       <span class="tab active" onclick="switchTab(this)">ติดตาม</span>
@@ -61,7 +55,6 @@
     </div>
     <div class="video-wrap">
       <div class="video-card">
-        <!-- ปุ่มด้านขวา 6 ปุ่ม — ครบ กดได้! -->
         <div class="side-buttons">
           <div class="side-btn like" onclick="this.classList.toggle('liked'); return false;">
             <span class="side-icon">❤️</span>
@@ -88,7 +81,6 @@
             <span class="side-num">เจ้าของ</span>
           </div>
         </div>
-        <!-- ข้อมูลด้านซ้ายล่าง — ชัดเจน ไม่ทับ! -->
         <div class="info">
           <div class="author">
             <div class="avatar">🌍</div>
@@ -102,28 +94,24 @@
     </div>
   </div>
 
-  <!-- ===== หน้าตลาดสินค้า ===== -->
   <div class="page" id="page-shop" style="display:flex;align-items:center;justify-content:center;font-size:24px;flex-direction:column;gap:20px">
     <div style="font-size:60px">🏪</div>
     <div style="font-weight:bold;font-size:28px">ตลาดโลก</div>
     <div style="color:#9ca3af">World Market — ทุกสินค้า ทั่วโลก</div>
   </div>
 
-  <!-- ===== หน้าอัปโหลด ===== -->
   <div class="page" id="page-camera" style="display:flex;align-items:center;justify-content:center;font-size:24px;flex-direction:column;gap:20px">
     <div style="font-size:60px">📷</div>
     <div style="font-weight:bold;font-size:28px">อัปโหลด</div>
     <div style="color:#9ca3af">โพสต์สินค้า วิดีโอ และสิ่งของ</div>
   </div>
 
-  <!-- ===== หน้าข้อความ ===== -->
   <div class="page" id="page-msg" style="display:flex;align-items:center;justify-content:center;font-size:24px;flex-direction:column;gap:20px">
     <div style="font-size:60px">💬</div>
     <div style="font-weight:bold;font-size:28px">ข้อความ</div>
     <div style="color:#9ca3af">แชทและการแจ้งเตือน</div>
   </div>
 
-  <!-- ===== หน้าโปรไฟล์ ===== -->
   <div class="page" id="page-profile" style="display:flex;align-items:center;justify-content:center;font-size:24px;flex-direction:column;gap:20px">
     <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:50px">👤</div>
     <div style="font-weight:bold;font-size:28px">ผู้ใช้</div>
@@ -135,7 +123,6 @@
     </div>
   </div>
 
-  <!-- ===== เมนูล่าง — กดทำงานได้แน่นอน! ===== -->
   <div class="nav">
     <div class="nav-item active" onclick="goPage('home',0)"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></div>
     <div class="nav-item" onclick="goPage('shop',1)"><span class="nav-icon">🏪</span><span class="nav-label">ตลาด</span></div>
@@ -144,7 +131,6 @@
     <div class="nav-item" onclick="goPage('profile',4)"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></div>
   </div>
 
-  <!-- ===== ระบบทำงาน — ครบสมบูรณ์! ===== -->
   <script>
     const navItems = document.querySelectorAll('.nav-item');
     const tabs = document.querySelectorAll('.tab');
