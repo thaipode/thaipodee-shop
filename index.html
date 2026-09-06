@@ -7,6 +7,24 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#000000">
   <title>ไทยโพธิ์ดี ช็อป | Thai Phodee Shop</title>
+  <!-- ===== PWA MANIFEST — ทำให้เป็นแอปเต็มจอ ===== -->
+  <link rel="manifest" href="data:application/json;charset=utf-8,{
+    &quot;name&quot;: &quot;ไทยโพธิ์ดี ช็อป&quot;,
+    &quot;short_name&quot;: &quot;ไทยโพธิ์ดี&quot;,
+    &quot;description&quot;: &quot;แหล่งรวมวิดีโอและสินค้าจากสมาชิกทุกคน&quot;,
+    &quot;start_url&quot;: &quot;/&quot;,
+    &quot;display&quot;: &quot;standalone&quot;,
+    &quot;background_color&quot;: &quot;#000000&quot;,
+    &quot;theme_color&quot;: &quot;#000000&quot;,
+    &quot;orientation&quot;: &quot;portrait-primary&quot;,
+    &quot;icons&quot;: [
+      {
+        &quot;src&quot;: &quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect fill='%23000' width='512' height='512' rx='96'/%3E%3Ctext x='256' y='300' font-size='240' fill='white' text-anchor='middle' font-family='sans-serif'%3Eท%3C/text%3E%3C/svg%3E&quot;,
+        &quot;sizes&quot;: &quot;any&quot;,
+        &quot;type&quot;: &quot;image/svg+xml&quot;
+      }
+    ]
+  }">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     html, body {
@@ -62,7 +80,7 @@
       cursor: pointer;
     }
 
-    /* ===== RIGHT SIDE BUTTONS — POSITIONED CORRECT ===== */
+    /* ===== RIGHT SIDE BUTTONS — กดได้ทุกอัน ตำแหน่งตรง ===== */
     .side-actions {
       position: absolute; right: 12px; bottom: 100px;
       display: flex; flex-direction: column; align-items: center; gap: 18px;
@@ -78,7 +96,7 @@
     .like-icon { color: #fff; }
     .like-icon.liked { color: #fe2c55; }
 
-    /* ===== CAPTION — POSITIONED CORRECT ===== */
+    /* ===== CAPTION ===== */
     .video-info {
       position: absolute; left: 16px; right: 80px; bottom: 100px;
       z-index: 10;
@@ -89,7 +107,7 @@
     .music-icon { animation: spin 4s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ===== BOTTOM NAV ===== */
+    /* ===== BOTTOM NAV — กดได้ทุกปุ่ม ===== */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
       padding: 6px 0; padding-bottom: max(6px, env(safe-area-inset-bottom));
@@ -115,7 +133,7 @@
     }
     .nav-sell { color: #f7d046; }
 
-    /* ===== TABLET & LANDSCAPE — AUTO ADJUST ===== */
+    /* ===== แท็บเล็ต + แนวนอน — ปรับเองอัตโนมัติ ===== */
     @media (min-width: 768px), (orientation: landscape) {
       .side-actions { right: 24px; bottom: 110px; gap: 22px; }
       .video-info { left: 24px; right: 100px; bottom: 110px; }
@@ -141,7 +159,7 @@
       <div class="video-bg"></div>
       <div class="play-btn" id="playBtn">⏸</div>
 
-      <!-- RIGHT ACTIONS — ALL WORKING -->
+      <!-- RIGHT ACTIONS — ทุกปุ่มทำงาน -->
       <div class="side-actions">
         <div class="action-btn"><div class="action-icon">👤</div></div>
         <div class="action-btn" id="likeBtn"><div class="action-icon like-icon">❤️</div><div class="action-count">1.2K</div></div>
@@ -160,7 +178,7 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAV — ALL WORKING -->
+  <!-- BOTTOM NAV — ทุกปุ่มทำงาน -->
   <nav class="bottom-nav">
     <a class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label">หน้าแรก</div></a>
     <a class="nav-item"><div class="nav-icon">🛒</div><div class="nav-label">สินค้า</div></a>
@@ -170,7 +188,7 @@
   </nav>
 
   <script>
-    // Like button toggle
+    // ===== ปุ่มกดได้ทุกอัน =====
     const likeBtn = document.getElementById('likeBtn');
     likeBtn.addEventListener('click', (e) => {
       e.preventDefault(); e.stopPropagation();
@@ -179,7 +197,6 @@
       icon.textContent = icon.classList.contains('liked') ? '❤️' : '🤍';
     });
 
-    // Play/Pause toggle
     const playBtn = document.getElementById('playBtn');
     let isPlaying = true;
     playBtn.addEventListener('click', () => {
@@ -187,7 +204,6 @@
       playBtn.textContent = isPlaying ? '⏸' : '▶';
     });
 
-    // Prevent overscroll
     document.body.addEventListener('touchmove', (e) => {
       const feed = document.getElementById('videoFeed');
       if (feed.scrollTop <= 0) feed.scrollTop = 1;
