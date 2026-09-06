@@ -1,97 +1,200 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ไทยโพธิ์ดี ช็อป">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="description" content="ไทยโพธิ์ดี ช็อป — แอปวิดีโอและสินค้าจากสมาชิกทุกคน">
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi5LiT5ZKM5bKb4Liq4LiZ4Li54LiaIExhbmRpbmciLCJzaG9ydF9uYW1lIjoiVGhhaVBvZGVlIiwiZGVzY3JpcHRpb24iOiI5LiE5ZKM5bKb4Liq4LiZ4Li54LiaIOWcq+S4quS4g+S4g+S4quS4g+S4u+S4g+S4quS4i+S4reS4g+S4h+S4u+S4g+S4quS4i4Li54LiaIOWcq+S4quS4g+S4g+S4quS4g+S4u+S4gIiwiZGVzcmlwdGlvbiI6IuS4g+S4quS4g+S4g+S4quS4g+S4u+S4g+S4quS4i+S4reS4g+S4h+S4u+S4g+S4quS4i4Li54LiaIOWcq+S4quS4gIiwic3RhcnRfdXJsIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwMDAwMDAiLCJ0aGVtZV9jb2xvciI6IiMwMDAwMDAiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0Iiwic2NhcmxfZmFjdG9yIjoibXVsdGlwbGljYXRpb24iLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTAwIDUwMCc+PHRleHQgeD0nNTAlJyB5PSc1NTAlJyBkb21pbmFudC1iYXNlbGluZT0nbWlkZGxlJyBmb250LXNpemU9JzMwMCcgdGV4dC1hbmNob3I9J21pZGRsZScgZmlsbD0nd2hpdGUnPvCfkqE8L3RleHQ+PC9zdmc+Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifV19">
-    <title>ไทยโพธิ์ดี ช็อป</title>
-    <style>
-        * { margin:0; padding:0; box-sizing:border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        html, body { height: 100%; background: #000; color: #fff; overflow: hidden; }
-        body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
-        .app-container { height: 100vh; display: flex; flex-direction: column; position: relative; }
-        .top-nav { display: flex; justify-content: center; padding: 12px 0; gap: 20px; position: absolute; top: 0; left: 0; right: 0; z-index: 10; background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); padding-top: max(12px, env(safe-area-inset-top)); }
-        .top-nav span { font-size: 16px; cursor: pointer; }
-        .top-nav .active { font-weight: bold; color: #fff; border-bottom: 2px solid #fff; padding-bottom: 2px; }
-        .video-area { flex: 1; display: flex; align-items: center; justify-content: center; background: #111; position: relative; }
-        .video-placeholder { width: 80px; height: 80px; border-radius: 50%; background: #333; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #888; }
-        .right-actions { position: absolute; right: 12px; bottom: 120px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-        .action-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
-        .action-btn .icon { font-size: 28px; }
-        .action-btn .count { font-size: 11px; color: #fff; }
-        .bottom-info { position: absolute; left: 16px; bottom: 100px; right: 80px; }
-        .username { font-weight: bold; margin-bottom: 8px; font-size: 15px; }
-        .desc { font-size: 13px; line-height: 1.4; margin-bottom: 8px; color: #eee; }
-        .music { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #ddd; }
-        .bottom-nav { display: flex; justify-content: space-around; padding: 10px 0; background: #000; border-top: 1px solid #222; padding-bottom: max(10px, env(safe-area-inset-bottom)); position: absolute; bottom: 0; left: 0; right: 0; z-index: 10; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; font-size: 10px; }
-        .nav-item .icon { font-size: 22px; }
-        .create-btn { width: 45px; height: 32px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 24px; font-weight: bold; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000000">
+  <title>ไทยโพธิ์ดี ช็อป | Thai Phodee Shop</title>
+  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiXHUwMDV0XHUwMGU0XHUwMDBlXHUwMDBlXHUwMDk1XHUwMGU0XHUwMDk0IENvbGxlY3Rpb24iLCJzaG9ydF9uYW1lIjoiXHUwMDV0XHUwMGU0XHUwMDBlXHUwMDBlXHUwMDk1XHUwMGU0XHUwMDk0IiwiZGVzY3JpcHRpb24iOiJBbGwgU2hvcCIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5IjoiZnVsbHNjcmVlbmIsImJhY2tncm91bmRfY29sb3IiOiIjMDAwMDAwIiwidGhlbWVfY29sb3IiOiIjMDAwMDAwIiwic2NvcGUiIjoic3RhbmRhcmQiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIjUlM0VzdHlsZSUzRWRpczlwcm9maWxlLWNvbG9yOiJ3aGl0ZSI7ZmlsbDpibGFjazslM0Mvc3R5bGUlM0V0ZXh0IHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LXNpemU9IjUwIj5UJTNDL3RleHQlM0Mvc3ZnJTNFIix9XX0=">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+    html, body {
+      background: #000; color: #fff;
+      width: 100%; height: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      position: fixed;
+      overscroll-behavior: none;
+    }
+
+    /* ===== TOP NAVIGATION ===== */
+    .top-nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      padding: 12px 16px; padding-top: max(12px, env(safe-area-inset-top));
+      display: flex; justify-content: center; gap: 24px;
+      background: linear-gradient(to bottom, rgba(0,0,0,.7), transparent);
+      z-index: 100;
+    }
+    .top-nav-tab { font-size: 15px; color: #aaa; cursor: pointer; position: relative; }
+    .top-nav-tab.active { color: #fff; font-weight: 600; }
+    .top-nav-tab.active::after {
+      content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
+      width: 24px; height: 2px; background: #fff; border-radius: 2px;
+    }
+
+    /* ===== VIDEO FEED CONTAINER ===== */
+    .video-container {
+      width: 100%; height: 100%;
+      padding-top: 50px; padding-bottom: 85px;
+      overflow-y: auto; overflow-x: hidden;
+      scroll-snap-type: y mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .video-slide {
+      width: 100%; height: calc(100dvh - 135px);
+      height: 100%; min-height: 100%;
+      position: relative;
+      scroll-snap-align: start;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .video-bg {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .play-btn { width: 70px; height: 70px; border-radius: 50%; background: rgba(255,255,255,.25); display: flex; align-items: center; justify-content: center; font-size: 28px; backdrop-filter: blur(8px); }
+
+    /* ===== RIGHT SIDE ACTION BUTTONS ===== */
+    .side-actions {
+      position: absolute; right: 12px; bottom: 100px;
+      display: flex; flex-direction: column; align-items: center; gap: 22px;
+      z-index: 10;
+    }
+    .action-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+    .action-icon { font-size: 26px; line-height: 1; }
+    .action-count { font-size: 11px; color: #fff; }
+    .like-icon { color: #fff; }
+    .like-icon.liked { color: #fe2c55; }
+
+    /* ===== CAPTION & INFO ===== */
+    .video-info {
+      position: absolute; left: 16px; right: 80px; bottom: 100px;
+      z-index: 10;
+    }
+    .username { font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+    .caption { font-size: 14px; line-height: 1.4; margin-bottom: 8px; }
+    .music-line { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .music-icon { animation: spin 4s linear infinite; }
+    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* ===== BOTTOM NAVIGATION — FIXED, ALWAYS VISIBLE ===== */
+    .bottom-nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      padding: 8px 0; padding-bottom: max(8px, env(safe-area-inset-bottom));
+      background: #000;
+      display: flex; justify-content: space-around; align-items: center;
+      border-top: 1px solid #222;
+      z-index: 200;
+    }
+    .nav-item {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      cursor: pointer; color: #fff; text-decoration: none;
+    }
+    .nav-icon { font-size: 22px; line-height: 1; }
+    .nav-label { font-size: 10px; }
+    .nav-center {
+      width: 45px; height: 30px; border-radius: 8px;
+      background: linear-gradient(45deg, #fff, #f0f0f0);
+      display: flex; align-items: center; justify-content: center;
+      color: #000; font-size: 24px; font-weight: 700;
+    }
+    .nav-sell { color: #f7d046; }
+  </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="top-nav">
-            <span>ติดตาม</span>
-            <span class="active">ไทยโพธิ์ดี</span>
-            <span>สำหรับคุณ</span>
-        </div>
 
-        <div class="video-area">
-            <div class="video-placeholder">⏯</div>
-        </div>
+  <!-- TOP NAV -->
+  <div class="top-nav">
+    <div class="top-nav-tab">ติดตาม</div>
+    <div class="top-nav-tab active">ไทยโพธิ์ดี</div>
+    <div class="top-nav-tab">สำหรับคุณ</div>
+  </div>
 
-        <div class="right-actions">
-            <div class="action-btn">
-                <div class="icon">👤</div>
-            </div>
-            <div class="action-btn">
-                <div class="icon" id="likeBtn">❤️</div>
-                <div class="count">1.2K</div>
-            </div>
-            <div class="action-btn">
-                <div class="icon">💬</div>
-                <div class="count">128</div>
-            </div>
-            <div class="action-btn">
-                <div class="icon">🔖</div>
-                <div class="count">456</div>
-            </div>
-            <div class="action-btn">
-                <div class="icon">↗️</div>
-                <div class="count">3.4K</div>
-            </div>
-            <div class="action-btn">
-                <div class="icon">🎵</div>
-            </div>
-        </div>
+  <!-- VIDEO FEED -->
+  <div class="video-container" id="videoFeed">
+    <!-- VIDEO SLIDE 1 -->
+    <div class="video-slide">
+      <div class="video-bg">
+        <div class="play-btn">⏸</div>
+      </div>
 
-        <div class="bottom-info">
-            <div class="username">@thaipodee_shop</div>
-            <div class="desc">ยินดีต้อนรับสู่ ไทยโพธิ์ดี ช็อป — แหล่งรวมวิดีโอและสินค้าจากสมาชิกทุกคน!</div>
-            <div class="music">🎵 เสียงต้นฉบับ — ไทยโพธิ์ดี ช็อป</div>
+      <!-- RIGHT ACTIONS -->
+      <div class="side-actions">
+        <div class="action-btn">
+          <div class="action-icon">👤</div>
         </div>
+        <div class="action-btn" id="likeBtn">
+          <div class="action-icon like-icon">❤️</div>
+          <div class="action-count">1.2K</div>
+        </div>
+        <div class="action-btn">
+          <div class="action-icon">💬</div>
+          <div class="action-count">128</div>
+        </div>
+        <div class="action-btn">
+          <div class="action-icon">🔁</div>
+          <div class="action-count">456</div>
+        </div>
+        <div class="action-btn">
+          <div class="action-icon">↗️</div>
+          <div class="action-count">3.4K</div>
+        </div>
+        <div class="action-btn">
+          <div class="action-icon">🎵</div>
+        </div>
+      </div>
 
-        <div class="bottom-nav">
-            <div class="nav-item"><div class="icon">🏠</div><div>หน้าแรก</div></div>
-            <div class="nav-item"><div class="icon">🛒</div><div>สินค้า</div></div>
-            <div class="nav-item"><div class="create-btn">+</div></div>
-            <div class="nav-item"><div class="icon">📦</div><div>ขายของ</div></div>
-            <div class="nav-item"><div class="icon">👤</div><div>โปรไฟล์</div></div>
+      <!-- VIDEO INFO -->
+      <div class="video-info">
+        <div class="username">@thaipodee_shop</div>
+        <div class="caption">ยินดีต้อนรับสู่ ไทยโพธิ์ดี ช็อป — แหล่งรวมวิดีโอและสินค้าจากสมาชิกทุกคน!</div>
+        <div class="music-line">
+          <span class="music-icon">🎵</span>
+          <span>เสียงต้นฉบับ — ไทยโพธิ์ดี ช็อป</span>
         </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        document.getElementById('likeBtn').addEventListener('click', function() {
-            this.style.transform = 'scale(1.2)';
-            setTimeout(() => this.style.transform = 'scale(1)', 200);
-        });
-    </script>
+  <!-- BOTTOM NAV — ALWAYS VISIBLE, NOT HIDDEN -->
+  <nav class="bottom-nav">
+    <a class="nav-item" href="#">
+      <div class="nav-icon">🏠</div>
+      <div class="nav-label">หน้าแรก</div>
+    </a>
+    <a class="nav-item" href="#">
+      <div class="nav-icon">🛒</div>
+      <div class="nav-label">สินค้า</div>
+    </a>
+    <a class="nav-item" href="#">
+      <div class="nav-center">+</div>
+    </a>
+    <a class="nav-item nav-sell" href="#">
+      <div class="nav-icon">📦</div>
+      <div class="nav-label">ขายสินค้า</div>
+    </a>
+    <a class="nav-item" href="#">
+      <div class="nav-icon">👤</div>
+      <div class="nav-label">โปรไฟล์</div>
+    </a>
+  </nav>
+
+  <script>
+    // Like button toggle
+    const likeBtn = document.getElementById('likeBtn');
+    likeBtn.addEventListener('click', () => {
+      const icon = likeBtn.querySelector('.like-icon');
+      icon.classList.toggle('liked');
+      icon.textContent = icon.classList.contains('liked') ? '❤️' : '🤍';
+    });
+
+    // Prevent overscroll
+    document.body.addEventListener('touchmove', (e) => {
+      const feed = document.getElementById('videoFeed');
+      if (feed.scrollTop <= 0) feed.scrollTop = 1;
+    }, { passive: false });
+  </script>
 </body>
 </html>
