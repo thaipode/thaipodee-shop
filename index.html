@@ -8,14 +8,19 @@
     *{margin:0;padding:0;box-sizing:border-box}
     html,body{background:#000;color:#fff;width:100%;height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 
-    /* ===== บังคับซ่อนทุกอย่างตรงกลางจอ — เด็ดขาด! ===== */
+    /* ===== บังคับซ่อนทุกอย่างที่ไม่ใช่หน้าหลัก ===== */
+    .page{display:none;position:absolute;inset:0;overflow-y:auto}
+    .page.active{display:block}
+
+    /* ===== ซ่อนเนื้อหาโปรไฟล์ไม่ให้ทับหน้าหลัก ===== */
+    #page-profile{display:none;}
+    #page-profile.active{display:flex;}
+
+    /* ===== ล้างทุกอย่างตรงกลางจอ — เด็ดขาด! ===== */
     .video-card > *:not(.side-buttons):not(.info),
     .center-icon, .center-text, .middle-box, .profile-preview,
     [class*="center"], [id*="center"], .avatar-large,
-    .video-card::before, .video-card::after { display: none !important; visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
-
-    .page{display:none;position:absolute;inset:0;overflow-y:auto}
-    .page.active{display:block}
+    .video-card::before, .video-card::after { display: none !important; visibility: hidden !important; opacity: 0 !important; }
 
     .tabs{position:fixed;top:0;left:0;right:0;padding:12px 0;text-align:center;background:linear-gradient(180deg,#000,transparent);z-index:10}
     .tab{display:inline-block;margin:0 14px;font-size:15px;color:#aaa;cursor:pointer}
@@ -26,7 +31,8 @@
 
     .side-buttons{position:absolute;right:12px;bottom:120px;display:flex;flex-direction:column;align-items:center;gap:24px;z-index:20}
     .side-btn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;pointer-events:auto !important}
-    .side-icon{font-size:28px;user-select:none}
+    .side-icon{font-size:28px;user-select:none;transition:transform 0.2s}
+    .side-btn:active .side-icon{transform:scale(0.9)}
     .side-num{font-size:11px;color:#fff;opacity:0.9}
     .like.liked .side-icon{color:#fe2c55;filter:drop-shadow(0 0 4px #fe2c55)}
 
@@ -44,10 +50,26 @@
     .nav-label{font-size:10px;color:#9ca3af}
     .nav-item.active .nav-label{color:#fff}
     .plus-btn{width:48px;height:36px;background:linear-gradient(90deg,#25f4ee,#fe2c55);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;color:#fff;box-shadow:0 0 12px rgba(37,244,238,0.3)}
+
+    /* ===== หน้าตลาด ===== */
+    #page-shop{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;background:#000}
+    /* ===== หน้าอัปโหลด ===== */
+    #page-camera{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;background:#000}
+    /* ===== หน้าข้อความ ===== */
+    #page-msg{display:flex;align-items:center;justify-content:center;flex-direction:column;gap:20px;background:#000}
+    /* ===== หน้าโปรไฟล์ — ซ่อนไว้ก่อน จะโผล่เมื่อกดเท่านั้น! ===== */
+    #page-profile{display:none;align-items:center;justify-content:center;flex-direction:column;gap:20px;background:#000;padding-top:60px;padding-bottom:90px;overflow-y:auto}
+    #page-profile.active{display:flex;}
+    .profile-avatar{width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:50px}
+    .profile-stats{display:flex;gap:30px;margin-top:20px}
+    .stat-item{text-align:center}
+    .stat-num{font-weight:bold;font-size:20px}
+    .stat-label{font-size:12px;color:#9ca3af}
   </style>
 </head>
 <body>
 
+  <!-- ===== หน้าหลัก ===== -->
   <div class="page active" id="page-home">
     <div class="tabs">
       <span class="tab active" onclick="switchTab(this)">ติดตาม</span>
@@ -55,8 +77,9 @@
     </div>
     <div class="video-wrap">
       <div class="video-card">
+        <!-- ปุ่มด้านขวา 6 ปุ่ม -->
         <div class="side-buttons">
-          <div class="side-btn like" onclick="this.classList.toggle('liked'); return false;">
+          <div class="side-btn like" onclick="this.classList.toggle('liked')">
             <span class="side-icon">❤️</span>
             <span class="side-num">0</span>
           </div>
@@ -81,6 +104,7 @@
             <span class="side-num">เจ้าของ</span>
           </div>
         </div>
+        <!-- ข้อมูลด้านซ้ายล่าง -->
         <div class="info">
           <div class="author">
             <div class="avatar">🌍</div>
@@ -94,35 +118,40 @@
     </div>
   </div>
 
-  <div class="page" id="page-shop" style="display:flex;align-items:center;justify-content:center;font-size:24px;flex-direction:column;gap:20px">
+  <!-- ===== หน้าตลาด ===== -->
+  <div class="page" id="page-shop">
     <div style="font-size:60px">🏪</div>
     <div style="font-weight:bold;font-size:28px">ตลาดโลก</div>
     <div style="color:#9ca3af">World Market — ทุกสินค้า ทั่วโลก</div>
   </div>
 
-  <div class="page" id="page-camera" style="display:flex;align-items:center;justify-content:center;font-size:24px;flex-direction:column;gap:20px">
+  <!-- ===== หน้าอัปโหลด ===== -->
+  <div class="page" id="page-camera">
     <div style="font-size:60px">📷</div>
     <div style="font-weight:bold;font-size:28px">อัปโหลด</div>
     <div style="color:#9ca3af">โพสต์สินค้า วิดีโอ และสิ่งของ</div>
   </div>
 
-  <div class="page" id="page-msg" style="display:flex;align-items:center;justify-content:center;font-size:24px;flex-direction:column;gap:20px">
+  <!-- ===== หน้าข้อความ ===== -->
+  <div class="page" id="page-msg">
     <div style="font-size:60px">💬</div>
     <div style="font-weight:bold;font-size:28px">ข้อความ</div>
     <div style="color:#9ca3af">แชทและการแจ้งเตือน</div>
   </div>
 
-  <div class="page" id="page-profile" style="display:flex;align-items:center;justify-content:center;font-size:24px;flex-direction:column;gap:20px">
-    <div style="width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:50px">👤</div>
+  <!-- ===== หน้าโปรไฟล์ — ซ่อนไว้ก่อน! ===== -->
+  <div class="page" id="page-profile">
+    <div class="profile-avatar">👤</div>
     <div style="font-weight:bold;font-size:28px">ผู้ใช้</div>
     <div style="color:#9ca3af">@world-user</div>
-    <div style="display:flex;gap:30px;margin-top:10px">
-      <div style="text-align:center"><div style="font-weight:bold">0</div><div style="font-size:12px;color:#9ca3af">กำลังติดตาม</div></div>
-      <div style="text-align:center"><div style="font-weight:bold">0</div><div style="font-size:12px;color:#9ca3af">ผู้ติดตาม</div></div>
-      <div style="text-align:center"><div style="font-weight:bold">0</div><div style="font-size:12px;color:#9ca3af">ถูกใจ</div></div>
+    <div class="profile-stats">
+      <div class="stat-item"><div class="stat-num">0</div><div class="stat-label">กำลังติดตาม</div></div>
+      <div class="stat-item"><div class="stat-num">0</div><div class="stat-label">ผู้ติดตาม</div></div>
+      <div class="stat-item"><div class="stat-num">0</div><div class="stat-label">ถูกใจ</div></div>
     </div>
   </div>
 
+  <!-- ===== เมนูล่าง ===== -->
   <div class="nav">
     <div class="nav-item active" onclick="goPage('home',0)"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></div>
     <div class="nav-item" onclick="goPage('shop',1)"><span class="nav-icon">🏪</span><span class="nav-label">ตลาด</span></div>
