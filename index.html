@@ -5,209 +5,599 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="theme-color" content="#000000">
-  <title>ไทยโพธิ์ดี ช็อป | Thai Phodee Shop</title>
-  <!-- ===== PWA MANIFEST — ทำให้เป็นแอปเต็มจอ ===== -->
-  <link rel="manifest" href="data:application/json;charset=utf-8,{
-    &quot;name&quot;: &quot;ไทยโพธิ์ดี ช็อป&quot;,
-    &quot;short_name&quot;: &quot;ไทยโพธิ์ดี&quot;,
-    &quot;description&quot;: &quot;แหล่งรวมวิดีโอและสินค้าจากสมาชิกทุกคน&quot;,
-    &quot;start_url&quot;: &quot;/&quot;,
-    &quot;display&quot;: &quot;standalone&quot;,
-    &quot;background_color&quot;: &quot;#000000&quot;,
-    &quot;theme_color&quot;: &quot;#000000&quot;,
-    &quot;orientation&quot;: &quot;portrait-primary&quot;,
-    &quot;icons&quot;: [
-      {
-        &quot;src&quot;: &quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect fill='%23000' width='512' height='512' rx='96'/%3E%3Ctext x='256' y='300' font-size='240' fill='white' text-anchor='middle' font-family='sans-serif'%3Eท%3C/text%3E%3C/svg%3E&quot;,
-        &quot;sizes&quot;: &quot;any&quot;,
-        &quot;type&quot;: &quot;image/svg+xml&quot;
-      }
-    ]
-  }">
+  <title>THAIPODEE SHOP</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-    html, body {
-      background: #000; color: #fff;
-      width: 100%; height: 100%;
-      height: 100dvh;
-      overflow: hidden; position: fixed;
-      overscroll-behavior: none;
-    }
+    *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{background:#000;color:#fff;width:100%;height:100%;height:100dvh;overflow:hidden;position:fixed;font-family:-apple-system,Roboto,'Segoe UI',sans-serif}
 
-    /* ===== TOP NAV ===== */
-    .top-nav {
-      position: fixed; top: 0; left: 0; right: 0;
-      padding: 10px 16px; padding-top: max(10px, env(safe-area-inset-top));
-      display: flex; justify-content: center; gap: 24px;
-      background: linear-gradient(to bottom, rgba(0,0,0,.6), transparent);
-      z-index: 100;
-    }
-    .top-nav-tab { font-size: 15px; color: #aaa; cursor: pointer; }
-    .top-nav-tab.active { color: #fff; font-weight: 600; position: relative; }
-    .top-nav-tab.active::after {
-      content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%);
-      width: 24px; height: 2px; background: #fff; border-radius: 2px;
-    }
+    /* ===== ตัวควบคุมการแสดงหน้า — ทุกหน้าอยู่ที่นี่ ไม่ลบ ไม่ซ้ำ ===== */
+    .page{position:fixed;inset:0;display:none;flex-direction:column;z-index:10;overflow-y:auto}
+    .page.active{display:flex}
 
-    /* ===== VIDEO CONTAINER ===== */
-    .video-container {
-      position: absolute; inset: 0;
-      padding-top: 50px; padding-bottom: 75px;
-      overflow-y: auto; overflow-x: hidden;
-      scroll-snap-type: y mandatory;
-      -webkit-overflow-scrolling: touch;
-    }
-    .video-slide {
-      width: 100%; height: 100%;
-      min-height: calc(100dvh - 125px);
-      position: relative;
-      scroll-snap-align: start;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .video-bg {
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, #0f0f23, #1a1a3c);
-    }
-    .play-btn {
-      position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-      width: 56px; height: 56px; border-radius: 50%;
-      background: rgba(255,255,255,.2);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; color: #fff;
-      backdrop-filter: blur(6px);
-      z-index: 5;
-      cursor: pointer;
-    }
+    /* ======================================
+       🏠 หน้า 1: หน้าแรก — ฟีดวิดีโอ ไม่มีที่สิ้นสุด
+       ====================================== */
+    .page-home{background:#000;color:#fff}
+    .home-top-bar{position:absolute;top:0;left:0;right:0;padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top));display:flex;justify-content:center;gap:24px;z-index:20;background:linear-gradient(to bottom,rgba(0,0,0,.7),transparent)}
+    .home-tab{font-size:15px;color:#aaa;cursor:pointer}
+    .home-tab.active{color:#fff;font-weight:600;position:relative}
+    .home-tab.active::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:24px;height:2px;background:#fff;border-radius:2px}
+    
+    /* -- ฟีดวิดีโอ เลื่อนไม่มีที่สิ้นสุด -- */
+    .video-feed{flex:1;overflow-y:auto;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;padding-top:60px;padding-bottom:80px}
+    .video-slide{width:100%;min-height:calc(100dvh - 140px);display:flex;align-items:center;justify-content:center;position:relative;scroll-snap-align:start;margin-bottom:4px}
+    .video-bg{position:absolute;inset:0;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%)}
+    .video-slide:nth-child(2) .video-bg{background:linear-gradient(135deg,#2e1a1a 0%,#3e1616 50%,#600f0f 100%)}
+    .video-slide:nth-child(3) .video-bg{background:linear-gradient(135deg,#1a2e1f 0%,#163e26 50%,#0f602e 100%)}
+    .video-slide:nth-child(4) .video-bg{background:linear-gradient(135deg,#2e2c1a 0%,#3e3c16 50%,#605c0f 100%)}
+    .video-slide:nth-child(5) .video-bg{background:linear-gradient(135deg,#2e1a2c 0%,#3e163c 50%,#600f5c 100%)}
+    
+    /* -- ปุ่มด้านขวา -- */
+    .video-actions{position:absolute;right:12px;bottom:100px;display:flex;flex-direction:column;align-items:center;gap:22px;z-index:10}
+    .action-btn{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
+    .action-icon{font-size:28px}
+    .action-count{font-size:11px;color:#fff}
+    .like-btn.liked .action-icon{color:#fe2c55}
+    
+    /* -- ข้อมูลวิดีโอ ด้านซ้ายล่าง -- */
+    .video-info{position:absolute;left:16px;right:80px;bottom:100px;z-index:10}
+    .author-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer}
+    .author-avatar{width:40px;height:40px;border-radius:50%;background:#555;display:flex;align-items:center;justify-content:center;font-size:20px;border:2px solid #fff;overflow:hidden}
+    .author-name{font-weight:700;font-size:15px;color:#fff}
+    .follow-btn{background:#fe2c55;color:#fff;border:none;padding:6px 14px;border-radius:4px;font-size:13px;font-weight:600;cursor:pointer;margin-left:8px}
+    .video-desc{font-size:14px;line-height:1.5;margin-bottom:8px;color:#f1f1f1}
+    .music-row{font-size:13px;display:flex;align-items:center;gap:6px;color:#eee;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-    /* ===== RIGHT SIDE BUTTONS — กดได้ทุกอัน ตำแหน่งตรง ===== */
-    .side-actions {
-      position: absolute; right: 12px; bottom: 100px;
-      display: flex; flex-direction: column; align-items: center; gap: 18px;
-      z-index: 10;
-    }
-    .action-btn {
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      cursor: pointer;
-      pointer-events: auto;
-    }
-    .action-icon { font-size: 24px; line-height: 1; }
-    .action-count { font-size: 11px; color: #fff; }
-    .like-icon { color: #fff; }
-    .like-icon.liked { color: #fe2c55; }
+    /* ======================================
+       📷 หน้า 2: ถ่าย/สร้างโพสต์
+       ====================================== */
+    .page-camera{background:#000;color:#fff}
+    .camera-area{flex:1;display:flex;align-items:center;justify-content:center;position:relative;background:#111}
+    .camera-close{position:absolute;top:16px;left:16px;font-size:28px;color:#fff;z-index:10;cursor:pointer}
+    .camera-top-btn{position:absolute;top:16px;left:50%;transform:translateX(-50%);background:#333;border-radius:20px;padding:8px 16px;display:flex;align-items:center;gap:8px;z-index:10;cursor:pointer;font-size:15px}
+    .camera-right-buttons{position:absolute;right:12px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;align-items:center;gap:20px;z-index:10}
+    .cam-btn{width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;cursor:pointer;border:none}
+    .cam-btn.active{background:#fe2c55}
+    .timer-selector{position:absolute;bottom:160px;left:0;right:0;display:flex;justify-content:center;gap:12px}
+    .timer-option{padding:6px 12px;border-radius:16px;font-size:14px;color:rgba(255,255,255,.7);cursor:pointer}
+    .timer-option.active{background:#fff;color:#000;font-weight:600}
+    .camera-bottom{padding:20px 16px;padding-bottom:max(30px,env(safe-area-inset-bottom));display:flex;flex-direction:column;align-items:center;gap:20px}
+    .gallery-thumb{width:44px;height:44px;border-radius:6px;background:#333;overflow:hidden;cursor:pointer;align-self:flex-start}
+    .shutter-row{display:flex;align-items:center;gap:40px}
+    .shutter-btn{width:72px;height:72px;border-radius:50%;background:#fff;border:4px solid #444;cursor:pointer}
+    .mode-row{display:flex;gap:30px;margin-top:10px}
+    .mode-tab{font-size:15px;color:rgba(255,255,255,.6);cursor:pointer;padding:4px 12px 8px;border-bottom:2px solid transparent}
+    .mode-tab.active{color:#fff;border-bottom-color:#fff;font-weight:600}
 
-    /* ===== CAPTION ===== */
-    .video-info {
-      position: absolute; left: 16px; right: 80px; bottom: 100px;
-      z-index: 10;
-    }
-    .username { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
-    .caption { font-size: 14px; line-height: 1.4; margin-bottom: 6px; }
-    .music-line { display: flex; align-items: center; gap: 6px; font-size: 12px; }
-    .music-icon { animation: spin 4s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    /* ======================================
+       💬 หน้า 3: กล่องข้อความ
+       ====================================== */
+    .page-messages{background:#fff;color:#000}
+    .msg-header{padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top));display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid #eee}
+    .msg-title{font-size:18px;font-weight:600}
+    .msg-banner{margin:12px;background:#f8f8f8;border-radius:10px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between}
+    .msg-banner-btn{background:#fe2c55;color:#fff;border:none;padding:6px 12px;border-radius:16px;font-size:13px;font-weight:600;cursor:pointer}
+    .msg-stories{padding:12px 0;white-space:nowrap;overflow-x:auto;border-bottom:1px solid #eee}
+    .story-item{display:inline-flex;flex-direction:column;align-items:center;gap:6px;margin:0 12px;cursor:pointer}
+    .story-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#fe2c55,#ff9500);padding:2px;position:relative}
+    .story-avatar-inner{width:100%;height:100%;border-radius:50%;background:#ddd;display:flex;align-items:center;justify-content:center;font-size:24px;overflow:hidden}
+    .story-add{position:absolute;bottom:0;right:0;width:18px;height:18px;background:#fe2c55;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px;font-weight:700;border:2px solid #fff}
+    .story-name{font-size:11px;color:#333;max-width:60px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:center}
+    .msg-list{padding:0}
+    .msg-item{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid #f5f5f5;cursor:pointer;background:#fff;transition:background .2s}
+    .msg-item:active{background:#f9f9f9}
+    .msg-avatar{width:48px;height:48px;border-radius:50%;background:#ddd;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden}
+    .msg-icon-wrap{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .msg-icon{font-size:24px;color:#fff}
+    .msg-icon.blue{background:#e3f2fd}
+    .msg-icon.pink{background:#fce4ec}
+    .msg-icon.orange{background:#fff3e0}
+    .msg-icon.dark{background:#263238}
+    .msg-content{flex:1;min-width:0}
+    .msg-name{font-size:15px;font-weight:600;margin-bottom:4px}
+    .msg-preview{font-size:13px;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .msg-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
+    .msg-time{font-size:11px;color:#999}
+    .msg-badge{min-width:20px;height:20px;border-radius:10px;background:#fe2c55;color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;padding:0 6px}
+    .msg-dot{width:8px;height:8px;border-radius:50%;background:#fe2c55}
 
-    /* ===== BOTTOM NAV — กดได้ทุกปุ่ม ===== */
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      padding: 6px 0; padding-bottom: max(6px, env(safe-area-inset-bottom));
-      background: #000;
-      display: flex; justify-content: space-around; align-items: center;
-      border-top: 1px solid #222;
-      z-index: 200;
-    }
-    .nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 2px;
-      color: #fff; text-decoration: none; cursor: pointer;
-      pointer-events: auto;
-    }
-    .nav-icon { font-size: 22px; line-height: 1; }
-    .nav-label { font-size: 10px; }
-    .nav-center {
-      width: 44px; height: 28px; border-radius: 8px;
-      background: linear-gradient(45deg, #fff, #ddd);
-      display: flex; align-items: center; justify-content: center;
-      color: #000; font-size: 22px; font-weight: 700;
-      cursor: pointer;
-      pointer-events: auto;
-    }
-    .nav-sell { color: #f7d046; }
+    /* ======================================
+       👤 หน้า 4: โปรไฟล์
+       ====================================== */
+    .page-profile{background:#fff;color:#000}
+    .profile-header{padding:16px;padding-top:max(12px,env(safe-area-inset-top));display:flex;flex-direction:column;align-items:center;border-bottom:1px solid #eee}
+    .profile-top-bar{width:100%;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+    .profile-top-icon{font-size:22px;cursor:pointer}
+    .profile-avatar-wrap{position:relative;margin-bottom:12px}
+    .profile-avatar{width:96px;height:96px;border-radius:50%;background:#ddd;display:flex;align-items:center;justify-content:center;font-size:40px;overflow:hidden;border:2px solid #f5f5f5}
+    .profile-avatar-add{position:absolute;bottom:0;right:0;width:28px;height:28px;background:#fe2c55;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;border:2px solid #fff;cursor:pointer}
+    .profile-name{font-size:20px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+    .profile-badge{background:#fe2c55;color:#fff;font-size:12px;padding:2px 6px;border-radius:10px}
+    .profile-username{font-size:14px;color:#666;margin-bottom:16px}
+    .profile-stats{display:flex;gap:32px;margin-bottom:16px;text-align:center}
+    .stat-num{font-size:18px;font-weight:700}
+    .stat-label{font-size:12px;color:#999}
+    .profile-bio{font-size:14px;line-height:1.6;text-align:center;margin-bottom:16px;padding:0 20px;color:#333}
+    .profile-tabs{display:flex;border-bottom:1px solid #eee}
+    .profile-tab{flex:1;padding:12px;text-align:center;font-size:14px;color:#999;cursor:pointer;border-bottom:2px solid transparent}
+    .profile-tab.active{color:#000;border-bottom-color:#000;font-weight:600}
+    .profile-videos{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;padding:2px}
+    .video-thumb{aspect-ratio:9/12;background:#eee;position:relative;overflow:hidden;cursor:pointer}
+    .video-thumb-img{width:100%;height:100%;object-fit:cover}
+    .video-thumb-count{position:absolute;bottom:6px;left:6px;color:#fff;font-size:12px;text-shadow:0 1px 3px rgba(0,0,0,.6);display:flex;align-items:center;gap:4px}
 
-    /* ===== แท็บเล็ต + แนวนอน — ปรับเองอัตโนมัติ ===== */
-    @media (min-width: 768px), (orientation: landscape) {
-      .side-actions { right: 24px; bottom: 110px; gap: 22px; }
-      .video-info { left: 24px; right: 100px; bottom: 110px; }
-      .action-icon { font-size: 28px; }
-      .username { font-size: 16px; }
-      .caption { font-size: 15px; }
-      .play-btn { width: 64px; height: 64px; font-size: 24px; }
-    }
+    /* ======================================
+       🛒 หน้า 5: ร้านค้า — หน้าจอหลักร้านค้า
+       ====================================== */
+    .page-shop{background:#fff;color:#000}
+    .shop-search-bar{padding:10px 12px;display:flex;align-items:center;gap:10px;position:sticky;top:0;background:#fff;z-index:10;box-shadow:0 1px 4px rgba(0,0,0,.06)}
+    .shop-search-input{flex:1;background:#f5f5f5;border:none;border-radius:20px;padding:8px 14px;font-size:14px;outline:none}
+    .shop-top-menu{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;padding:12px 8px;background:#fff}
+    .shop-top-item{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
+    .shop-top-icon{font-size:22px;margin-bottom:2px}
+    .shop-top-text{font-size:12px;color:#333}
+    .shop-banner{padding:10px 12px;background:linear-gradient(90deg,#ffd6e0,#ffe8f0)}
+    .shop-icon-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;padding:20px 12px;background:#fff;margin-top:8px}
+    .shop-icon-item{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer}
+    .shop-icon-circle{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,#fe2c5515,#25f4ee15);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:4px}
+    .shop-icon-label{font-size:12px;color:#333;text-align:center;line-height:1.3}
+    .shop-section-header{display:flex;justify-content:space-between;align-items:center;padding:16px 12px 8px;background:#fff;margin-top:8px}
+    .shop-section-title{font-size:18px;font-weight:700}
+    .shop-brand-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:0 12px 16px;background:#fff}
+    .shop-brand-card{background:#f9f9f9;border-radius:10px;overflow:hidden;cursor:pointer;position:relative}
+    .shop-brand-img{width:100%;aspect-ratio:1;background:#ddd;display:flex;align-items:center;justify-content:center;font-size:28px}
+    .shop-brand-discount{position:absolute;top:6px;left:6px;background:#fe2c55;color:#fff;font-size:12px;padding:2px 6px;border-radius:4px}
+    .shop-brand-price{padding:6px 8px;font-size:14px;font-weight:700;color:#fe2c55}
+    .shop-flash-header{display:flex;align-items:center;gap:10px;padding:16px 12px 8px;background:#fff;margin-top:8px}
+    .shop-flash-title{font-size:18px;font-weight:700;color:#fe2c55}
+    .shop-flash-timer{display:flex;align-items:center;gap:4px;background:#f5f5f5;padding:4px 10px;border-radius:16px;font-size:13px}
+    .shop-timer-box{background:#000;color:#fff;padding:2px 6px;border-radius:4px;font-weight:700}
+    .shop-category-tabs{display:flex;overflow-x:auto;gap:16px;padding:10px 12px;background:#fff;border-bottom:1px solid #eee}
+    .shop-cat-tab{font-size:14px;color:#666;cursor:pointer;white-space:nowrap;padding:4px 0;border-bottom:2px solid transparent}
+    .shop-cat-tab.active{color:#fe2c55;border-bottom-color:#fe2c55;font-weight:600}
+    .shop-product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding:12px;background:#fff}
+    .shop-product-item{background:#f9f9f9;border-radius:10px;overflow:hidden;cursor:pointer}
+    .shop-product-img{width:100%;aspect-ratio:1;background:#ddd;display:flex;align-items:center;justify-content:center;font-size:32px;position:relative}
+    .shop-product-badge{position:absolute;top:6px;left:6px;background:#fe2c55;color:#fff;font-size:11px;padding:2px 6px;border-radius:4px}
+    .shop-product-info{padding:10px}
+    .shop-product-name{font-size:14px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:6px}
+    .shop-product-price{font-size:16px;font-weight:700;color:#fe2c55}
+    .shop-product-meta{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+    .shop-product-discount{font-size:12px;color:#999;text-decoration:line-through}
+    .shop-product-xtra{font-size:11px;background:#fe2c55;color:#fff;padding:1px 6px;border-radius:4px}
+
+    /* ======================================
+       🧭 เมนูนำทางหลัก — แสดงทุกหน้า คงที่
+       ====================================== */
+    .main-nav{position:fixed;bottom:0;left:0;right:0;height:70px;background:#000;display:flex;justify-content:space-around;align-items:center;border-top:1px solid #222;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+    .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;color:#fff;text-decoration:none;position:relative}
+    .nav-icon{font-size:24px}
+    .nav-label{font-size:11px;color:#aaa}
+    .nav-item.active .nav-label{color:#fff}
+    .nav-item.active .nav-icon{color:#fe2c55}
+    .nav-center-btn{width:48px;height:36px;background:linear-gradient(90deg,#25f4ee,#fe2c55);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;color:#fff;cursor:pointer}
+    .nav-badge{position:absolute;top:-4px;right:-4px;background:#fe2c55;color:#fff;font-size:11px;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center}
+
+    /* ===== ปุ่มย้อนกลับระบบ ===== */
+    .back-press-toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.85);color:#fff;padding:12px 24px;border-radius:24px;font-size:14px;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none}
+    .back-press-toast.show{opacity:1}
   </style>
 </head>
 <body>
 
-  <!-- TOP NAV -->
-  <div class="top-nav">
-    <div class="top-nav-tab">ติดตาม</div>
-    <div class="top-nav-tab active">ไทยโพธิ์ดี</div>
-    <div class="top-nav-tab">สำหรับคุณ</div>
-  </div>
-
-  <!-- VIDEO FEED -->
-  <div class="video-container" id="videoFeed">
-    <div class="video-slide">
-      <div class="video-bg"></div>
-      <div class="play-btn" id="playBtn">⏸</div>
-
-      <!-- RIGHT ACTIONS — ทุกปุ่มทำงาน -->
-      <div class="side-actions">
-        <div class="action-btn"><div class="action-icon">👤</div></div>
-        <div class="action-btn" id="likeBtn"><div class="action-icon like-icon">❤️</div><div class="action-count">1.2K</div></div>
-        <div class="action-btn"><div class="action-icon">💬</div><div class="action-count">128</div></div>
-        <div class="action-btn"><div class="action-icon">🔁</div><div class="action-count">456</div></div>
-        <div class="action-btn"><div class="action-icon">↗️</div><div class="action-count">3.4K</div></div>
-        <div class="action-btn"><div class="action-icon">🎵</div></div>
+  <!-- ======================================
+       🏠 หน้า 1: หน้าแรก — ฟีดวิดีโอ เริ่มต้น
+       ====================================== -->
+  <div class="page page-home active" id="page-home">
+    <div class="home-top-bar">
+      <span class="home-tab active">ติดตาม</span>
+      <span class="home-tab">สำหรับคุณ</span>
+    </div>
+    <div class="video-feed">
+      <!-- วิดีโอ 1 -->
+      <div class="video-slide">
+        <div class="video-bg"></div>
+        <div class="video-actions">
+          <div class="action-btn like-btn" onclick="this.classList.toggle('liked')">
+            <span class="action-icon">❤️</span>
+            <span class="action-count">28.6K</span>
+          </div>
+          <div class="action-btn">
+            <span class="action-icon">💬</span>
+            <span class="action-count">116</span>
+          </div>
+          <div class="action-btn">
+            <span class="action-icon">⭐</span>
+            <span class="action-count">4,415</span>
+          </div>
+          <div class="action-btn">
+            <span class="action-icon">↗️</span>
+            <span class="action-count">1,150</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <div class="author-row">
+            <div class="author-avatar">👤</div>
+            <span class="author-name">@podee.office</span>
+            <button class="follow-btn">ติดตาม</button>
+          </div>
+          <div class="video-desc">Did you pass the test? 🥁 #drum #musik #drumcover</div>
+          <div class="music-row">🎵 เสียงต้นฉบับ - ไทยโพธิ์ดี</div>
+        </div>
       </div>
-
-      <!-- CAPTION -->
-      <div class="video-info">
-        <div class="username">@thaipodee_shop</div>
-        <div class="caption">ยินดีต้อนรับสู่ ไทยโพธิ์ดี ช็อป — แหล่งรวมวิดีโอและสินค้าจากสมาชิกทุกคน!</div>
-        <div class="music-line"><span class="music-icon">🎵</span><span>เสียงต้นฉบับ — ไทยโพธิ์ดี ช็อป</span></div>
+      <!-- วิดีโอ 2 -->
+      <div class="video-slide">
+        <div class="video-bg"></div>
+        <div class="video-actions">
+          <div class="action-btn like-btn" onclick="this.classList.toggle('liked')">
+            <span class="action-icon">🤍</span>
+            <span class="action-count">12.3K</span>
+          </div>
+          <div class="action-btn">
+            <span class="action-icon">💬</span>
+            <span class="action-count">523</span>
+          </div>
+          <div class="action-btn">
+            <span class="action-icon">⭐</span>
+            <span class="action-count">2,100</span>
+          </div>
+          <div class="action-btn">
+            <span class="action-icon">↗️</span>
+            <span class="action-count">890</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <div class="author-row">
+            <div class="author-avatar">🎤</div>
+            <span class="author-name">@music.th</span>
+            <button class="follow-btn">ติดตาม</button>
+          </div>
+          <div class="video-desc">เพลงใหม่มาแรง 🎵 ฟังแล้วอย่าลืมกดหัวใจนะคะ ❤️</div>
+          <div class="music-row">🎵 เพลงลม - วงไทยโพธิ์ดี</div>
+        </div>
+      </div>
+      <!-- วิดีโอ 3, 4, 5 ... เพิ่มได้เรื่อยๆ ไม่มีที่สิ้นสุด -->
+      <div class="video-slide">
+        <div class="video-bg"></div>
+        <div class="video-actions">
+          <div class="action-btn like-btn" onclick="this.classList.toggle('liked')">
+            <span class="action-icon">🤍</span>
+            <span class="action-count">45.2K</span>
+          </div>
+          <div class="action-btn">
+            <span class="action-icon">💬</span>
+            <span class="action-count">2.3K</span>
+          </div>
+          <div class="action-btn">
+            <span class="action-icon">⭐</span>
+            <span class="action-count">12K</span>
+          </div>
+          <div class="action-btn">
+            <span class="action-icon">↗️</span>
+            <span class="action-count">5.6K</span>
+          </div>
+        </div>
+        <div class="video-info">
+          <div class="author-row">
+            <div class="author-avatar">🏗️</div>
+            <span class="author-name">@thaipodee.official</span>
+            <button class="follow-btn">ติดตาม</button>
+          </div>
+          <div class="video-desc">บริการปรึกษาโครงการ ออกแบบ เขียนแบบ ปรับปรุง ซ่อมแซม สร้างประวัติศาสตร์ 🇹🇭</div>
+          <div class="music-row">🎵 เสียงต้นฉบับ - THAIPODEE SHOP</div>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- BOTTOM NAV — ทุกปุ่มทำงาน -->
-  <nav class="bottom-nav">
-    <a class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label">หน้าแรก</div></a>
-    <a class="nav-item"><div class="nav-icon">🛒</div><div class="nav-label">สินค้า</div></a>
-    <a class="nav-item"><div class="nav-center">+</div></a>
-    <a class="nav-item nav-sell"><div class="nav-icon">📦</div><div class="nav-label">ขายสินค้า</div></a>
-    <a class="nav-item"><div class="nav-icon">👤</div><div class="nav-label">โปรไฟล์</div></a>
-  </nav>
+  <!-- ======================================
+       📷 หน้า 2: ถ่าย/สร้างโพสต์
+       ====================================== -->
+  <div class="page page-camera" id="page-camera">
+    <div class="camera-area">
+      <div class="camera-close" onclick="switchPage('home')">✕</div>
+      <div class="camera-top-btn">🎵 เพิ่มเสียง</div>
+      <div class="camera-right-buttons">
+        <button class="cam-btn">🔄</button>
+        <button class="cam-btn">⚡</button>
+        <button class="cam-btn active">👤</button>
+        <button class="cam-btn">↕️</button>
+      </div>
+      <div class="timer-selector">
+        <span class="timer-option">10 นาที</span>
+        <span class="timer-option">60 วินาที</span>
+        <span class="timer-option">15 วินาที</span>
+        <span class="timer-option active">รูปภาพ</span>
+        <span class="timer-option">ข้อความ</span>
+      </div>
+    </div>
+    <div class="camera-bottom">
+      <div class="gallery-thumb"></div>
+      <div class="shutter-row">
+        <div class="shutter-side"></div>
+        <button class="shutter-btn"></button>
+        <div class="shutter-side"></div>
+      </div>
+      <div class="mode-row">
+        <span class="mode-tab active">โพสต์</span>
+        <span class="mode-tab">LIVE</span>
+      </div>
+    </div>
+  </div>
 
-  <script>
-    // ===== ปุ่มกดได้ทุกอัน =====
-    const likeBtn = document.getElementById('likeBtn');
-    likeBtn.addEventListener('click', (e) => {
-      e.preventDefault(); e.stopPropagation();
-      const icon = likeBtn.querySelector('.like-icon');
-      icon.classList.toggle('liked');
-      icon.textContent = icon.classList.contains('liked') ? '❤️' : '🤍';
-    });
+  <!-- ======================================
+       💬 หน้า 3: กล่องข้อความ
+       ====================================== -->
+  <div class="page page-messages" id="page-messages">
+    <div class="msg-header">
+      <span class="msg-title">กล่องข้อความ</span>
+      <span class="msg-online-dot"></span>
+      <span class="msg-search-icon" style="position:absolute;right:16px">🔍</span>
+    </div>
+    <div class="msg-banner">
+      <div class="msg-banner-left">
+        <span class="msg-banner-icon">📱</span>
+        <span class="msg-banner-text">รับข้อมูลอัปเดตผ่านทาง SMS เมื่อผู้คนโต้ตอบกับบัญชีของคุณ</span>
+      </div>
+      <button class="msg-banner-btn">เรียนรู้เพิ่มเติม</button>
+      <span class="msg-banner-close">✕</span>
+    </div>
+    <div class="msg-stories">
+      <div class="story-item">
+        <div class="story-avatar">
+          <div class="story-avatar-inner">➕</div>
+          <span class="story-add">+</span>
+        </div>
+        <span class="story-name">สร้าง</span>
+      </div>
+      <div class="story-item">
+        <div class="story-avatar"><div class="story-avatar-inner">👩</div></div>
+        <span class="story-name">Tai orathai</span>
+      </div>
+      <div class="story-item">
+        <div class="story-avatar"><div class="story-avatar-inner">👵</div></div>
+        <span class="story-name">แม่Siriwan</span>
+      </div>
+      <div class="story-item">
+        <div class="story-avatar"><div class="story-avatar-inner">👩</div></div>
+        <span class="story-name">สาวใต้ ป้าย...</span>
+      </div>
+      <div class="story-item">
+        <div class="story-avatar"><div class="story-avatar-inner">🎤</div></div>
+        <span class="story-name">ร้อง</span>
+      </div>
+      <div class="story-item">
+        <div class="story-avatar"><div class="story-avatar-inner">👩‍❤️‍👨</div></div>
+        <span class="story-name">Harold Scha...</span>
+      </div>
+    </div>
+    <div class="msg-list">
+      <div class="msg-item">
+        <div class="msg-icon-wrap"><span class="msg-icon blue">👥</span></div>
+        <div class="msg-content">
+          <div class="msg-name">ผู้ติดตามใหม่</div>
+          <div class="msg-preview">Jaoaeimz เริ่มติดตามคุณ</div>
+        </div>
+        <div class="msg-meta">
+          <span class="msg-time"></span>
+          <span class="msg-badge">8</span>
+        </div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-icon-wrap"><span class="msg-icon pink">❤️</span></div>
+        <div class="msg-content">
+          <div class="msg-name">กิจกรรม</div>
+          <div class="msg-preview">Penjor ถูกใจวิดีโอของคุณ</div>
+        </div>
+        <div class="msg-meta">
+          <span class="msg-time"></span>
+          <span class="msg-badge">99+</span>
+        </div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-icon-wrap"><span class="msg-icon orange">🛒</span></div>
+        <div class="msg-content">
+          <div class="msg-name">ThaiPodee Shop</div>
+          <div class="msg-preview">มีการอัปเดต 10 ร้านค้าและ 33 ข้อความ · 2 วัน</div>
+        </div>
+        <div class="msg-meta">
+          <span class="msg-time">2 วัน</span>
+          <span class="msg-dot"></span>
+        </div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-icon-wrap"><span class="msg-icon dark">🚗</span></div>
+        <div class="msg-content">
+          <div class="msg-name">การแจ้งเตือนของระบบ</div>
+          <div class="msg-preview" style="color:red">[สำคัญสูงสุด] ผู้ได้รับโปรโมท: การแจ้งยังไม่ได้รับอนุมัติ · 2 วัน</div>
+        </div>
+        <div class="msg-meta">
+          <span class="msg-time">2 วัน</span>
+          <span class="msg-dot"></span>
+        </div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-avatar">🐱</div>
+        <div class="msg-content">
+          <div class="msg-name">Jaoaeimz</div>
+          <div class="msg-preview">ทักทายยกมือ 👋</div>
+        </div>
+        <div class="msg-meta">
+          <span class="msg-time"></span>
+          <span class="msg-action-icon">✋</span>
+        </div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-avatar">🎵</div>
+        <div class="msg-content">
+          <div class="msg-name">ไทยโพธิ์ดี มิวสิก แบนด์</div>
+          <div class="msg-preview">ส่งเมื่อ 3 วันที่แล้ว</div>
+        </div>
+        <div class="msg-meta">
+          <span class="msg-time">3 วัน</span>
+          <span class="msg-badge">1</span>
+        </div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-avatar">👤</div>
+        <div class="msg-content">
+          <div class="msg-name">Artichart Gooner Pod</div>
+          <div class="msg-preview">ส่งเมื่อ 3 วันที่แล้ว</div>
+        </div>
+        <div class="msg-meta">
+          <span class="msg-time">3 วัน</span>
+          <span class="msg-action-icon">📷</span>
+        </div>
+      </div>
+      <div class="msg-item">
+        <div class="msg-avatar">👤</div>
+        <div class="msg-content">
+          <div class="msg-name">Ple_karan</div>
+          <div class="msg-preview">ใช้งานเมื่อ 2 ชั่วโมงที่แล้ว</div>
+        </div>
+        <div class="msg-meta">
+          <span class="msg-time">2 ชม.</span>
+          <span class="msg-action-icon">📷</span>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    const playBtn = document.getElementById('playBtn');
-    let isPlaying = true;
-    playBtn.addEventListener('click', () => {
-      isPlaying = !isPlaying;
-      playBtn.textContent = isPlaying ? '⏸' : '▶';
-    });
+  <!-- ======================================
+       👤 หน้า 4: โปรไฟล์
+       ====================================== -->
+  <div class="page page-profile" id="page-profile">
+    <div class="profile-header">
+      <div class="profile-top-bar">
+        <div class="profile-top-left">
+          <span class="profile-top-icon">⚙️</span>
+        </div>
+        <div class="profile-top-right">
+          <span class="profile-top-icon">🔁</span>
+          <span class="profile-top-icon">☰</span>
+        </div>
+      </div>
+      <div class="profile-avatar-wrap">
+        <div class="profile-avatar">🏷️</div>
+        <span class="profile-avatar-add">+</span>
+      </div>
+      <h1 class="profile-name">THAIPODEE PRODUCT ENGINEERING <span class="profile-badge">9+</span></h1>
+      <p class="profile-username">@podee.office.cancel</p>
+      <div class="profile-stats">
+        <div class="stat-item"><div class="stat-num">3,267</div><div class="stat-label">กำลังติดตาม</div></div>
+        <div class="stat-item"><div class="stat-num">1,237</div><div class="stat-label">ผู้ติดตาม</div></div>
+        <div class="stat-item"><div class="stat-num">2,734</div><div class="stat-label">ถูกใจ</div></div>
+      </div>
+      <p class="profile-bio">บริการที่ปรึกษาบริหารโครงการ จัดหา ออกแบบเขียนแบบ ปรับปรุง ซ่อมแซม สร้างประกอบ ติดตั้งเครื่องจักรกลทุกชนิด</p>
+      <div style="display:flex;gap:12px;margin-bottom:16px;">
+        <button style="display:flex;align-items:center;gap:6px;background:#f5f5f5;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;">📧 อีเมล</button>
+        <button style="display:flex;align-items:center;gap:6px;background:#f5f5f5;border:none;padding:8px 16px;border-radius:6px;cursor:pointer;">🛒 คำสั่งซื้อของคุณ</button>
+      </div>
+    </div>
+    <div class="profile-tabs">
+      <div class="profile-tab active">📋</div>
+      <div class="profile-tab">🔒</div>
+      <div class="profile-tab">↕️</div>
+      <div class="profile-tab">📷</div>
+    </div>
+    <div class="profile-videos">
+      <div class="video-thumb"><div class="video-thumb-img" style="background:#333"></div><span class="video-thumb-count">▶ 123</span></div>
+      <div class="video-thumb"><div class="video-thumb-img" style="background:#444"></div><span class="video-thumb-count">▶ 119</span></div>
+      <div class="video-thumb"><div class="video-thumb-img" style="background:#555"></div><span class="video-thumb-count">▶ 117</span></div>
+      <div class="video-thumb"><div class="video-thumb-img" style="background:#666"></div><span class="video-thumb-count">▶ 91</span></div>
+      <div class="video-thumb"><div class="video-thumb-img" style="background:#777"></div><span class="video-thumb-count">▶ 131</span></div>
+      <div class="video-thumb"><div class="video-thumb-img" style="background:#888"></div><span class="video-thumb-count">▶ 30</span></div>
+      <div class="video-thumb"><div class="video-thumb-img" style="background:#999"></div><span class="video-thumb-count">▶ 86</span></div>
+      <div class="video-thumb"><div class="video-thumb-img" style="background:#aaa"></div><span class="video-thumb-count">▶ 49</span></div>
+    </div>
+  </div>
 
-    document.body.addEventListener('touchmove', (e) => {
-      const feed = document.getElementById('videoFeed');
-      if (feed.scrollTop <= 0) feed.scrollTop = 1;
-    }, { passive: false });
-  </script>
-</body>
-</html>
+  <!-- ======================================
+       🛒 หน้า 5: ร้านค้า
+       ====================================== -->
+  <div class="page page-shop" id="page-shop">
+    <div class="shop-search-bar">
+      <span class="search-icon">🔍</span>
+      <input type="text" class="shop-search-input" placeholder="แฟนเฟซาโกรสูตร 3 รสจืด">
+      <span class="search-icon">📷</span>
+      <span class="search-icon" style="position:relative">🛒<span style="position:absolute;top:-6px;right:-6px;background:#fe2c55;color:#fff;font-size:10px;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;">9</span></span>
+    </div>
+    <div class="shop-top-menu">
+      <div class="shop-top-item"><span class="shop-top-icon">📋</span><span class="shop-top-text">คำสั่งซื้อ</span></div>
+      <div class="shop-top-item"><span class="shop-top-icon">🎟️</span><span class="shop-top-text">คูปอง</span></div>
+      <div class="shop-top-item"><span class="shop-top-icon">💬</span><span class="shop-top-text">ข้อความ</span></div>
+      <div class="shop-top-item"><span class="shop-top-icon">👤</span><span class="shop-top-text">ครีเอเตอร์</span></div>
+      <div class="shop-top-item"><span class="shop-top-icon">📍</span><span class="shop-top-text">ที่อยู่ของฉัน</span></div>
+    </div>
+    <div class="shop-banner">
+      <div style="display:flex;align-items:center;gap:12px;overflow-x:auto;white-space:nowrap;">
+        <div style="background:linear-gradient(90deg,#fe2c55,#ff6b81);color:#fff;padding:12px 16px;border-radius:12px;min-width:120px;text-align:center;">
+          <div style="font-size:32px;font-weight:900;line-height:1;">9.9</div>
+          <div style="font-size:12px;margin-top:4px;">วันไลฟ์แห่งชาติ</div>
+          <div style="font-size:11px;opacity:.8;">5-10 ก.ย. 69</div>
+        </div>
+        <div style="background:#fff;border:2px solid #fe2c55;padding:12px 14px;border-radius:10px;min-width:110px;text-align:center;">
+          <div style="font-size:14px;color:#fe2c55;font-weight:700;">คูปองลด</div>
+          <div style="font-size:20px;font-weight:900;color:#fe2c55;">35%</div>
+        </div>
+        <div style="background:linear-gradient(90deg,#fff3e0,#ffe0b2);padding:12px 14px;border-radius:10px;min-width:110px;text-align:center;">
+          <div style="font-size:14px;font-weight:600;">ลดสูงสุด</div>
+          <div style="font-size:20px;font-weight:900;color:#ff6f00;">90%</div>
+        </div>
+        <div style="background:linear-gradient(90deg,#e0f7ff,#b3ecff);padding:12px 14px;border-radius:10px;min-width:100px;text-align:center;">
+          <div style="font-size:14px;font-weight:600;">ส่งฟรี</div>
+          <div style="font-size:20px;font-weight:900;color:#0099cc;">ขั้นต่ำ 0.-</div>
+        </div>
+      </div>
+    </div>
+    <div class="shop-icon-grid">
+      <div class="shop-icon-item"><div class="shop-icon-circle">🚚</div><span class="shop-icon-label">คูปองจัดส่ง</span></div>
+      <div class="shop-icon-item"><div class="shop-icon-circle">📹</div><span class="shop-icon-label">ไลฟ์ช้อปปิ้ง</span></div>
+      <div class="shop-icon-item"><div class="shop-icon-circle">🏬</div><span class="shop-icon-label">TikTok Shop Mall</span></div>
+      <div class="shop-icon-item"><div class="shop-icon-circle">🛍️</div><span class="shop-icon-label">กำลังติดตาม</span></div>
+      <div class="shop-icon-item"><div class="shop-icon-circle">⚡</div><span class="shop-icon-label">แฟลชเซลล์</span></div>
+    </div>
+    <div class="shop-section-header">
+      <h2 class="shop-section-title">แบรนด์ดัง ลดแรง</h2>
+    </div>
+    <div class="shop-brand-grid">
+      <div class="shop-brand-card">
+        <div class="shop-brand-img">🎸</div>
+        <span class="shop-brand-discount">-69%</span>
+        <div class="shop-brand-price">฿167.00</div>
+      </div>
+      <div class="shop-brand-card">
+        <div class="shop-brand-img">🧥</div>
+        <span class="shop-brand-discount">-72%</span>
+        <div class="shop-brand-price">฿165.59</div>
+      </div>
+      <div class="shop-brand-card">
+        <div class="shop-brand-img">👷</div>
+        <span class="shop-brand-discount">-70%</span>
+        <div class="shop-brand-price">฿100.00</div>
+      </div>
+      <div class="shop-brand-card">
+        <div class="shop-brand-img">🎧</div>
+        <span class="shop-brand-discount">-25%</span>
+        <div class="shop-brand-price">฿0.01</div>
+      </div>
+    </div>
+    <div class="shop-flash-header">
+      <h2 class="shop-flash-title">⚡ Flash Sale</h2>
+      <div class="shop-flash-timer">
+        <span class="timer-box">12</span>:<span class="timer-box">29</span>:<span class="timer-box">48</span>
+      </div>
+    </div>
+    <div class="shop-category-tabs">
+      <span class="shop-cat-tab active">ทั้งหมด</span>
+      <span class="shop-cat-tab">9.9</span>
+      <span class="shop-cat-tab">คูปองลดเพิ่ม</span>
+      <span class="shop-cat-tab">Mall</span>
+      <span class="shop-cat-tab">อิเล็กทรอนิกส์</span>
+      <span class="shop-cat-tab">เครื่องสำอาง</span>
+    </div>
+    <div class="shop-product-grid">
+      <div class="shop-product-item">
+        <div class="shop-product-img">🎤<span class="shop-product-badge">XTRA</span></div
