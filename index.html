@@ -17,7 +17,7 @@
         }
         body { background: var(--dark); color: white; min-height: 100vh; overflow-x: hidden; }
 
-        /* ====== แถบบน — โลโก้ ไทยโพธิ์ดี ช็อป ====== */
+        /* ====== แถบบน — โลโก้แอป ====== */
         .app-header {
             position: fixed;
             top: 0;
@@ -71,7 +71,7 @@
         }
         .screen.active { display: block; }
 
-        /* ====== ฟีดวิดีโอ — ตลาดซื้อขาย ====== */
+        /* ====== วิดีโอ ====== */
         .video-container {
             width: 100%;
             height: 75vh;
@@ -80,13 +80,30 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            overflow: hidden;
         }
-        .play-btn { font-size: 80px; color: rgba(255,255,255,0.8); cursor: pointer; }
+        .video-player {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        .play-btn { 
+            font-size: 80px; 
+            color: rgba(255,255,255,0.8); 
+            cursor: pointer;
+            position: absolute;
+            z-index: 2;
+            transition: opacity 0.3s;
+        }
         .video-info {
             position: absolute;
             bottom: 20px;
             left: 15px;
             right: 70px;
+            z-index: 3;
         }
         .video-owner { font-weight: bold; font-size: 16px; margin-bottom: 5px; }
         .video-desc { font-size: 14px; margin-bottom: 8px; line-height: 1.4; color: #eee; }
@@ -194,6 +211,38 @@
         .btn-primary { background: var(--primary); color: white; }
         .btn-outline { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
 
+        /* ====== อัปโหลดวิดีโอ ====== */
+        .upload-area {
+            border: 2px dashed #444;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            margin: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .upload-area:hover { border-color: var(--primary); background: #1a1a1a; }
+        .upload-icon { font-size: 50px; margin-bottom: 10px; }
+        textarea, input, select {
+            width: calc(100% - 30px);
+            margin: 8px 15px;
+            padding: 12px;
+            border: 1px solid #444;
+            border-radius: 8px;
+            background: #1a1a1a;
+            color: white;
+            font-size: 15px;
+        }
+        textarea:focus, input:focus, select:focus { outline: none; border-color: var(--primary); }
+        .preview-container {
+            width: 100%;
+            max-height: 300px;
+            background: #000;
+            margin: 10px 0;
+            display: none;
+        }
+        .preview-container video { width: 100%; height: 100%; object-fit: contain; }
+
         /* ====== ขายสินค้า ====== */
         .tabs {
             display: flex;
@@ -214,17 +263,7 @@
             font-weight: bold;
         }
         .form-group { padding: 0 15px; margin-bottom: 15px; }
-        label { display: block; margin-bottom: 6px; font-size: 14px; color: #ddd; }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #444;
-            border-radius: 8px;
-            background: #1a1a1a;
-            color: white;
-            font-size: 15px;
-        }
-        input:focus, select:focus { outline: none; border-color: var(--primary); }
+        label { display: block; margin-bottom: 6px; font-size: 14px; color: #ddd; padding: 0 15px; }
         .hidden { display: none !important; }
         .badge {
             display: inline-block;
@@ -252,6 +291,12 @@
             font-size: 32px;
             font-weight: bold;
             margin: 0 auto 12px;
+            overflow: hidden;
+        }
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .profile-name { font-size: 20px; font-weight: bold; margin-bottom: 4px; }
         .profile-username { color: #888; font-size: 14px; margin-bottom: 8px; }
@@ -363,11 +408,15 @@
 </div>
 
 <!-- ======================================
-            หน้าที่ 1 — ฟีดวิดีโอ / ตลาดซื้อขาย
+            หน้าที่ 1 — ฟีดวิดีโอ
      ====================================== -->
 <div id="screen-feed" class="screen active">
     <div class="video-container">
-        <div class="play-btn" onclick="showToast('▶ กำลังเล่นวิดีโอ...')">▶</div>
+        <video id="mainVideo" class="video-player" loop muted playsinline>
+            <source src="" type="video/mp4">
+            เบราว์เซอร์ไม่รองรับวิดีโอ
+        </video>
+        <div class="play-btn" id="playPauseBtn" onclick="toggleVideo()">▶</div>
         <div class="video-info">
             <div class="video-owner">@thaipodee_shop</div>
             <div class="video-desc">สมาชิกใส่รายละเอียดสินค้าของตนเอง ✅</div>
@@ -407,7 +456,7 @@
             <div class="cart-img"></div>
             <div class="cart-info">
                 <div class="cart-name">สินค้าจากสมาชิก</div>
-                <div class="cart-price">ราคาแต่ละสินค้า <del>เดิม</del></div>
+                <div class="cart-price">ตามราคาสินค้า</div>
                 <div style="font-size:13px; color:#888; margin-top:4px;">จำนวน · ผู้ขาย</div>
             </div>
             <div class="qty-control">
@@ -427,7 +476,36 @@
 </div>
 
 <!-- ======================================
-            หน้าที่ 3 — ขายสินค้า
+            หน้าที่ 3 — อัปโหลดวิดีโอ
+     ====================================== -->
+<div id="screen-upload" class="screen">
+    <h2 class="page-title">📤 โพสต์วิดีโอใหม่</h2>
+    
+    <div class="upload-area" onclick="document.getElementById('videoInput').click()">
+        <div class="upload-icon">🎬</div>
+        <p>กดเพื่อเลือกวิดีโอจากเครื่อง</p>
+        <p style="font-size:12px; color:#888; margin-top:5px;">รองรับไฟล์ .mp4, .mov, .webm</p>
+    </div>
+    
+    <input type="file" id="videoInput" accept="video/*" style="display:none;" onchange="previewVideo(event)">
+    
+    <div class="preview-container" id="previewContainer">
+        <video id="previewVideo" controls style="width:100%; height:100%;"></video>
+    </div>
+    
+    <label>รายละเอียดสินค้า / คำอธิบาย</label>
+    <textarea id="postDesc" rows="3" placeholder="เขียนรายละเอียดสินค้า ราคา ขนาด ฯลฯ..."></textarea>
+    
+    <label>เพลงประกอบ</label>
+    <input type="text" id="postMusic" placeholder="พิมพ์ชื่อเพลง...">
+    
+    <div style="padding:15px;">
+        <button class="btn btn-primary" onclick="uploadVideo()">✅ โพสต์วิดีโอ</button>
+    </div>
+</div>
+
+<!-- ======================================
+            หน้าที่ 4 — ขายสินค้า / ลงทะเบียน
      ====================================== -->
 <div id="screen-sell" class="screen">
     <h2 class="page-title">📦 ลงทะเบียนผู้ขาย</h2>
@@ -494,11 +572,13 @@
 </div>
 
 <!-- ======================================
-            หน้าที่ 4 — บัญชีของฉัน
+            หน้าที่ 5 — บัญชีของฉัน
      ====================================== -->
 <div id="screen-account" class="screen">
     <div class="profile-header">
-        <div class="profile-avatar">ท</div>
+        <div class="profile-avatar">
+            <img src="logo.png" alt="โลโก้" onerror="this.style.display='none'">
+        </div>
         <div class="profile-name">ไทยโพธิ์ดี ช็อป</div>
         <div class="profile-username">@thaipodee_shop</div>
         <span class="badge person">บุคคลธรรมดา</span>
@@ -549,8 +629,12 @@
         <span class="nav-icon">🛒</span>
         <span>ตะกร้า</span>
     </div>
-    <div class="nav-item" data-screen="screen-sell" onclick="switchScreen('screen-sell')">
+    <div class="nav-item" data-screen="screen-upload" onclick="switchScreen('screen-upload')">
         <span class="nav-icon">➕</span>
+        <span>โพสต์</span>
+    </div>
+    <div class="nav-item" data-screen="screen-sell" onclick="switchScreen('screen-sell')">
+        <span class="nav-icon">📦</span>
         <span>ขายของ</span>
     </div>
     <div class="nav-item" data-screen="screen-account" onclick="switchScreen('screen-account')">
@@ -682,7 +766,7 @@
 <div id="toast" class="toast"></div>
 
 <!-- ======================================
-            JAVASCRIPT
+            JAVASCRIPT — ครบทุกฟังก์ชัน
      ====================================== -->
 <script>
 // ====== ตัวแปรสถานะ ======
@@ -692,6 +776,7 @@ let shareCount = 3420;
 let myShareCount = 0;
 let cartCount = 2;
 let selectedPackage = 50;
+let uploadedVideoURL = null;
 
 // ====== สลับหน้าจอ ======
 function switchScreen(screenId) {
@@ -713,6 +798,65 @@ function switchTab(type) {
         document.getElementById('form-person').classList.add('hidden');
         document.getElementById('form-company').classList.remove('hidden');
     }
+}
+
+// ====== เล่น-หยุดวิดีโอ ======
+function toggleVideo() {
+    const vid = document.getElementById('mainVideo');
+    const btn = document.getElementById('playPauseBtn');
+    if (!vid.src || vid.src === window.location.href + '') {
+        showToast('⚠️ ยังไม่มีวิดีโอ กด ➕ เพื่ออัปโหลดครับ');
+        return;
+    }
+    if (vid.paused) {
+        vid.play();
+        btn.style.opacity = '0';
+    } else {
+        vid.pause();
+        btn.style.opacity = '1';
+    }
+}
+
+// ====== พรีวิววิดีโอก่อนโพสต์ ======
+function previewVideo(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    uploadedVideoURL = URL.createObjectURL(file);
+    const previewVid = document.getElementById('previewVideo');
+    const container = document.getElementById('previewContainer');
+    previewVid.src = uploadedVideoURL;
+    container.style.display = 'block';
+    showToast('✅ วิดีโอพร้อมแล้ว! กดโพสต์ได้เลยครับ');
+}
+
+// ====== โพสต์วิดีโอ ======
+function uploadVideo() {
+    if (!uploadedVideoURL) {
+        showToast('⚠️ กดเลือกวิดีโอก่อนครับ');
+        return;
+    }
+    showToast('⏳ กำลังบันทึกวิดีโอ...');
+    
+    setTimeout(() => {
+        // นำวิดีโอที่อัปโหลดไปแสดงที่หน้าแรก
+        const mainVid = document.getElementById('mainVideo');
+        mainVid.src = uploadedVideoURL;
+        
+        // อัปเดตคำอธิบาย
+        const desc = document.getElementById('postDesc').value;
+        const music = document.getElementById('postMusic').value;
+        if (desc) document.querySelector('.video-desc').textContent = desc;
+        if (music) document.querySelector('.music-name').textContent = '🎵 ' + music;
+        
+        showToast('✅ โพสต์สำเร็จ!');
+        switchScreen('screen-feed');
+        
+        // ล้างค่า
+        document.getElementById('previewContainer').style.display = 'none';
+        document.getElementById('postDesc').value = '';
+        document.getElementById('postMusic').value = '';
+        uploadedVideoURL = null;
+    }, 1500);
 }
 
 // ====== กดไลก์ ======
@@ -797,8 +941,7 @@ document.querySelectorAll('.modal').forEach(m => {
 // ====== เริ่มทำงานเมื่อโหลดเสร็จ ======
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 ไทยโพธิ์ดี ช็อป — ตลาดซื้อขาย พร้อมใช้งานแล้ว!');
-    console.log('✅ เราคือศูนย์กลางตลาดซื้อขาย ให้สมาชิกซื้อ-ขายกันเอง');
-    console.log('✅ ไม่มีระบบระงับบัญชี · ไม่ระงับเงิน ตลอดอายุการใช้งาน');
+    console.log('✅ กด ➕ เพื่ออัปโหลดวิดีโอ');
     showToast('👋 ยินดีต้อนรับสู่ ไทยโพธิ์ดี ช็อป!');
 });
 </script>
