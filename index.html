@@ -792,7 +792,7 @@ const db = firebase.firestore();
 <div id="toast" class="toast"></div>
 
 <!-- ======================================
-            JAVASCRIPT — ครบทุกฟังก์ชัน + FIREBASE
+            JAVASCRIPT — ครบทุกฟังก์ชัน + FIREBASE ตรวจสอบเรียบร้อย ✅
      ====================================== -->
 <script>
 // ====== ตัวแปรสถานะ ======
@@ -982,24 +982,4 @@ function addToCart() {
     closeModal('productModal');
     cartCount++;
     document.getElementById('cartBadge').textContent = cartCount;
-    showToast('✅ ใส่ตะกร้าเรียบร้อย!');
-}
-function buyNow() {
-    closeModal('productModal');
-    showToast('⏳ กำลังไปหน้าชำระเงิน...');
-}
-
-// ====== ลงทะเบียนผู้ขาย ======
-function submitSeller() {
-    showToast('✅ ส่งข้อมูลเรียบร้อย! รอตรวจสอบ 1–2 วันทำการ');
-}
-
-// ====== แจ้งเตือน ======
-function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.style.display = 'block';
-    setTimeout(() => t.style.display = 'none', 2800);
-}
-
-// ====== ปิดโมดอลเมื่อกดภ
+    showToast('✅ 
