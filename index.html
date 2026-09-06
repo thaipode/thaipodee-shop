@@ -2,385 +2,96 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#fe2c55">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ThaiPodee">
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi5LiT5ZKM5bKb4Liq4LiZ4Li54LiaIExhbmRpbmciLCJzaG9ydF9uYW1lIjoiVGhhaVBvZGVlIiwiZGVzY3JpcHRpb24iOiI5LiE5ZKM5bKb4Liq4LiZ4Li54LiaIOWcq+S4quS4g+S4g+S4quS4g+S4u+S4g+S4quS4quS4g+S4u+S4gIiwic3RhcnRfdXJsIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwMDAwMDAiLCJ0aGVtZV9jb2xvciI6IiNmZTJjNTUiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTkyIDE5MSc+JTNDY2lyY2xlIGN4PScxMDAnIGN5PScxMDAnIHI9JzkwJyBmaWxsPSclZmUyYzU1Jy8lM0N0ZXh0IHg9JzUwJScgeT0nNTAlJyBkb21pbmFudC1iYXNlbGluZT0nbWlkZGxlJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmaWxsPSd3aGl0ZScgZm9udC1zaXplPSc4MCcgZm9udC1mYW1pbHk9J0FyaWFsJyB0ZXh0LWRpcmVjdGlvbj0nbG9uZ2VyJyB0ZXh0LWRlY29yYXRlPSdtaWRkbGUnPlRQJTNDJTJGdGV4dCUzQSUyRnN2ZyUzRSIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn0seyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDUxMiA1MTInJTNFJTNDY2lyY2xlIGN4PScyNTYnIGN5PScyNTYnIHI9JzI0MCcgZmlsbD0nI2ZlMmM1NScvJTNDdGV4dCB4PSc1MCUnIHk9JzUwJScgZG9taW5hbnQtYmFzZWxpbmU9J21pZGRsZScgdGV4dC1hbmNob3I9J21pZGRsZScgZmlsbD0nd2hpdGUnIGZvbnQtc2l6ZT0nMjAwJyBmb250LWZhbWlseT0nQXJpYWwnIHRleHQtZGlyZWN0aW9uPSdsb25nZXInIHRleHQtZGVjb3JhdGU9J21pZGRsZSc+VFA8JTJGdGV4dD48JTJGc3ZnPiIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQ==">
-    <title>ไทยโพธิ์ดี ช็อป | Thaipodee Shop</title>
+    <meta name="apple-mobile-web-app-title" content="ไทยโพธิ์ดี ช็อป">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="ไทยโพธิ์ดี ช็อป — แอปวิดีโอและสินค้าจากสมาชิกทุกคน">
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi5LiT5ZKM5bKb4Liq4LiZ4Li54LiaIExhbmRpbmciLCJzaG9ydF9uYW1lIjoiVGhhaVBvZGVlIiwiZGVzY3JpcHRpb24iOiI5LiE5ZKM5bKb4Liq4LiZ4Li54LiaIOWcq+S4quS4g+S4g+S4quS4g+S4u+S4g+S4quS4i+S4reS4g+S4h+S4u+S4g+S4quS4i4Li54LiaIOWcq+S4quS4g+S4g+S4quS4g+S4u+S4gIiwiZGVzcmlwdGlvbiI6IuS4g+S4quS4g+S4g+S4quS4g+S4u+S4g+S4quS4i+S4reS4g+S4h+S4u+S4g+S4quS4i4Li54LiaIOWcq+S4quS4gIiwic3RhcnRfdXJsIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwMDAwMDAiLCJ0aGVtZV9jb2xvciI6IiMwMDAwMDAiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0Iiwic2NhcmxfZmFjdG9yIjoibXVsdGlwbGljYXRpb24iLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLDxzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgNTAwIDUwMCc+PHRleHQgeD0nNTAlJyB5PSc1NTAlJyBkb21pbmFudC1iYXNlbGluZT0nbWlkZGxlJyBmb250LXNpemU9JzMwMCcgdGV4dC1hbmNob3I9J21pZGRsZScgZmlsbD0nd2hpdGUnPvCfkqE8L3RleHQ+PC9zdmc+Iiwic2l6ZXMiOiIxOTJ4MTkyIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifV19">
+    <title>ไทยโพธิ์ดี ช็อป</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-        :root { --primary: #fe2c55; --secondary: #25f4ee; --bg: #000; --text: #fff; --gray: #333; --light-gray: #888; }
-        body { background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
-
-        .install-bar { position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(90deg, var(--primary), #ff6b8b); color: white; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; z-index: 500; transform: translateY(-100%); transition: transform 0.3s ease; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
-        .install-bar.show { transform: translateY(0); }
-        .install-btn { background: white; color: var(--primary); border: none; padding: 8px 18px; border-radius: 20px; font-weight: bold; font-size: 14px; cursor: pointer; white-space: nowrap; }
-        .close-install { font-size: 20px; cursor: pointer; padding: 0 8px; opacity: 0.9; }
-
-        .top-bar { position: fixed; top: 50px; left: 0; right: 0; background: rgba(0,0,0,0.85); padding: 12px 15px; display: flex; justify-content: center; align-items: center; z-index: 100; border-bottom: 1px solid #222; }
-        .top-bar.no-install { top: 0; }
-        .top-bar .tab { color: var(--light-gray); margin: 0 12px; font-size: 15px; cursor: pointer; }
-        .top-bar .tab.active { color: #fff; border-bottom: 2px solid #fff; padding-bottom: 4px; }
-        .top-bar h1 { font-size: 18px; color: var(--primary); font-weight: 700; }
-
-        .screen { display: none; padding-top: 105px; padding-bottom: 80px; min-height: 100vh; }
-        .screen.no-install { padding-top: 55px; }
-        .screen.active { display: block; }
-
-        .video-container { position: relative; width: 100%; height: calc(100vh - 185px); background: #000; overflow: hidden; touch-action: pan-y; }
-        video { width: 100%; height: 100%; object-fit: contain; background: #000; }
-        .no-video { text-align: center; padding-top: 30vh; color: var(--light-gray); }
-
-        .video-info { position: absolute; bottom: 20px; left: 15px; right: 110px; z-index: 10; }
-        .video-info .username { font-size: 16px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
-        .video-info .desc { font-size: 14px; line-height: 1.5; margin-bottom: 10px; color: #eee; }
-        .video-info .music { font-size: 13px; display: flex; align-items: center; gap: 6px; color: #ddd; }
-        .tag-sale { display: inline-block; background: var(--primary); color: white; padding: 6px 14px; border-radius: 20px; font-size: 13px; margin-top: 10px; cursor: pointer; font-weight: 600; }
-
-        /* ===== 6 ปุ่มด้านขวา เรียงตรงเหมือน TikTok เป๊ะ! ===== */
-        .side-actions { position: fixed; right: 12px; bottom: 160px; display: flex; flex-direction: column; gap: 26px; align-items: center; z-index: 50; }
-        .side-btn { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: transform 0.2s; }
-        .side-btn:active { transform: scale(0.9); }
-        .side-btn span { font-size: 28px; line-height: 1; }
-        .side-btn small { font-size: 11px; margin-top: 3px; color: #fff; }
-        .side-btn.liked span { color: var(--primary); }
-
-        .user-avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 24px; border: 2px solid #fff; }
-        .avatar-follow { position: relative; }
-        .follow-plus { position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 18px; height: 18px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: white; border: 2px solid #000; }
-
-        .music-disc { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; font-size: 20px; border: 2px solid #fff; animation: spin 8s linear infinite; }
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.95); display: flex; justify-content: space-around; align-items: center; padding: 8px 0 20px; border-top: 1px solid #222; z-index: 100; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; color: #aaa; transition: all 0.2s; }
-        .nav-item.active { color: #fff; }
-        .nav-item span { font-size: 24px; line-height: 1; }
-        .nav-item small { font-size: 10px; margin-top: 3px; }
-        .nav-center { width: 48px; height: 38px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 22px; font-weight: bold; }
-
-        .upload-area { margin: 20px; border: 2px dashed #444; border-radius: 12px; padding: 50px 20px; text-align: center; cursor: pointer; transition: all 0.3s; }
-        .upload-area:hover { border-color: var(--primary); background: #1a1a1a; }
-        .upload-area span { font-size: 48px; display: block; margin-bottom: 10px; }
-        input, textarea, select { width: calc(100% - 30px); margin: 8px 15px; padding: 14px; border: 1px solid #444; border-radius: 8px; background: #1a1a1a; color: white; font-size: 15px; outline: none; }
-        input:focus, textarea:focus, select:focus { border-color: var(--primary); }
-        button { width: calc(100% - 30px); margin: 15px; padding: 15px; border-radius: 10px; border: none; font-size: 16px; font-weight: bold; cursor: pointer; transition: opacity 0.2s; }
-        button:active { opacity: 0.8; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-secondary { background: #333; color: white; }
-        .preview-vid { width: calc(100% - 30px); margin: 10px 15px; max-height: 300px; background: #000; display: none; border-radius: 8px; }
-
-        .cart-item { display: flex; gap: 12px; padding: 15px; border-bottom: 1px solid #333; align-items: center; }
-        .cart-img { width: 80px; height: 80px; background: #222; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 30px; }
-        .cart-info { flex: 1; }
-        .cart-info h4 { font-size: 15px; margin-bottom: 4px; }
-        .cart-info p { font-size: 14px; color: var(--primary); font-weight: 600; }
-
-        .form-section { padding: 15px; border-bottom: 1px solid #333; }
-        .form-section h3 { font-size: 16px; margin-bottom: 12px; color: #ddd; }
-        .row { display: flex; gap: 10px; }
-        .row input { flex: 1; margin: 0; }
-
-        .profile-header { text-align: center; padding: 30px 20px; }
-        .profile-avatar { width: 90px; height: 90px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); margin: 0 auto 15px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
-        .profile-stats { display: flex; justify-content: space-around; padding: 20px; border-bottom: 1px solid #333; }
-        .stat-num { font-size: 20px; font-weight: 700; }
-        .stat-label { font-size: 12px; color: var(--light-gray); margin-top: 4px; }
-        .profile-menu { padding: 15px 20px; border-bottom: 1px solid #333; cursor: pointer; }
-        .profile-menu:active { background: #222; }
-
-        .modal { position: fixed; bottom: 0; left: 0; right: 0; background: #111; border-radius: 20px 20px 0 0; max-height: 80vh; overflow-y: auto; z-index: 200; display: none; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); }
-        .modal-header { padding: 15px; text-align: center; border-bottom: 1px solid #333; position: relative; }
-        .modal-close { position: absolute; right: 15px; top: 10px; font-size: 24px; cursor: pointer; color: #888; }
-        .comment-item { padding: 15px; border-bottom: 1px solid #222; }
-        .comment-user { font-weight: 600; margin-bottom: 5px; font-size: 14px; }
-        .comment-text { font-size: 14px; line-height: 1.5; color: #ddd; }
-        .comment-input-area { display: flex; padding: 15px; border-top: 1px solid #333; position: sticky; bottom: 0; background: #111; }
-        .comment-input { flex: 1; margin: 0; border-radius: 20px; padding: 10px 15px; }
-        .comment-submit { width: auto; margin: 0 0 0 10px; padding: 10px 15px; border-radius: 20px; font-size: 14px; }
-
-        .toast { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.9); color: white; padding: 15px 25px; border-radius: 30px; z-index: 300; display: none; text-align: center; font-size: 15px; max-width: 80%; }
+        * { margin:0; padding:0; box-sizing:border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        html, body { height: 100%; background: #000; color: #fff; overflow: hidden; }
+        body { padding-top: env(safe-area-inset-top); padding-bottom: env(safe-area-inset-bottom); }
+        .app-container { height: 100vh; display: flex; flex-direction: column; position: relative; }
+        .top-nav { display: flex; justify-content: center; padding: 12px 0; gap: 20px; position: absolute; top: 0; left: 0; right: 0; z-index: 10; background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent); padding-top: max(12px, env(safe-area-inset-top)); }
+        .top-nav span { font-size: 16px; cursor: pointer; }
+        .top-nav .active { font-weight: bold; color: #fff; border-bottom: 2px solid #fff; padding-bottom: 2px; }
+        .video-area { flex: 1; display: flex; align-items: center; justify-content: center; background: #111; position: relative; }
+        .video-placeholder { width: 80px; height: 80px; border-radius: 50%; background: #333; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #888; }
+        .right-actions { position: absolute; right: 12px; bottom: 120px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .action-btn { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; }
+        .action-btn .icon { font-size: 28px; }
+        .action-btn .count { font-size: 11px; color: #fff; }
+        .bottom-info { position: absolute; left: 16px; bottom: 100px; right: 80px; }
+        .username { font-weight: bold; margin-bottom: 8px; font-size: 15px; }
+        .desc { font-size: 13px; line-height: 1.4; margin-bottom: 8px; color: #eee; }
+        .music { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #ddd; }
+        .bottom-nav { display: flex; justify-content: space-around; padding: 10px 0; background: #000; border-top: 1px solid #222; padding-bottom: max(10px, env(safe-area-inset-bottom)); position: absolute; bottom: 0; left: 0; right: 0; z-index: 10; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; font-size: 10px; }
+        .nav-item .icon { font-size: 22px; }
+        .create-btn { width: 45px; height: 32px; background: #fff; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #000; font-size: 24px; font-weight: bold; }
     </style>
 </head>
 <body>
-
-<div class="install-bar" id="installBar">
-    <span>📱 ติดตั้งแอป ไทยโพธิ์ดี ช็อป</span>
-    <div style="display:flex; gap:10px; align-items:center;">
-        <button class="install-btn" id="installAppBtn">ติดตั้ง</button>
-        <span class="close-install" onclick="closeInstallBar()">×</span>
-    </div>
-</div>
-
-<div class="top-bar" id="topBar">
-    <span class="tab active" onclick="goPage('page-feed')">ติดตาม</span>
-    <h1>ไทยโพธิ์ดี</h1>
-    <span class="tab" onclick="goPage('page-feed')">สำหรับคุณ</span>
-</div>
-
-<!-- ===== หน้าแรก — ฟีดวิดีโอ + 6 ปุ่มด้านขวา ===== -->
-<div id="page-feed" class="screen active">
-    <div class="video-container" id="videoContainer">
-        <video id="mainVideo" loop muted playsinline controls></video>
-        <div class="no-video" id="noVidMsg">
-            🎬 ยังไม่มีวิดีโอ<br>
-            กดปุ่ม + ด้านล่างเพื่อโพสต์วิดีโอแรก
+    <div class="app-container">
+        <div class="top-nav">
+            <span>ติดตาม</span>
+            <span class="active">ไทยโพธิ์ดี</span>
+            <span>สำหรับคุณ</span>
         </div>
 
-        <div class="video-info">
+        <div class="video-area">
+            <div class="video-placeholder">⏯</div>
+        </div>
+
+        <div class="right-actions">
+            <div class="action-btn">
+                <div class="icon">👤</div>
+            </div>
+            <div class="action-btn">
+                <div class="icon" id="likeBtn">❤️</div>
+                <div class="count">1.2K</div>
+            </div>
+            <div class="action-btn">
+                <div class="icon">💬</div>
+                <div class="count">128</div>
+            </div>
+            <div class="action-btn">
+                <div class="icon">🔖</div>
+                <div class="count">456</div>
+            </div>
+            <div class="action-btn">
+                <div class="icon">↗️</div>
+                <div class="count">3.4K</div>
+            </div>
+            <div class="action-btn">
+                <div class="icon">🎵</div>
+            </div>
+        </div>
+
+        <div class="bottom-info">
             <div class="username">@thaipodee_shop</div>
             <div class="desc">ยินดีต้อนรับสู่ ไทยโพธิ์ดี ช็อป — แหล่งรวมวิดีโอและสินค้าจากสมาชิกทุกคน!</div>
             <div class="music">🎵 เสียงต้นฉบับ — ไทยโพธิ์ดี ช็อป</div>
-            <div class="tag-sale" onclick="goPage('page-cart')">🛒 ดูสินค้า</div>
         </div>
 
-        <!-- ===== 6 ปุ่มด้านขวา — เรียงตรงเหมือน TikTok เป๊ะ! ===== -->
-        <div class="side-actions">
-            <div class="side-btn avatar-follow" onclick="goPage('page-profile')">
-                <div class="user-avatar">👤</div>
-                <div class="follow-plus">+</div>
-            </div>
-            <div class="side-btn" id="likeBtn" onclick="toggleLike()">
-                <span>❤️</span>
-                <small id="likeCount">1.2K</small>
-            </div>
-            <div class="side-btn" onclick="openComments()">
-                <span>💬</span>
-                <small id="commentCount">128</small>
-            </div>
-            <div class="side-btn" id="saveBtn" onclick="toggleSave()">
-                <span>🔖</span>
-                <small id="saveCount">456</small>
-            </div>
-            <div class="side-btn" onclick="doShare()">
-                <span>↗️</span>
-                <small id="shareCount">3.4K</small>
-            </div>
-            <div class="side-btn music-icon" onclick="showToast('🎵 เสียงต้นฉบับ — ไทยโพธิ์ดี ช็อป')">
-                <div class="music-disc">🎵</div>
-            </div>
+        <div class="bottom-nav">
+            <div class="nav-item"><div class="icon">🏠</div><div>หน้าแรก</div></div>
+            <div class="nav-item"><div class="icon">🛒</div><div>สินค้า</div></div>
+            <div class="nav-item"><div class="create-btn">+</div></div>
+            <div class="nav-item"><div class="icon">📦</div><div>ขายของ</div></div>
+            <div class="nav-item"><div class="icon">👤</div><div>โปรไฟล์</div></div>
         </div>
     </div>
-</div>
 
-<!-- ===== หน้าโพสต์วิดีโอ ===== -->
-<div id="page-upload" class="screen">
-    <h2 style="text-align:center; padding:20px 15px 10px; font-size:20px;">📤 โพสต์วิดีโอใหม่</h2>
-    <div class="upload-area" onclick="document.getElementById('videoFile').click()">
-        <span>🎬</span>
-        <p>กดเพื่อเลือกวิดีโอจากเครื่อง</p>
-        <p style="font-size:12px; color:#888; margin-top:8px;">รองรับ .mp4, .mov</p>
-    </div>
-    <input type="file" id="videoFile" accept="video/*" style="display:none;" onchange="previewVideo(event)">
-    <video id="vidPreview" class="preview-vid" controls></video>
-    <textarea id="descInput" rows="3" placeholder="เขียนคำอธิบาย..."></textarea>
-    <input type="text" id="musicInput" placeholder="🎵 เพลงประกอบ (ถ้ามี)">
-    <button class="btn-primary" onclick="submitVideo()">✅ โพสต์</button>
-    <button class="btn-secondary" onclick="goPage('page-feed')">ยกเลิก</button>
-</div>
-
-<!-- ===== หน้าตะกร้า ===== -->
-<div id="page-cart" class="screen">
-    <h2 style="text-align:center; padding:20px; font-size:20px;">🛒 สินค้า</h2>
-    <div id="cartList">
-        <div class="cart-item">
-            <div class="cart-img">📦</div>
-            <div class="cart-info">
-                <h4>สินค้าของคุณ</h4>
-                <p>฿ 0.00</p>
-                <small style="color:#888;">ไซซ์ / สี / รายละเอียด</small>
-            </div>
-            <button style="width:auto; padding:8px 12px; font-size:13px; margin:0; border-radius:6px; background:var(--primary); color:white; border:none;">ดูสินค้า</button>
-        </div>
-    </div>
-    <p style="text-align:center; color:#888; margin-top:30px;">👇 กด "ขายสินค้า" เพื่อลงขายของคุณเอง</p>
-    <button class="btn-primary" onclick="goPage('page-sell')" style="margin-top:20px;">📦 ลงขายสินค้า</button>
-</div>
-
-<!-- ===== หน้าขายสินค้า ===== -->
-<div id="page-sell" class="screen">
-    <h2 style="text-align:center; padding:20px; font-size:20px;">📦 ลงขายสินค้า</h2>
-    <div class="form-section">
-        <h3>ข้อมูลสินค้า *</h3>
-        <input type="text" id="prodName" placeholder="ชื่อสินค้า *">
-        <div class="row">
-            <input type="number" id="prodPrice" placeholder="ราคา (บาท) *">
-            <input type="number" id="prodStock" placeholder="จำนวนสินค้า">
-        </div>
-        <textarea id="prodDesc" rows="4" placeholder="รายละเอียดสินค้า..."></textarea>
-    </div>
-    <div class="form-section">
-        <h3>การจัดส่ง & การชำระเงิน</h3>
-        <input type="text" placeholder="เลขที่บัญชี / พร้อมเพย์ *">
-        <select>
-            <option>เก็บเงินปลายทาง</option>
-            <option>โอนเงินล่วงหน้า</option>
-            <option>พร้อมเพย์</option>
-        </select>
-    </div>
-    <button class="btn-primary" onclick="submitProduct()">✅ ยืนยันการลงขาย</button>
-    <button class="btn-secondary" onclick="goPage('page-cart')">ยกเลิก</button>
-</div>
-
-<!-- ===== หน้าโปรไฟล์ ===== -->
-<div id="page-profile" class="screen">
-    <div class="profile-header">
-        <div class="profile-avatar">👤</div>
-        <h2 style="font-size:20px;">ไทยโพธิ์ดี ช็อป</h2>
-        <p style="color:#888; margin-top:5px;">@thaipodee_shop</p>
-        <button style="width:auto; padding:8px 25px; margin-top:15px; background:#333; color:white; border-radius:6px; font-size:14px; border:none;">แก้ไขโปรไฟล์</button>
-    </div>
-    <div class="profile-stats">
-        <div style="text-align:center;"><div class="stat-num">128</div><div class="stat-label">กำลังติดตาม</div></div>
-        <div style="text-align:center;"><div class="stat-num">45.2K</div><div class="stat-label">ผู้ติดตาม</div></div>
-        <div style="text-align:center;"><div class="stat-num">892K</div><div class="stat-label">ถูกใจ</div></div>
-    </div>
-    <div class="profile-menu" onclick="goPage('page-cart')">🛒 สินค้าของฉัน</div>
-    <div class="profile-menu" onclick="goPage('page-sell')">📦 ขายสินค้า</div>
-    <div class="profile-menu">💰 ยอดขาย & รายได้</div>
-    <div class="profile-menu">💳 เบิกถอนเงิน</div>
-    <div class="profile-menu">⚙️ ตั้งค่าบัญชี</div>
-</div>
-
-<!-- ===== คอมเมนต์ ===== -->
-<div id="commentModal" class="modal">
-    <div class="modal-header">
-        <span class="modal-close" onclick="closeComments()">×</span>
-        <strong>ความคิดเห็น <span id="totalComments">128</span></strong>
-    </div>
-    <div style="padding:15px;" id="commentList">
-        <div class="comment-item"><div class="comment-user">@user_001</div><div class="comment-text">สินค้าน่าสนใจมากครับ!</div></div>
-    </div>
-    <div class="comment-input-area">
-        <input type="text" class="comment-input" id="newComment" placeholder="เขียนความคิดเห็น...">
-        <button class="btn-primary comment-submit" onclick="addComment()">ส่ง</button>
-    </div>
-</div>
-
-<!-- ===== เมนูล่าง ===== -->
-<div class="bottom-nav">
-    <div class="nav-item active" data-page="page-feed" onclick="goPage('page-feed')"><span>🏠</span><small>หน้าแรก</small></div>
-    <div class="nav-item" data-page="page-cart" onclick="goPage('page-cart')"><span>🛒</span><small>สินค้า</small></div>
-    <div class="nav-item" data-page="page-upload" onclick="goPage('page-upload')"><div class="nav-center">+</div></div>
-    <div class="nav-item" data-page="page-sell" onclick="goPage('page-sell')"><span>📦</span><small>ขายของ</small></div>
-    <div class="nav-item" data-page="page-profile" onclick="goPage('page-profile')"><span>👤</span><small>โปรไฟล์</small></div>
-</div>
-
-<div id="toast" class="toast"></div>
-
-<script>
-let videoURL = null, isLiked = false, isSaved = false;
-let likeCount = 1200, saveCount = 456, shareCount = 3400, commentCount = 128;
-let deferredPrompt = null;
-let comments = [{user: '@user_001', text: 'สินค้าน่าสนใจมากครับ!'}];
-
-window.addEventListener('beforeinstallprompt', e => {
-    e.preventDefault();
-    deferredPrompt = e;
-    setTimeout(() => document.getElementById('installBar').classList.add('show'), 1500);
-});
-document.getElementById('installAppBtn').addEventListener('click', async () => {
-    if (!deferredPrompt) return showToast('เปิดเมนู → เพิ่มไปที่หน้าจอหลัก');
-    deferredPrompt.prompt();
-    const {outcome} = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') { showToast('✅ ติดตั้งสำเร็จ!'); document.getElementById('installBar').classList.remove('show'); }
-    deferredPrompt = null;
-});
-function closeInstallBar() {
-    document.getElementById('installBar').classList.remove('show');
-    document.getElementById('topBar').classList.add('no-install');
-    document.querySelectorAll('.screen').forEach(s => s.classList.add('no-install'));
-}
-
-function goPage(pageId) {
-    document.querySelectorAll('.screen').forEach(p => p.classList.remove('active'));
-    document.getElementById(pageId).classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    const nav = document.querySelector(`.nav-item[data-page="${pageId}"]`);
-    if (nav) nav.classList.add('active');
-    window.scrollTo(0, 0);
-    closeComments();
-}
-
-function previewVideo(e) {
-    const f = e.target.files[0];
-    if (!f || !f.type.startsWith('video/')) return showToast('❌ กรุณาเลือกวิดีโอ');
-    videoURL = URL.createObjectURL(f);
-    const p = document.getElementById('vidPreview');
-    p.src = videoURL; p.style.display = 'block';
-    showToast('✅ วิดีโอพร้อม!');
-}
-function submitVideo() {
-    if (!videoURL) return showToast('⚠️ กรุณาเลือกวิดีโอก่อน');
-    document.getElementById('mainVideo').src = videoURL;
-    document.getElementById('noVidMsg').style.display = 'none';
-    showToast('✅ โพสต์สำเร็จ!');
-    setTimeout(() => goPage('page-feed'), 800);
-}
-
-function toggleLike() {
-    isLiked = !isLiked;
-    document.getElementById('likeBtn').classList.toggle('liked', isLiked);
-    likeCount += isLiked ? 1 : -1;
-    document.getElementById('likeCount').textContent = formatNum(likeCount);
-    showToast(isLiked ? '❤️ ถูกใจแล้ว!' : 'ยกเลิกถูกใจ');
-}
-function toggleSave() {
-    isSaved = !isSaved;
-    saveCount += isSaved ? 1 : -1;
-    document.getElementById('saveCount').textContent = formatNum(saveCount);
-    showToast(isSaved ? '🔖 บันทึกแล้ว!' : 'ยกเลิกบันทึก');
-}
-function doShare() {
-    shareCount++;
-    document.getElementById('shareCount').textContent = formatNum(shareCount);
-    if (navigator.share) navigator.share({title: 'ไทยโพธิ์ดี ช็อป', url: window.location.href});
-    else { navigator.clipboard.writeText(window.location.href); showToast('🔁 คัดลอกลิงก์แล้ว!'); }
-}
-
-function openComments() {
-    document.getElementById('commentModal').style.display = 'block';
-    document.getElementById('totalComments').textContent = comments.length;
-    renderComments();
-}
-function closeComments() { document.getElementById('commentModal').style.display = 'none'; }
-function renderComments() {
-    document.getElementById('commentList').innerHTML = comments.map(c =>
-        `<div class="comment-item"><div class="comment-user">${c.user}</div><div class="comment-text">${c.text}</div></div>`
-    ).join('');
-}
-function addComment() {
-    const inp = document.getElementById('newComment');
-    if (!inp.value.trim()) return showToast('⚠️ พิมพ์ก่อน');
-    comments.unshift({user: '@คุณ', text: inp.value.trim()});
-    inp.value = '';
-    renderComments();
-    showToast('✅ ส่งแล้ว!');
-}
-
-function submitProduct() {
-    const n = document.getElementById('prodName').value.trim();
-    const p = document.getElementById('prodPrice').value;
-    if (!n || !p) return showToast('⚠️ กรุณากรอกชื่อและราคา');
-    showToast('✅ ลงขายสำเร็จ!');
-    goPage('page-cart');
-}
-
-function formatNum(n) { return n >= 1000 ? (n/1000).toFixed(1).replace(/\.0$/, '') + 'K' : n; }
-function showToast(m) {
-    const t = document.getElementById('toast');
-    t.textContent = m; t.style.display = 'block';
-    setTimeout(() => t.style.display = 'none', 2200);
-}
-
-let touchY = 0;
-document.getElementById('videoContainer')?.addEventListener('touchstart', e => touchY = e.touches[0].clientY);
-document.getElementById('videoContainer')?.addEventListener('touchend', e => {
-    const d = touchY - e.changedTouches[0].clientY;
-    if (Math.abs(d) > 80) showToast(d > 0 ? '⬆️ วิดีโอถัดไป' : '⬇️ วิดีโอก่อนหน้า');
-});
-</script>
+    <script>
+        document.getElementById('likeBtn').addEventListener('click', function() {
+            this.style.transform = 'scale(1.2)';
+            setTimeout(() => this.style.transform = 'scale(1)', 200);
+        });
+    </script>
 </body>
 </html>
