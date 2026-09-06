@@ -3,6 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#fe2c55">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ThaiPodee">
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi5LiT5ZKM5bKb4Liq4LiZ4Li54LiaIExhbmRpbmciLCJzaG9ydF9uYW1lIjoiVGhhaVBvZGVlIiwiZGVzY3JpcHRpb24iOiI5LiE5ZKM5bKb4Liq4LiZ4Li54LiaIOWcq+S4quS4g+S4g+S4quS4g+S4u+S4g+S4quS4quS4g+S4u+S4gIiwic3RhcnRfdXJsIjoiLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwMDAwMDAiLCJ0aGVtZV9jb2xvciI6IiNmZTJjNTUiLCJvcmllbnRhdGlvbiI6InBvcnRyYWl0IiwiaWNvbnMiOlt7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbCwlM0NzdmcgeG1sbnM9J2h0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnJyB2aWV3Qm94PScwIDAgMTkyIDE5MSc+JTNDY2lyY2xlIGN4PScxMDAnIGN5PScxMDAnIHI9JzkwJyBmaWxsPSclZmUyYzU1Jy8lM0N0ZXh0IHg9JzUwJScgeT0nNTAlJyBkb21pbmFudC1iYXNlbGluZT0nbWlkZGxlJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmaWxsPSd3aGl0ZScgZm9udC1zaXplPSc4MCcgZm9udC1mYW1pbHk9J0FyaWFsJyB0ZXh0LWRpcmVjdGlvbj0nbG9uZ2VyJyB0ZXh0LWRlY29yYXRlPSdtaWRkbGUnPlRQJTNDJTJGdGV4dCUzQSUyRnN2ZyUzRSIsInNpemVzIjoiMTkyeDE5MiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn0seyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWwsJTNDc3ZnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zycgdmlld0JveD0nMCAwIDUxMiA1MTInJTNFJTNDY2lyY2xlIGN4PScyNTYnIGN5PScyNTYnIHI9JzI0MCcgZmlsbD0nI2ZlMmM1NScvJTNDdGV4dCB4PSc1MCUnIHk9JzUwJScgZG9taW5hbnQtYmFzZWxpbmU9J21pZGRsZScgdGV4dC1hbmNob3I9J21pZGRsZScgZmlsbD0nd2hpdGUnIGZvbnQtc2l6ZT0nMjAwJyBmb250LWZhbWlseT0nQXJpYWwnIHRleHQtZGlyZWN0aW9uPSdsb25nZXInIHRleHQtZGVjb3JhdGU9J21pZGRsZSc+VFA8JTJGdGV4dD48JTJGc3ZnPiIsInNpemVzIjoiNTEyeDUxMiIsInR5cGUiOiJpbWFnZS9zdmcreG1sIn1dfQ==">
     <title>ไทยโพธิ์ดี ช็อป | Thaipodee Shop</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
@@ -16,32 +21,60 @@
         }
         body { background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
 
+        /* ====== แถบติดตั้งแอป — แสดงเมื่อเปิดลิงก์ ====== */
+        .install-bar {
+            position: fixed; top: 0; left: 0; right: 0;
+            background: linear-gradient(90deg, var(--primary), #ff6b8b);
+            color: white; padding: 12px 15px;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 500; transform: translateY(-100%); transition: transform 0.3s ease;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        .install-bar.show { transform: translateY(0); }
+        .install-btn {
+            background: white; color: var(--primary); border: none;
+            padding: 8px 18px; border-radius: 20px; font-weight: bold; font-size: 14px; cursor: pointer;
+            white-space: nowrap;
+        }
+        .install-btn:active { opacity: 0.8; }
+        .close-install { font-size: 20px; cursor: pointer; padding: 0 8px; opacity: 0.9; }
+
         /* ====== แถบบน ====== */
         .top-bar {
-            position: fixed; top: 0; left: 0; right: 0;
+            position: fixed; top: 50px; left: 0; right: 0;
             background: rgba(0,0,0,0.85); padding: 12px 15px;
             display: flex; justify-content: center; align-items: center;
             z-index: 100; border-bottom: 1px solid #222;
         }
+        .top-bar.no-install { top: 0; }
         .top-bar h1 { font-size: 18px; color: var(--primary); font-weight: 700; }
-        .top-bar .tab { color: var(--light-gray); margin: 0 12px; font-size: 15px; }
+        .top-bar .tab { color: var(--light-gray); margin: 0 12px; font-size: 15px; cursor: pointer; }
         .top-bar .tab.active { color: #fff; border-bottom: 2px solid #fff; padding-bottom: 4px; }
 
         /* ====== หน้าจอ — ทุกหน้า ====== */
-        .screen { display: none; padding-top: 55px; padding-bottom: 80px; min-height: 100vh; }
+        .screen { display: none; padding-top: 105px; padding-bottom: 80px; min-height: 100vh; }
+        .screen.no-install { padding-top: 55px; }
         .screen.active { display: block; }
 
         /* ====== หน้า 1 — ฟีดวิดีโอ ====== */
-        .video-container { position: relative; width: 100%; height: 82vh; background: #111; }
-        video { width: 100%; height: 100%; object-fit: cover; }
-        .play-overlay {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            font-size: 80px; color: rgba(255,255,255,0.7); cursor: pointer; pointer-events: auto;
+        .video-container { 
+            position: relative; 
+            width: 100%; 
+            height: calc(100vh - 185px); 
+            background: #000; 
+            overflow: hidden;
+            touch-action: pan-y;
+        }
+        video { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+            background: #000;
         }
         .no-video { text-align: center; padding-top: 30vh; color: var(--light-gray); }
 
         /* ====== ข้อมูลวิดีโอ — ซ้ายล่าง ====== */
-        .video-info { position: absolute; bottom: 100px; left: 15px; right: 90px; z-index: 10; }
+        .video-info { position: absolute; bottom: 20px; left: 15px; right: 90px; z-index: 10; }
         .video-info .username { font-size: 16px; font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
         .video-info .desc { font-size: 14px; line-height: 1.5; margin-bottom: 10px; color: #eee; }
         .video-info .music { font-size: 13px; display: flex; align-items: center; gap: 6px; color: #ddd; }
@@ -51,7 +84,7 @@
             cursor: pointer; font-weight: 600;
         }
 
-        /* ====== ปุ่มด้านขวา — ครบ 5 ปุ่ม ตามภาพเป๊ะ! ====== */
+        /* ====== ปุ่มด้านขวา — ครบ 5 ปุ่ม ====== */
         .side-actions {
             position: fixed; right: 12px; bottom: 130px; display: flex;
             flex-direction: column; gap: 24px; align-items: center; z-index: 50;
@@ -75,7 +108,7 @@
             font-size: 12px; font-weight: bold; color: white; border: 1px solid #000;
         }
 
-        /* ====== เมนูล่าง — ครบ 5 ปุ่ม เหมือน TikTok ====== */
+        /* ====== เมนูล่าง — ครบ 5 ปุ่ม ====== */
         .bottom-nav {
             position: fixed; bottom: 0; left: 0; right: 0; background: rgba(0,0,0,0.95);
             display: flex; justify-content: space-around; align-items: center;
@@ -168,26 +201,33 @@
 </head>
 <body>
 
+<!-- ====== แถบติดตั้งแอป — แสดงเมื่อเปิดลิงก์จากไลน์ ====== -->
+<div class="install-bar" id="installBar">
+    <span>📱 ติดตั้งแอป ไทยโพธิ์ดี ช็อป</span>
+    <div style="display:flex; gap:10px; align-items:center;">
+        <button class="install-btn" id="installAppBtn">ติดตั้ง</button>
+        <span class="close-install" onclick="closeInstallBar()">×</span>
+    </div>
+</div>
+
 <!-- ====== แถบบน ====== -->
-<div class="top-bar">
+<div class="top-bar" id="topBar">
     <span class="tab active" onclick="goPage('page-feed')">ติดตาม</span>
     <h1>ไทยโพธิ์ดี</h1>
     <span class="tab" onclick="goPage('page-feed')">แนะนำ</span>
 </div>
 
 <!-- ================================================= -->
-<!-- ====== หน้า 1 — ฟีดวิดีโอ (หน้าแรก) ====== -->
+<!-- ====== หน้า 1 — ฟีดวิดีโอ ====== -->
 <!-- ================================================= -->
 <div id="page-feed" class="screen active">
-    <div class="video-container">
-        <video id="mainVideo" loop muted playsinline></video>
-        <div class="play-overlay" id="playBtn" onclick="toggleVideo()">▶</div>
+    <div class="video-container" id="videoContainer">
+        <video id="mainVideo" loop muted playsinline controls></video>
         <div class="no-video" id="noVidMsg">
             🎬 ยังไม่มีวิดีโอ<br>
             กดปุ่ม ➕ ด้านล่างเพื่อโพสต์วิดีโอแรกของคุณ
         </div>
 
-        <!-- ข้อมูลวิดีโอ ด้านซ้ายล่าง -->
         <div class="video-info">
             <div class="username">
                 <span>@thaipodee_official</span>
@@ -197,29 +237,23 @@
             <div class="tag-sale" onclick="goPage('page-cart')">🛒 ดูสินค้า</div>
         </div>
 
-        <!-- ปุ่มด้านขวา — ครบ 5 ปุ่ม ตามภาพเป๊ะ! -->
         <div class="side-actions">
-            <!-- 1. กดถูกใจ -->
             <div class="side-btn" id="likeBtn" onclick="toggleLike()">
                 <span>❤️</span>
                 <small id="likeCount">1.2K</small>
             </div>
-            <!-- 2. คอมเมนต์ -->
             <div class="side-btn" onclick="openComments()">
                 <span>💬</span>
                 <small id="commentCount">128</small>
             </div>
-            <!-- 3. บันทึก -->
             <div class="side-btn" id="saveBtn" onclick="toggleSave()">
                 <span>🔖</span>
                 <small id="saveCount">456</small>
             </div>
-            <!-- 4. แชร์ -->
             <div class="side-btn" onclick="doShare()">
                 <span>🔁</span>
                 <small id="shareCount">3.4K</small>
             </div>
-            <!-- 5. โปรไฟล์ผู้โพสต์ -->
             <div class="side-btn avatar-follow" onclick="goPage('page-profile')">
                 <div class="user-avatar">👤</div>
                 <div class="follow-plus">+</div>
@@ -246,7 +280,7 @@
     <textarea id="descInput" rows="3" placeholder="คำอธิบายวิดีโอ / รายละเอียดสินค้า..."></textarea>
     <input type="text" id="musicInput" placeholder="🎵 เพลงประกอบ (ถ้ามี)">
     
-    <button class="btn-primary" onclick="submitVideo()">✅ โพสต์วิดีโอ</button>
+    <button class="btn-primary" id="postBtn" onclick="submitVideo()">✅ โพสต์วิดีโอ</button>
     <button class="btn-secondary" onclick="goPage('page-feed')">ยกเลิก</button>
 </div>
 
@@ -400,7 +434,7 @@
 </div>
 
 <!-- ================================================= -->
-<!-- ====== เมนูล่าง — ครบ 5 ปุ่ม เหมือน TikTok ====== -->
+<!-- ====== เมนูล่าง — ครบ 5 ปุ่ม ====== -->
 <!-- ================================================= -->
 <div class="bottom-nav">
     <div class="nav-item active" data-page="page-feed" onclick="goPage('page-feed')">
@@ -425,7 +459,7 @@
 
 <script>
 // =================================================
-// ตัวแปรกลาง — เก็บสถานะทุกอย่าง
+// ตัวแปรกลาง
 // =================================================
 let videoURL = null;
 let isLiked = false;
@@ -434,6 +468,7 @@ let likeCount = 1200;
 let saveCount = 456;
 let shareCount = 3400;
 let commentCount = 128;
+let deferredPrompt = null;
 let comments = [
     {user: '@user_001', text: 'สินค้าน่าสนใจมากครับ สอบถามรายละเอียดเพิ่มเติมได้ไหมครับ?'},
     {user: '@thaipodee_official', text: 'ได้เลยครับ! สามารถทักแชทมาสอบถามได้ตลอดเวลาเลยครับ ขอบคุณที่สนใจนะครับ 🙏'},
@@ -441,37 +476,55 @@ let comments = [
 ];
 
 // =================================================
-// เปลี่ยนหน้า — ทุกปุ่มเรียกใช้ตรงนี้
+// 📱 ระบบติดตั้งแอป — แชร์ไปไลน์ กดติดตั้งได้เลย!
+// =================================================
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    // แสดงแถบติดตั้งเมื่อเปิดลิงก์
+    setTimeout(() => {
+        document.getElementById('installBar').classList.add('show');
+    }, 1500);
+});
+
+document.getElementById('installAppBtn').addEventListener('click', async () => {
+    if (!deferredPrompt) {
+        showToast('✅ เปิดเมนูเบราว์เซอร์ → เพิ่มไปที่หน้าจอหลัก');
+        return;
+    }
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+        showToast('✅ ติดตั้งแอปสำเร็จ!');
+        document.getElementById('installBar').classList.remove('show');
+    } else {
+        showToast('ยกเลิกการติดตั้ง');
+    }
+    deferredPrompt = null;
+});
+
+function closeInstallBar() {
+    document.getElementById('installBar').classList.remove('show');
+    document.getElementById('topBar').classList.add('no-install');
+    document.querySelectorAll('.screen').forEach(s => s.classList.add('no-install'));
+}
+
+// =================================================
+// เปลี่ยนหน้า
 // =================================================
 function goPage(pageId) {
-    // ซ่อนทุกหน้า
     document.querySelectorAll('.screen').forEach(p => p.classList.remove('active'));
-    // แสดงหน้าที่เลือก
     document.getElementById(pageId).classList.add('active');
-    // อัปเดตเมนูล่าง
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     const navItem = document.querySelector(`.nav-item[data-page="${pageId}"]`);
     if (navItem) navItem.classList.add('active');
-    // เลื่อนขึ้นบนสุด
     window.scrollTo(0, 0);
-    // ปิดคอมเมนต์ถ้าเปิดอยู่
     closeComments();
 }
 
 // =================================================
-// วิดีโอ — เล่น/หยุด + อัปโหลด
+// วิดีโอ — อัปโหลด + แสดง
 // =================================================
-function toggleVideo() {
-    const vid = document.getElementById('mainVideo');
-    const btn = document.getElementById('playBtn');
-    if (!vid.src) {
-        showToast('⚠️ ยังไม่มีวิดีโอ — กด ➕ เพื่อโพสต์วิดีโอแรก');
-        return;
-    }
-    if (vid.paused) { vid.play(); btn.style.opacity = '0'; }
-    else { vid.pause(); btn.style.opacity = '1'; }
-}
-
 function previewVideo(e) {
     const file = e.target.files[0];
     if (!file || !file.type.startsWith('video/')) {
@@ -487,29 +540,25 @@ function previewVideo(e) {
 
 function submitVideo() {
     if (!videoURL) {
-        showToast('⚠️ เลือกวิดีโอก่อนครับ');
+        showToast('⚠️ กรุณาเลือกวิดีโอก่อนครับ');
         return;
     }
-    // นำวิดีโอไปแสดงที่หน้าแรก
     const mainVid = document.getElementById('mainVideo');
     mainVid.src = videoURL;
-    // อัปเดตคำอธิบาย
-    const desc = document.getElementById('descInput').value;
+    const desc = document.getElementById('descInput').value?.trim();
     if (desc) document.getElementById('videoDesc').textContent = desc;
-    // ซ่อนข้อความแจ้งเตือน
     document.getElementById('noVidMsg').style.display = 'none';
-    // ล้างฟอร์ม
     document.getElementById('vidPreview').style.display = 'none';
     document.getElementById('descInput').value = '';
     document.getElementById('musicInput').value = '';
     document.getElementById('videoFile').value = '';
-    // กลับไปหน้าแรก
+    videoURL = null;
     showToast('✅ โพสต์วิดีโอสำเร็จ!');
-    goPage('page-feed');
+    setTimeout(() => goPage('page-feed'), 800);
 }
 
 // =================================================
-// ปุ่มด้านขวา — ไลก์, คอมเมนต์, บันทึก, แชร์, โปรไฟล์
+// ปุ่มด้านขวา — ไลก์, คอมเมนต์, บันทึก, แชร์
 // =================================================
 function toggleLike() {
     isLiked = !isLiked;
@@ -532,16 +581,26 @@ function toggleSave() {
 function doShare() {
     shareCount++;
     document.getElementById('shareCount').textContent = formatNumber(shareCount);
-    // คัดลอกลิงก์
-    navigator.clipboard.writeText(window.location.href).then(() => {
-        showToast('🔁 คัดลอกลิงก์แล้ว! แชร์ได้เลย');
-    }).catch(() => {
-        showToast('🔁 แชร์สำเร็จ! คัดลอกลิงก์: ' + window.location.href);
-    });
+    const shareData = {
+        title: 'ไทยโพธิ์ดี ช็อป',
+        text: 'แอปวิดีโอและสินค้าจากสมาชิกทุกคน!',
+        url: window.location.href
+    };
+    if (navigator.share) {
+        navigator.share(shareData).then(() => {
+            showToast('✅ แชร์สำเร็จ!');
+        }).catch(() => {
+            navigator.clipboard.writeText(window.location.href);
+            showToast('🔁 คัดลอกลิงก์แล้ว! แชร์ได้เลย');
+        });
+    } else {
+        navigator.clipboard.writeText(window.location.href);
+        showToast('🔁 คัดลอกลิงก์แล้ว! แชร์ไปไลน์ได้เลย');
+    }
 }
 
 // =================================================
-// คอมเมนต์ — เปิด/ปิด/เพิ่ม
+// คอมเมนต์
 // =================================================
 function openComments() {
     document.getElementById('commentModal').style.display = 'block';
@@ -580,7 +639,7 @@ function addComment() {
 }
 
 // =================================================
-// ขายสินค้า — บันทึกสินค้า
+// ขายสินค้า
 // =================================================
 function submitProduct() {
     const name = document.getElementById('prodName').value.trim();
@@ -592,6 +651,26 @@ function submitProduct() {
     showToast('✅ ลงขายสินค้าสำเร็จ!');
     goPage('page-cart');
 }
+
+// =================================================
+// เลื่อนขึ้น-ลง เปลี่ยนวิดีโอ เหมือน TikTok
+// =================================================
+let touchStartY = 0;
+const container = document.getElementById('videoContainer');
+container?.addEventListener('touchstart', (e) => {
+    touchStartY = e.touches[0].clientY;
+});
+container?.addEventListener('touchend', (e) => {
+    const touchEndY = e.changedTouches[0].clientY;
+    const diff = touchStartY - touchEndY;
+    if (Math.abs(diff) > 80) {
+        if (diff > 0) {
+            showToast('⬆️ วิดีโอถัดไป');
+        } else {
+            showToast('⬇️ วิดีโอก่อนหน้า');
+        }
+    }
+});
 
 // =================================================
 // เครื่องมือช่วย
@@ -608,7 +687,6 @@ function showToast(msg) {
     setTimeout(() => t.style.display = 'none', 2200);
 }
 
-// ปิดคอมเมนต์เมื่อกดภายนอก
 document.addEventListener('click', (e) => {
     const modal = document.getElementById('commentModal');
     if (modal.style.display === 'block' && !modal.contains(e.target) && !e.target.closest('[onclick*="openComments"]')) {
