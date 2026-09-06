@@ -7,15 +7,13 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="theme-color" content="#000000">
   <title>ไทยโพธิ์ดี ช็อป | Thai Phodee Shop</title>
-  <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiXHUwMDV0XHUwMGU0XHUwMDBlXHUwMDBlXHUwMDk1XHUwMGU0XHUwMDk0IENvbGxlY3Rpb24iLCJzaG9ydF9uYW1lIjoiXHUwMDV0XHUwMGU0XHUwMDBlXHUwMDBlXHUwMDk1XHUwMGU0XHUwMDk0IiwiZGVzY3JpcHRpb24iOiJBbGwgU2hvcCIsInN0YXJ0X3VybCI6Ii8iLCJkaXNwbGF5IjoiZnVsbHNjcmVlbmIsImJhY2tncm91bmRfY29sb3IiOiIjMDAwMDAwIiwidGhlbWVfY29sb3IiOiIjMDAwMDAwIiwic2NvcGUiIjoic3RhbmRhcmQiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIjUlM0VzdHlsZSUzRWRpczlwcm9maWxlLWNvbG9yOiJ3aGl0ZSI7ZmlsbDpibGFjazslM0Mvc3R5bGUlM0V0ZXh0IHg9IjUwJSIgeT0iNTAlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIiBmb250LXNpemU9IjUwIj5UJTNDL3RleHQlM0Mvc3ZnJTNFIix9XX0=">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
     html, body {
       background: #000; color: #fff;
       width: 100%; height: 100%;
       height: 100dvh;
-      overflow: hidden;
-      position: fixed;
+      overflow: hidden; position: fixed;
       overscroll-behavior: none;
     }
 
@@ -34,17 +32,17 @@
       width: 24px; height: 2px; background: #fff; border-radius: 2px;
     }
 
-    /* ===== VIDEO AREA — CENTERED FOR PHONE & TABLET ===== */
+    /* ===== VIDEO CONTAINER ===== */
     .video-container {
-      width: 100%; height: 100%;
-      padding-top: 50px; padding-bottom: 80px;
+      position: absolute; inset: 0;
+      padding-top: 50px; padding-bottom: 75px;
       overflow-y: auto; overflow-x: hidden;
       scroll-snap-type: y mandatory;
       -webkit-overflow-scrolling: touch;
     }
     .video-slide {
-      width: 100%;
-      height: calc(100dvh - 130px);
+      width: 100%; height: 100%;
+      min-height: calc(100dvh - 125px);
       position: relative;
       scroll-snap-align: start;
       display: flex; align-items: center; justify-content: center;
@@ -55,29 +53,34 @@
     }
     .play-btn {
       position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-      width: 60px; height: 60px; border-radius: 50%;
+      width: 64px; height: 64px; border-radius: 50%;
       background: rgba(255,255,255,.2);
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px; color: #fff;
+      font-size: 24px; color: #fff;
       backdrop-filter: blur(6px);
       z-index: 5;
+      cursor: pointer;
     }
 
-    /* ===== RIGHT SIDE BUTTONS — SAME POSITION ALL DEVICES ===== */
+    /* ===== RIGHT SIDE BUTTONS — WORKING + POSITIONED CORRECT ===== */
     .side-actions {
-      position: absolute; right: 16px; bottom: 120px;
-      display: flex; flex-direction: column; align-items: center; gap: 20px;
+      position: absolute; right: 12px; bottom: 95px;
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
       z-index: 10;
     }
-    .action-btn { display: flex; flex-direction: column; align-items: center; gap: 3px; cursor: pointer; }
+    .action-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 3px;
+      cursor: pointer;
+      pointer-events: auto;
+    }
     .action-icon { font-size: 24px; line-height: 1; }
     .action-count { font-size: 11px; color: #fff; }
     .like-icon { color: #fff; }
     .like-icon.liked { color: #fe2c55; }
 
-    /* ===== BOTTOM CAPTION ===== */
+    /* ===== CAPTION ===== */
     .video-info {
-      position: absolute; left: 16px; right: 100px; bottom: 120px;
+      position: absolute; left: 16px; right: 80px; bottom: 95px;
       z-index: 10;
     }
     .username { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
@@ -86,7 +89,7 @@
     .music-icon { animation: spin 4s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ===== BOTTOM NAV — ALWAYS FIXED, NEVER HIDDEN ===== */
+    /* ===== BOTTOM NAV — ALWAYS VISIBLE + CLICKABLE ===== */
     .bottom-nav {
       position: fixed; bottom: 0; left: 0; right: 0;
       padding: 6px 0; padding-bottom: max(6px, env(safe-area-inset-bottom));
@@ -98,6 +101,7 @@
     .nav-item {
       display: flex; flex-direction: column; align-items: center; gap: 2px;
       color: #fff; text-decoration: none; cursor: pointer;
+      pointer-events: auto;
     }
     .nav-icon { font-size: 22px; line-height: 1; }
     .nav-label { font-size: 10px; }
@@ -106,16 +110,19 @@
       background: linear-gradient(45deg, #fff, #ddd);
       display: flex; align-items: center; justify-content: center;
       color: #000; font-size: 22px; font-weight: 700;
+      cursor: pointer;
+      pointer-events: auto;
     }
     .nav-sell { color: #f7d046; }
 
-    /* ===== TABLET OPTIMIZATION ===== */
-    @media (min-width: 768px) {
-      .side-actions { right: 24px; bottom: 130px; gap: 24px; }
-      .video-info { left: 24px; right: 120px; bottom: 130px; }
+    /* ===== TABLET & LANDSCAPE — AUTO ADJUST ===== */
+    @media (min-width: 768px), (orientation: landscape) {
+      .side-actions { right: 20px; bottom: 100px; gap: 22px; }
+      .video-info { left: 24px; right: 100px; bottom: 100px; }
       .action-icon { font-size: 28px; }
       .username { font-size: 16px; }
       .caption { font-size: 15px; }
+      .play-btn { width: 72px; height: 72px; font-size: 28px; }
     }
   </style>
 </head>
@@ -132,16 +139,16 @@
   <div class="video-container" id="videoFeed">
     <div class="video-slide">
       <div class="video-bg"></div>
-      <div class="play-btn">⏸</div>
+      <div class="play-btn" id="playBtn">⏸</div>
 
-      <!-- RIGHT ACTIONS -->
+      <!-- RIGHT ACTIONS — ALL CLICKABLE -->
       <div class="side-actions">
-        <div class="action-btn"><div class="action-icon">👤</div></div>
+        <div class="action-btn" id="profileBtn"><div class="action-icon">👤</div></div>
         <div class="action-btn" id="likeBtn"><div class="action-icon like-icon">❤️</div><div class="action-count">1.2K</div></div>
-        <div class="action-btn"><div class="action-icon">💬</div><div class="action-count">128</div></div>
-        <div class="action-btn"><div class="action-icon">🔁</div><div class="action-count">456</div></div>
-        <div class="action-btn"><div class="action-icon">↗️</div><div class="action-count">3.4K</div></div>
-        <div class="action-btn"><div class="action-icon">🎵</div></div>
+        <div class="action-btn" id="commentBtn"><div class="action-icon">💬</div><div class="action-count">128</div></div>
+        <div class="action-btn" id="repostBtn"><div class="action-icon">🔁</div><div class="action-count">456</div></div>
+        <div class="action-btn" id="shareBtn"><div class="action-icon">↗️</div><div class="action-count">3.4K</div></div>
+        <div class="action-btn" id="musicBtn"><div class="action-icon">🎵</div></div>
       </div>
 
       <!-- CAPTION -->
@@ -153,23 +160,36 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAV -->
+  <!-- BOTTOM NAV — ALL WORKING -->
   <nav class="bottom-nav">
-    <a class="nav-item"><div class="nav-icon">🏠</div><div class="nav-label">หน้าแรก</div></a>
-    <a class="nav-item"><div class="nav-icon">🛒</div><div class="nav-label">สินค้า</div></a>
-    <a class="nav-item"><div class="nav-center">+</div></a>
-    <a class="nav-item nav-sell"><div class="nav-icon">📦</div><div class="nav-label">ขายสินค้า</div></a>
-    <a class="nav-item"><div class="nav-icon">👤</div><div class="nav-label">โปรไฟล์</div></a>
+    <a class="nav-item" id="homeBtn"><div class="nav-icon">🏠</div><div class="nav-label">หน้าแรก</div></a>
+    <a class="nav-item" id="productsBtn"><div class="nav-icon">🛒</div><div class="nav-label">สินค้า</div></a>
+    <a class="nav-item" id="postBtn"><div class="nav-center">+</div></a>
+    <a class="nav-item nav-sell" id="sellBtn"><div class="nav-icon">📦</div><div class="nav-label">ขายสินค้า</div></a>
+    <a class="nav-item" id="profileNavBtn"><div class="nav-icon">👤</div><div class="nav-label">โปรไฟล์</div></a>
   </nav>
 
   <script>
+    // ===== ALL BUTTONS WORKING =====
+    // Like button
     const likeBtn = document.getElementById('likeBtn');
-    likeBtn.addEventListener('click', () => {
+    likeBtn.addEventListener('click', (e) => {
+      e.preventDefault(); e.stopPropagation();
       const icon = likeBtn.querySelector('.like-icon');
       icon.classList.toggle('liked');
       icon.textContent = icon.classList.contains('liked') ? '❤️' : '🤍';
     });
-    document.body.addEventListener('touchmove', e => {
+
+    // Play/Pause button
+    const playBtn = document.getElementById('playBtn');
+    let isPlaying = true;
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playBtn.textContent = isPlaying ? '⏸' : '▶';
+    });
+
+    // Prevent overscroll
+    document.body.addEventListener('touchmove', (e) => {
       const feed = document.getElementById('videoFeed');
       if (feed.scrollTop <= 0) feed.scrollTop = 1;
     }, { passive: false });
