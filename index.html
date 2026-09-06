@@ -16,18 +16,21 @@
     .tab{display:inline-block;margin:0 14px;font-size:15px;color:#aaa;cursor:pointer}
     .tab.active{color:#fff;border-bottom:2px solid #fff;padding-bottom:4px;font-weight:bold}
 
-    /* พื้นที่วิดีโอ */
+    /* พื้นที่วิดีโอ — ลบทุกอย่างตรงกลางจอเด็ดขาด */
     .video-wrap{padding-top:50px;padding-bottom:80px}
     .video-card{height:calc(100vh - 130px);position:relative;background:linear-gradient(135deg,#1a1a2e,#16213e);border-bottom:8px solid #000}
+    /* ซ่อนของเก่าที่ตกค้างตรงกลางจอ — บังคับให้หาย */
+    .video-card > *:not(.side-buttons):not(.info){display:none !important}
+    .video-card::before, .video-card::after, .center-icon, .middle-text, .floating-box, .overlay-icon{display:none !important;content:none !important}
 
-    /* ปุ่มด้านขวา 6 ตัว */
+    /* ปุ่มด้านขวา 6 ตัว — เหมือนในภาพเป๊ะ */
     .side-buttons{position:absolute;right:12px;bottom:100px;display:flex;flex-direction:column;align-items:center;gap:22px;z-index:6}
     .side-btn{display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
     .side-icon{font-size:30px}
     .side-num{font-size:11px;color:#fff}
     .like.liked .side-icon{color:#fe2c55}
 
-    /* ข้อมูลด้านซ้ายล่าง */
+    /* ข้อมูลด้านซ้ายล่าง — ชัดเจน ไม่ทับกัน */
     .info{position:absolute;left:15px;right:90px;bottom:100px;z-index:5}
     .author{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:nowrap}
     .avatar{width:42px;height:42px;border-radius:50%;background:#555;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
@@ -36,16 +39,13 @@
     .desc{font-size:14px;line-height:1.6;margin-bottom:8px;color:#f1f1f1;word-wrap:break-word;max-width:100%}
     .music{font-size:13px;display:flex;align-items:center;gap:6px;color:#ddd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 
-    /* เมนูล่าง */
+    /* เมนูล่าง — เหมือนเดิมเป๊ะ */
     .nav{position:fixed;bottom:0;left:0;right:0;height:65px;background:#000;display:flex;justify-content:space-around;align-items:center;border-top:1px solid #333;z-index:10}
     .nav-item{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
     .nav-icon{font-size:24px}
     .nav-label{font-size:10px;color:#aaa}
     .nav-item.active .nav-label{color:#fff}
     .plus-btn{width:45px;height:35px;background:linear-gradient(90deg,#25f4ee,#fe2c55);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;color:#fff}
-
-    /* ซ่อนทุกอย่างที่ไม่จำเป็น */
-    .middle-ghost, .center-float, .extra-icon, .video-card::before, .video-card::after{display:none !important}
   </style>
 </head>
 <body>
@@ -58,7 +58,6 @@
     </div>
     <div class="video-wrap">
       <div class="video-card">
-
         <!-- ปุ่มด้านขวา 6 ตัว -->
         <div class="side-buttons">
           <div class="side-btn like" onclick="this.classList.toggle('liked')">
@@ -86,7 +85,6 @@
             <span class="side-num">เจ้าของ</span>
           </div>
         </div>
-
         <!-- ข้อมูลด้านซ้ายล่าง -->
         <div class="info">
           <div class="author">
