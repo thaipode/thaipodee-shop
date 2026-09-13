@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/png" href="thaipodee_logo_icon.png">
+    <title>Thaipodee Market Online V2026</title>
+    <style>
+        * {
+            margin: 0 !important;
+            padding: 0 !important;
+            box-sizing: border-box !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        }
+        body {
+            background: #000 !important;
+            color: #fff !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            overflow: hidden !important;
+        }
+        .video-container {
+            position: relative !important;
+            width: 100vw !important;
+            width: 100dvw !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            overflow: hidden !important;
+        }
+        video {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+        }
+        .right-icons {
+            position: absolute !important;
+            right: 12px !important;
+            bottom: 180px !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+            gap: 24px !important;
+            z-index: 10 !important;
+        }
+        .icon-btn {
+            width: 48px !important;
+            height: 48px !important;
+            border-radius: 50% !important;
+            background: rgba(255,255,255,0.15) !important;
+            border: none !important;
+            color: white !important;
+            font-size: 22px !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            cursor: pointer !important;
+            backdrop-filter: blur(4px) !important;
+        }
+        .icon-btn.profile-icon {
+            border: 2px solid #fff !important;
+            overflow: hidden !important;
+            padding: 0 !important;
+            background: transparent !important;
+        }
+        .icon-btn.profile-icon img {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+        }
+        .bottom-nav {
+            position: absolute !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            height: 70px !important;
+            background: rgba(0,0,0,0.8) !important;
+            display: flex !important;
+            justify-content: space-around !important;
+            align-items: center !important;
+            z-index: 10 !important;
+            backdrop-filter: blur(10px) !important;
+            border-top: 1px solid rgba(255,255,255,0.1) !important;
+        }
+        .nav-btn {
+            color: #fff !important;
+            background: none !important;
+            border: none !important;
+            font-size: 24px !important;
+            cursor: pointer !important;
+        }
+        .nav-btn.central {
+            width: 56px !important;
+            height: 44px !important;
+            border-radius: 12px !important;
+            background: #fff !important;
+            color: #000 !important;
+            font-size: 28px !important;
+            font-weight: bold !important;
+        }
+        .user-info {
+            position: absolute !important;
+            left: 16px !important;
+            bottom: 100px !important;
+            z-index: 10 !important;
+            max-width: 70% !important;
+        }
+        .username {
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            margin-bottom: 8px !important;
+            color: #fff !important;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5) !important;
+        }
+        .videotext {
+            font-size: 14px !important;
+            color: #eee !important;
+            line-height: 1.4 !important;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.5) !important;
+        }
+        .progress-bar {
+            position: absolute !important;
+            bottom: 70px !important;
+            left: 0 !important;
+            right: 0 !important;
+            height: 3px !important;
+            background: rgba(255,255,255,0.2) !important;
+            z-index: 10 !important;
+            cursor: pointer !important;
+        }
+        .progress-fill {
+            height: 100% !important;
+            width: 0% !important;
+            background: #fff !important;
+            transition: width 0.1s linear !important;
+        }
+        .play-pause-overlay {
+            position: absolute !important;
+            top: 50% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            font-size: 80px !important;
+            color: rgba(255,255,255,0.8) !important;
+            pointer-events: none !important;
+            opacity: 0 !important;
+            transition: opacity 0.2s !important;
+            z-index: 15 !important;
+            text-shadow: 0 0 20px rgba(0,0,0,0.5) !important;
+        }
+        .play-pause-overlay.show {
+            opacity: 1 !important;
+        }
+        .fullscreen-btn {
+            position: absolute !important;
+            top: 16px !important;
+            right: 16px !important;
+            z-index: 15 !important;
+            background: rgba(0,0,0,0.4) !important;
+            border: none !important;
+            color: white !important;
+            font-size: 20px !important;
+            width: 40px !important;
+            height: 40px !important;
+            border-radius: 50% !important;
+            cursor: pointer !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container" id="videoContainer">
+        <video id="mainVideo" loop playsinline webkit-playsinline>
+            <source src="" type="video/mp4">
+        </video>
+
+        <div class="play-pause-overlay" id="playPauseIcon">▶</div>
+        <button class="fullscreen-btn" id="fullscreenBtn">⛶</button>
+
+        <div class="user-info">
+            <div class="username" id="displayUsername">Thaipodee Market Online V2026</div>
+            <div class="videotext" id="videoDesc">ยินดีต้อนรับสู่ Thaipodee — แพลตฟอร์มสร้างสรรค์วิดีโอและสินค้าออนไลน์</div>
+        </div>
+
+        <div class="right-icons">
+            <button class="icon-btn profile-icon" id="profileBtn">
+                <img id="profileImg" src="https://res.cloudinary.com/demo/image/upload/w_100,h_100,c_fill,ar_1:1,g_auto,f_auto,q_auto/thaipodee_logo_icon.png" alt="Profile">
+            </button>
+            <button class="icon-btn" id="likeBtn">❤️</button>
+            <button class="icon-btn" id="commentBtn">💬</button>
+            <button class="icon-btn" id="shareBtn">↗️</button>
+            <button class="icon-btn" id="musicBtn">🎵</button>
+            <button class="icon-btn" id="moreBtn">⋮</button>
+        </div>
+
+        <div class="progress-bar" id="progressBar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <nav class="bottom-nav">
+            <button class="nav-btn" id="homeBtn">🏠</button>
+            <button class="nav-btn" id="searchBtn">🔍</button>
+            <button class="nav-btn central" id="uploadBtn">+</button>
+            <button class="nav-btn" id="inboxBtn">📩</button>
+            <button class="nav-btn" id="profileBottomBtn">👤</button>
+        </nav>
+    </div>
+
+    <script>
+        // ===== ตัวแปรหลัก =====
+        const video = document.getElementById('mainVideo');
+        const videoContainer = document.getElementById('videoContainer');
+        const playPauseIcon = document.getElementById('playPauseIcon');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const profileBtn = document.getElementById('profileBtn');
+        const profileBottomBtn = document.getElementById('profileBottomBtn');
+        const profileImg = document.getElementById('profileImg');
+        const displayUsername = document.getElementById('displayUsername');
+
+        // ===== โหลดข้อมูลผู้ใช้จาก LocalStorage =====
+        let userData = {
+            username: 'Thaipodee Market Online V2026',
+            profileImage: 'https://res.cloudinary.com/demo/image/upload/w_100,h_100,c_fill,ar_1:1,g_auto,f_auto,q_auto/thaipodee_logo_icon.png',
+            videos: []
+        };
+
+        const savedData = localStorage.getItem('thaipodee_user');
+        if (savedData) {
+            userData = JSON.parse(savedData);
+            displayUsername.textContent = userData.username;
+            if (userData.profileImage) profileImg.src = userData.profileImage;
+        }
+
+        // ===== ฟังก์ชันบันทึกข้อมูล =====
+        function saveUserData() {
+            localStorage.setItem('thaipodee_user', JSON.stringify(userData));
+        }
+
+        // ===== เล่น/หยุดวิดีโอเมื่อกดจอ =====
+        let hideTimer;
+        videoContainer.addEventListener('click', () => {
+            if (video.paused) {
+                video.play();
+                playPauseIcon.textContent = '⏸';
+            } else {
+                video.pause();
+                playPauseIcon.textContent = '▶';
+            }
+            playPauseIcon.classList.add('show');
+            clearTimeout(hideTimer);
+            hideTimer = setTimeout(() => playPauseIcon.classList.remove('show'), 800);
+        });
+
+        // ===== แถบความคืบหน้า =====
+        video.addEventListener('timeupdate', () => {
+            if (video.duration) {
+                const percent = (video.currentTime / video.duration) * 100;
+                progressFill.style.width = percent + '%';
+            }
+        });
+
+        // ===== กดแถบเพื่อข้ามวิดีโอ =====
+        progressBar.addEventListener('click', (e) => {
+            const rect = progressBar.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const width = rect.width;
+            if (video.duration) {
+                video.currentTime = (clickX / width) * video.duration;
+            }
+        });
+
+        // ===== ปุ่มเต็มจอ =====
+        fullscreenBtn.addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                videoContainer.requestFullscreen().catch(err => console.log(err));
+                fullscreenBtn.textContent = '⛶';
+            } else {
+                document.exitFullscreen();
+                fullscreenBtn.textContent = '⛶';
+            }
+        });
+
+        // ===== อัปโหลดวิดีโอ =====
+        uploadBtn.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'video/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const url = URL.createObjectURL(file);
+                video.src = url;
+                video.load();
+                video.play();
+                
+                // บันทึกประวัติ
+                userData.videos.unshift({
+                    name: file.name,
+                    url: url,
+                    date: new Date().toISOString()
+                });
+                saveUserData();
+                alert('✅ อัปโหลดสำเร็จ!');
+            };
+            input.click();
+        });
+
+        // ===== เปลี่ยนรูปโปรไฟล์ =====
+        profileBtn.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const url = URL.createObjectURL(file);
+                profileImg.src = url;
+                userData.profileImage = url;
+                saveUserData();
+                alert('✅ เปลี่ยนรูปโปรไฟล์สำเร็จ!');
+            };
+            input.click();
+        });
+
+        // ===== เปลี่ยนชื่อโปรไฟล์ =====
+        displayUsername.addEventListener('click', () => {
+            const newName = prompt('ตั้งชื่อโปรไฟล์:', userData.username);
+            if (newName && newName.trim() !== '') {
+                userData.username = newName.trim();
+                displayUsername.textContent = userData.username;
+                saveUserData();
+                alert('✅ เปลี่ยนชื่อสำเร็จ!');
+            }
+        });
+
+        // ===== ปุ่มโปรไฟล์ล่าง =====
+        profileBottomBtn.addEventListener('click', () => {
+            alert(`👤 โปรไฟล์: ${userData.username}\n📹 วิดีโอที่อัปโหลด: ${userData.videos.length} รายการ`);
+        });
+
+        // ปุ่มอื่นๆ
+        document.getElementById('likeBtn').addEventListener('click', () => alert('❤️ กดถูกใจแล้ว!'));
+        document.getElementById('commentBtn').addEventListener('click', () => alert('💬 เปิดความคิดเห็น'));
+        document.getElementById('shareBtn').addEventListener('click', () => alert('↗️ แชร์'));
+        document.getElementById('musicBtn').addEventListener('click', () => alert('🎵 เลือกเพลงประกอบ — จะเพิ่มรายการเพลงฟรีลิขสิทธิ์'));
+        document.getElementById('homeBtn').addEventListener('click', () => window.scrollTo(0,0));
+        document.getElementById('searchBtn').addEventListener('click', () => alert('🔍 ค้นหา'));
+        document.getElementById('inboxBtn').addEventListener('click', () => alert('📩 ข้อความ'));
+        document.getElementById('moreBtn').addEventListener('click', () => alert('⋮ เพิ่มเติม'));
+
+        // ===== ล็อกการแก้ไข — ห้ามแก้โค้ดส่วนนี้โดยไม่ผ่านผู้ใช้ =====
+        console.log('🔒 Thaipodee Core — UI Locked — Protected Section');
+    </script>
+</body>
+</html>
